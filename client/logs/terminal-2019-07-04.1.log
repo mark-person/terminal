@@ -1,0 +1,262 @@
+2019-07-04 14:33:13,000 INFO  main (com.ppx.terminal.TerminalClient:50) - Starting TerminalClient on LAPTOP-OI83Q8E1 with PID 1128 (E:\eclipse-workspace-201809\terminal\client\target\classes started by LENOVO in E:\eclipse-workspace-201809\terminal\client)
+2019-07-04 14:33:13,083 DEBUG main (com.ppx.terminal.TerminalClient:53) - Running with Spring Boot v2.1.5.RELEASE, Spring v5.1.7.RELEASE
+2019-07-04 14:33:13,084 INFO  main (com.ppx.terminal.TerminalClient:679) - The following profiles are active: dev
+2019-07-04 14:33:15,697 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:90) - Tomcat initialized with port(s): 9010 (http)
+2019-07-04 14:33:15,746 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Initializing ProtocolHandler ["http-nio-9010"]
+2019-07-04 14:33:15,772 INFO  main (org.apache.catalina.core.StandardService:173) - Starting service [Tomcat]
+2019-07-04 14:33:15,773 INFO  main (org.apache.catalina.core.StandardEngine:173) - Starting Servlet engine: [Apache Tomcat/9.0.19]
+2019-07-04 14:33:15,935 INFO  main (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring embedded WebApplicationContext
+2019-07-04 14:33:15,935 INFO  main (org.springframework.web.context.ContextLoader:296) - Root WebApplicationContext: initialization completed in 2728 ms
+2019-07-04 14:33:16,315 INFO  main (org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor:171) - Initializing ExecutorService 'applicationTaskExecutor'
+2019-07-04 14:33:16,528 INFO  main (org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler:171) - Initializing ExecutorService 'taskScheduler'
+2019-07-04 14:33:16,572 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Starting ProtocolHandler ["http-nio-9010"]
+2019-07-04 14:33:16,627 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:204) - Tomcat started on port(s): 9010 (http) with context path ''
+2019-07-04 14:33:16,633 INFO  main (com.ppx.terminal.TerminalClient:59) - Started TerminalClient in 4.726 seconds (JVM running for 8.337)
+2019-07-04 14:33:39,578 INFO  http-nio-9010-exec-1 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-07-04 14:33:39,578 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:524) - Initializing Servlet 'dispatcherServlet'
+2019-07-04 14:33:39,605 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:546) - Completed initialization in 27 ms
+2019-07-04 14:34:47,674 INFO  nioEventLoopGroup-2-1 (com.ppx.terminal.netty.client.MyClientHandler:51) - execute command:OPEN_DOOR|00000001
+2019-07-04 14:34:55,068 INFO  nioEventLoopGroup-2-1 (com.ppx.terminal.netty.client.MyClientHandler:51) - execute command:OPEN_DOOR|00000001
+2019-07-04 14:36:51,293 ERROR http-nio-9010-exec-1 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/].[dispatcherServlet]:175) - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is java.lang.NullPointerException] with root cause
+java.lang.NullPointerException: null
+	at com.ppx.terminal.mvc.app.TestContoller.listAvailablePorts(TestContoller.java:38) ~[classes/:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_60]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_60]
+	at sun.reflect.DelegatingMethodAccessorImpl.__invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_60]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:45009) ~[?:1.8.0_60]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:45012) ~[?:1.8.0_60]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[?:1.8.0_60]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:104) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:892) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1039) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:942) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1005) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:897) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:882) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:92) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:200) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardContextValve.__invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:40002) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:490) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:836) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1747) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [?:1.8.0_60]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [?:1.8.0_60]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2019-07-04 14:37:34,103 INFO  main (com.ppx.terminal.TerminalClient:50) - Starting TerminalClient on LAPTOP-OI83Q8E1 with PID 3460 (E:\eclipse-workspace-201809\terminal\client\target\classes started by LENOVO in E:\eclipse-workspace-201809\terminal\client)
+2019-07-04 14:37:34,118 DEBUG main (com.ppx.terminal.TerminalClient:53) - Running with Spring Boot v2.1.5.RELEASE, Spring v5.1.7.RELEASE
+2019-07-04 14:37:34,119 INFO  main (com.ppx.terminal.TerminalClient:679) - The following profiles are active: dev
+2019-07-04 14:37:36,094 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:90) - Tomcat initialized with port(s): 9010 (http)
+2019-07-04 14:37:36,134 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Initializing ProtocolHandler ["http-nio-9010"]
+2019-07-04 14:37:36,147 INFO  main (org.apache.catalina.core.StandardService:173) - Starting service [Tomcat]
+2019-07-04 14:37:36,148 INFO  main (org.apache.catalina.core.StandardEngine:173) - Starting Servlet engine: [Apache Tomcat/9.0.19]
+2019-07-04 14:37:36,306 INFO  main (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring embedded WebApplicationContext
+2019-07-04 14:37:36,306 INFO  main (org.springframework.web.context.ContextLoader:296) - Root WebApplicationContext: initialization completed in 2115 ms
+2019-07-04 14:37:36,686 INFO  main (org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor:171) - Initializing ExecutorService 'applicationTaskExecutor'
+2019-07-04 14:37:36,920 INFO  main (org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler:171) - Initializing ExecutorService 'taskScheduler'
+2019-07-04 14:37:36,967 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Starting ProtocolHandler ["http-nio-9010"]
+2019-07-04 14:37:37,017 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:204) - Tomcat started on port(s): 9010 (http) with context path ''
+2019-07-04 14:37:37,023 INFO  main (com.ppx.terminal.TerminalClient:59) - Started TerminalClient in 3.467 seconds (JVM running for 5.721)
+2019-07-04 14:41:07,577 INFO  http-nio-9010-exec-1 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-07-04 14:41:07,578 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:524) - Initializing Servlet 'dispatcherServlet'
+2019-07-04 14:41:07,589 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:546) - Completed initialization in 11 ms
+2019-07-04 14:43:32,893 INFO  main (com.ppx.terminal.TerminalClient:50) - Starting TerminalClient on LAPTOP-OI83Q8E1 with PID 2324 (E:\eclipse-workspace-201809\terminal\client\target\classes started by LENOVO in E:\eclipse-workspace-201809\terminal\client)
+2019-07-04 14:43:32,902 DEBUG main (com.ppx.terminal.TerminalClient:53) - Running with Spring Boot v2.1.5.RELEASE, Spring v5.1.7.RELEASE
+2019-07-04 14:43:32,903 INFO  main (com.ppx.terminal.TerminalClient:679) - The following profiles are active: dev
+2019-07-04 14:43:34,736 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:90) - Tomcat initialized with port(s): 9010 (http)
+2019-07-04 14:43:34,772 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Initializing ProtocolHandler ["http-nio-9010"]
+2019-07-04 14:43:34,787 INFO  main (org.apache.catalina.core.StandardService:173) - Starting service [Tomcat]
+2019-07-04 14:43:34,788 INFO  main (org.apache.catalina.core.StandardEngine:173) - Starting Servlet engine: [Apache Tomcat/9.0.19]
+2019-07-04 14:43:34,939 INFO  main (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring embedded WebApplicationContext
+2019-07-04 14:43:34,939 INFO  main (org.springframework.web.context.ContextLoader:296) - Root WebApplicationContext: initialization completed in 1966 ms
+2019-07-04 14:43:35,456 INFO  main (org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler:171) - Initializing ExecutorService 'taskScheduler'
+2019-07-04 14:43:35,495 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Starting ProtocolHandler ["http-nio-9010"]
+2019-07-04 14:43:35,535 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:204) - Tomcat started on port(s): 9010 (http) with context path ''
+2019-07-04 14:43:35,540 INFO  main (com.ppx.terminal.TerminalClient:59) - Started TerminalClient in 3.192 seconds (JVM running for 5.433)
+2019-07-04 14:43:39,028 INFO  http-nio-9010-exec-1 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-07-04 14:43:39,028 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:524) - Initializing Servlet 'dispatcherServlet'
+2019-07-04 14:43:39,039 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:546) - Completed initialization in 9 ms
+2019-07-04 14:43:39,082 ERROR http-nio-9010-exec-1 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/].[dispatcherServlet]:175) - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Could not resolve view with name 'app/test/test' in servlet with name 'dispatcherServlet'] with root cause
+javax.servlet.ServletException: Could not resolve view with name 'app/test/test' in servlet with name 'dispatcherServlet'
+	at org.springframework.web.servlet.DispatcherServlet.render(DispatcherServlet.java:1351) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.processDispatchResult(DispatcherServlet.java:1117) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1056) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:942) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1005) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:897) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:882) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:200) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardContextValve.__invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:40002) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:490) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:836) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1747) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [?:1.8.0_60]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [?:1.8.0_60]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2019-07-04 14:43:42,395 ERROR http-nio-9010-exec-3 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/].[dispatcherServlet]:175) - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Could not resolve view with name 'app/test/test' in servlet with name 'dispatcherServlet'] with root cause
+javax.servlet.ServletException: Could not resolve view with name 'app/test/test' in servlet with name 'dispatcherServlet'
+	at org.springframework.web.servlet.DispatcherServlet.render(DispatcherServlet.java:1351) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.processDispatchResult(DispatcherServlet.java:1117) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1056) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:942) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1005) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:897) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:882) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:200) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardContextValve.__invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:40002) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:490) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:836) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1747) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [?:1.8.0_60]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [?:1.8.0_60]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2019-07-04 14:51:46,205 INFO  main (com.ppx.terminal.TerminalClient:50) - Starting TerminalClient on LAPTOP-OI83Q8E1 with PID 12472 (E:\eclipse-workspace-201809\terminal\client\target\classes started by LENOVO in E:\eclipse-workspace-201809\terminal\client)
+2019-07-04 14:51:46,216 DEBUG main (com.ppx.terminal.TerminalClient:53) - Running with Spring Boot v2.1.5.RELEASE, Spring v5.1.7.RELEASE
+2019-07-04 14:51:46,217 INFO  main (com.ppx.terminal.TerminalClient:679) - The following profiles are active: dev
+2019-07-04 14:51:48,220 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:90) - Tomcat initialized with port(s): 9010 (http)
+2019-07-04 14:51:48,262 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Initializing ProtocolHandler ["http-nio-9010"]
+2019-07-04 14:51:48,280 INFO  main (org.apache.catalina.core.StandardService:173) - Starting service [Tomcat]
+2019-07-04 14:51:48,280 INFO  main (org.apache.catalina.core.StandardEngine:173) - Starting Servlet engine: [Apache Tomcat/9.0.19]
+2019-07-04 14:51:48,457 INFO  main (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring embedded WebApplicationContext
+2019-07-04 14:51:48,458 INFO  main (org.springframework.web.context.ContextLoader:296) - Root WebApplicationContext: initialization completed in 2172 ms
+2019-07-04 14:51:48,999 INFO  main (org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler:171) - Initializing ExecutorService 'taskScheduler'
+2019-07-04 14:51:49,373 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Starting ProtocolHandler ["http-nio-9010"]
+2019-07-04 14:51:49,414 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:204) - Tomcat started on port(s): 9010 (http) with context path ''
+2019-07-04 14:51:49,418 INFO  main (com.ppx.terminal.TerminalClient:59) - Started TerminalClient in 3.745 seconds (JVM running for 5.946)
+2019-07-04 14:51:55,494 INFO  http-nio-9010-exec-1 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-07-04 14:51:55,495 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:524) - Initializing Servlet 'dispatcherServlet'
+2019-07-04 14:51:55,507 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:546) - Completed initialization in 11 ms
+2019-07-04 17:15:37,145 ERROR http-nio-9010-exec-7 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/].[dispatcherServlet]:175) - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Handler dispatch failed; nested exception is java.lang.NoSuchMethodError: com.ppx.terminal.mvc.app.TestContoller.listAvailablePorts()Ljava/lang/String;] with root cause
+java.lang.NoSuchMethodError: com.ppx.terminal.mvc.app.TestContoller.listAvailablePorts()Ljava/lang/String;
+	at com.zeroturnaround.jrebelbase.facade.v.throwWrappedNoSuchMethodError(SourceFile:176) ~[?:1.8.0_60]
+	at com.zeroturnaround.jrebelbase.facade.v.checkMethodRemoved(SourceFile:197) ~[?:1.8.0_60]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[?:1.8.0_60]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:104) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:892) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1039) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:942) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1005) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:908) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:882) ~[spring-webmvc-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107) ~[spring-web-5.1.7.RELEASE.jar:5.1.7.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) ~[tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:200) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardContextValve.__invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:40002) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:490) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:836) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1747) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [?:1.8.0_60]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [?:1.8.0_60]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.19.jar:9.0.19]
+	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_60]
+2019-07-04 17:16:03,578 INFO  main (com.ppx.terminal.TerminalClient:50) - Starting TerminalClient on LAPTOP-OI83Q8E1 with PID 6080 (E:\eclipse-workspace-201809\terminal\client\target\classes started by LENOVO in E:\eclipse-workspace-201809\terminal\client)
+2019-07-04 17:16:03,589 DEBUG main (com.ppx.terminal.TerminalClient:53) - Running with Spring Boot v2.1.5.RELEASE, Spring v5.1.7.RELEASE
+2019-07-04 17:16:03,590 INFO  main (com.ppx.terminal.TerminalClient:679) - The following profiles are active: dev
+2019-07-04 17:16:05,494 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:90) - Tomcat initialized with port(s): 9010 (http)
+2019-07-04 17:16:05,534 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Initializing ProtocolHandler ["http-nio-9010"]
+2019-07-04 17:16:05,548 INFO  main (org.apache.catalina.core.StandardService:173) - Starting service [Tomcat]
+2019-07-04 17:16:05,549 INFO  main (org.apache.catalina.core.StandardEngine:173) - Starting Servlet engine: [Apache Tomcat/9.0.19]
+2019-07-04 17:16:05,727 INFO  main (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring embedded WebApplicationContext
+2019-07-04 17:16:05,728 INFO  main (org.springframework.web.context.ContextLoader:296) - Root WebApplicationContext: initialization completed in 2074 ms
+2019-07-04 17:16:06,285 INFO  main (org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler:171) - Initializing ExecutorService 'taskScheduler'
+2019-07-04 17:16:06,394 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Starting ProtocolHandler ["http-nio-9010"]
+2019-07-04 17:16:06,443 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:204) - Tomcat started on port(s): 9010 (http) with context path ''
+2019-07-04 17:16:06,449 INFO  main (com.ppx.terminal.TerminalClient:59) - Started TerminalClient in 3.355 seconds (JVM running for 5.709)
+2019-07-04 17:16:35,412 INFO  http-nio-9010-exec-1 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-07-04 17:16:35,413 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:524) - Initializing Servlet 'dispatcherServlet'
+2019-07-04 17:16:35,424 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:546) - Completed initialization in 11 ms

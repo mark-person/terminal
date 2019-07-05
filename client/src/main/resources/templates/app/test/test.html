@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title></title>
+<meta th:fragment="mobile" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<script type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
+<script type="text/javascript" th:src="@{/static/cdn/jquery.min-3.3.1.js}"></script>
+
+
+<script type="text/javascript" th:inline="javascript">
+
+$.ajaxSetup({
+	error: function(r, textStatus, errorThrown) {
+		alert("error:" + r.status + "|" + this.url);
+	}
+});
+
+$(function() {
+
+})
+
+
+function request(obj, uri) {
+	var initName = $(obj).text();
+	$(obj).attr("disabled",true);
+	$(obj).text("请求中...");
+	
+	$.post(contextPath + uri, {}, function(r) {
+		var nextDiv = $(obj).next();
+		nextDiv.empty();
+		for (var i = 0; i < r.length; i++) {
+			nextDiv.append('<div>' + JSON.stringify(r[i]) + '</div>');
+		}
+		if (r.length == 0) {
+			nextDiv.append("没有数据");
+		}
+		
+		$(obj).attr("disabled", false);
+		$(obj).text(initName);
+	});
+}
+
+</script>
+
+</head>
+<body>
+
+
+
+<div>
+	v1.0.0
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<button onclick="$('.view').empty()" style="width:120px;height:25px">clear all</button>
+</div>
+
+<div><button onclick="request(this, 'test/listSerialPorts')" style="width:120px;height:25px">list</button><div class="view"></div></div>
+
+<br>
+<div><button onclick="request(this, 'test/testConnect')" style="width:120px;height:25px">conn</button><div class="view"></div></div>
+
+<br>
+<div><button onclick="request(this, 'test/sendCommand')" style="width:120px;height:25px">send</button><div class="view"></div></div>
+
+
+</body>
+</html>
+
+
+

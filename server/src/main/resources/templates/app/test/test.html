@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title></title>
+<meta th:fragment="mobile" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<script type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
+<script type="text/javascript" th:src="@{/static/cdn/jquery.min-3.3.1.js}"></script>
+
+
+<script type="text/javascript" th:inline="javascript">
+
+$.ajaxSetup({
+	error: function(r, textStatus, errorThrown) {
+		alert("error:" + r.status + "|" + this.url);
+	}
+});
+
+$(function() {
+
+})
+
+function sendTest(obj) {
+	var clientId = $("[name=clientId]:checked").val();
+	
+    var initName = $(obj).text();
+    $(obj).attr("disabled",true);
+    $(obj).text("请求中...");
+    $.post(contextPath + "terminal/getServerId", {clientId:clientId}, function(r) {
+        if (r == "") {
+        	var nextDiv = $(obj).next();
+    		nextDiv.empty();
+    		nextDiv.append("终端还没有登录");
+        	
+        	$(obj).attr("disabled", false);
+            $(obj).text(initName);
+        }
+        else {
+        	sendCommand(obj, clientId, r, initName);
+        }
+    });
+}
+
+function sendCommand(obj, clientId, serverName, initName) {
+	$.post(contextPath + serverName + "/terminal", {clientId:clientId}, function(r) {
+		var nextDiv = $(obj).next();
+		nextDiv.empty();
+		nextDiv.append(r.code + "|" + r.msg);
+		
+		$(obj).attr("disabled", false);
+		$(obj).text(initName);
+	});
+}
+
+function viewContent(obj, uri) {
+	var clientId = $("[name=clientId]:checked").val();
+	var serviceId = $("#serviceId").val();
+	
+	var initName = $(obj).text();
+	$(obj).attr("disabled",true);
+	$(obj).text("请求中...");
+	
+	$.post(contextPath + uri, {clientId:clientId, serviceId:serviceId}, function(r) {
+		var nextDiv = $(obj).next();
+		nextDiv.empty();
+		for (var i = 0; i < r.length; i++) {
+			nextDiv.append('<div>' + JSON.stringify(r[i]) + '</div>');
+		}
+		if (r.length == 0) {
+			nextDiv.append("没有数据");
+		}
+		
+		$(obj).attr("disabled", false);
+		$(obj).text(initName);
+	});
+}
+
+</script>
+
+</head>
+<body>
+
+
+
+<div>
+	v1.0.2
+	<input type="radio" name="clientId" value="007" id="clientId007" checked="checked"><label for="clientId007">007</label>
+	<input type="radio" name="clientId" value="008" id="clientId008" ><label for="clientId008">008</label>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<button onclick="$('.view').empty()" style="width:120px;height:25px">clear all</button>
+</div>
+
+<div><button onclick="sendTest(this)" style="width:120px;height:25px">TEST</button><div class="view"></div></div>
+
+
+<br>
+<div><button onclick="viewContent(this, 'test/listHeart')" style="width:120px;height:25px">view heart</button><div class="view"></div></div>
+
+<br>
+<div><button onclick="viewContent(this, 'test/listLogin')" style="width:120px;height:25px">view login</button><div class="view"></div></div>
+
+
+
+<hr>
+<div>
+<select  style="width:170px;height:25px" id="serviceId">
+	<option th:each="item:${serviceIdList}" th:value="${item}" th:text="${item}"></option>
+</select>
+</div>
+
+<div><button onclick="viewContent(this, 'test/listConnect')" style="width:120px;height:25px">view connect</button><div class="view"></div></div>
+
+<br>
+<div><button onclick="viewContent(this, 'test/listCommand')" style="width:120px;height:25px">view command</button><div class="view"></div></div>
+
+<hr>
+<br>
+<div><button onclick="viewContent(this, 'test/listSession')" style="width:120px;height:25px">view session</button><div class="view"></div></div>
+
+</body>
+</html>
+
+
+

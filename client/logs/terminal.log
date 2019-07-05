@@ -1,0 +1,83 @@
+2019-07-05 08:50:58,568 INFO  main (com.ppx.terminal.TerminalClient:50) - Starting TerminalClient on LAPTOP-OI83Q8E1 with PID 3484 (E:\eclipse-workspace-201809\terminal\client\target\classes started by LENOVO in E:\eclipse-workspace-201809\terminal\client)
+2019-07-05 08:50:58,620 DEBUG main (com.ppx.terminal.TerminalClient:53) - Running with Spring Boot v2.1.5.RELEASE, Spring v5.1.7.RELEASE
+2019-07-05 08:50:58,621 INFO  main (com.ppx.terminal.TerminalClient:679) - The following profiles are active: dev
+2019-07-05 08:51:01,408 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:90) - Tomcat initialized with port(s): 9010 (http)
+2019-07-05 08:51:01,519 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Initializing ProtocolHandler ["http-nio-9010"]
+2019-07-05 08:51:01,553 INFO  main (org.apache.catalina.core.StandardService:173) - Starting service [Tomcat]
+2019-07-05 08:51:01,554 INFO  main (org.apache.catalina.core.StandardEngine:173) - Starting Servlet engine: [Apache Tomcat/9.0.19]
+2019-07-05 08:51:01,790 INFO  main (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring embedded WebApplicationContext
+2019-07-05 08:51:01,791 INFO  main (org.springframework.web.context.ContextLoader:296) - Root WebApplicationContext: initialization completed in 3060 ms
+2019-07-05 08:51:02,425 INFO  main (org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler:171) - Initializing ExecutorService 'taskScheduler'
+2019-07-05 08:51:02,549 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Starting ProtocolHandler ["http-nio-9010"]
+2019-07-05 08:51:02,586 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:204) - Tomcat started on port(s): 9010 (http) with context path ''
+2019-07-05 08:51:02,589 INFO  main (com.ppx.terminal.TerminalClient:59) - Started TerminalClient in 5.071 seconds (JVM running for 8.991)
+2019-07-05 08:52:44,300 INFO  http-nio-9010-exec-2 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-07-05 08:52:44,300 INFO  http-nio-9010-exec-2 (org.springframework.web.servlet.DispatcherServlet:524) - Initializing Servlet 'dispatcherServlet'
+2019-07-05 08:52:44,312 INFO  http-nio-9010-exec-2 (org.springframework.web.servlet.DispatcherServlet:546) - Completed initialization in 11 ms
+2019-07-05 09:13:16,038 ERROR http-nio-9010-exec-6 (com.ppx.terminal.comm.CommUtils:30) - Port is currently in use
+2019-07-05 09:13:30,311 ERROR http-nio-9010-exec-10 (com.ppx.terminal.comm.CommUtils:30) - Port is currently in use
+2019-07-05 09:14:11,877 ERROR http-nio-9010-exec-4 (com.ppx.terminal.comm.CommUtils:30) - Port is currently in use
+2019-07-05 09:14:17,612 ERROR http-nio-9010-exec-5 (com.ppx.terminal.comm.CommUtils:30) - Port is currently in use
+2019-07-05 14:48:00,717 INFO  main (com.ppx.terminal.TerminalClient:50) - Starting TerminalClient on LAPTOP-OI83Q8E1 with PID 10248 (E:\eclipse-workspace-201809\terminal\client\target\classes started by LENOVO in E:\eclipse-workspace-201809\terminal\client)
+2019-07-05 14:48:00,727 DEBUG main (com.ppx.terminal.TerminalClient:53) - Running with Spring Boot v2.1.5.RELEASE, Spring v5.1.7.RELEASE
+2019-07-05 14:48:00,728 INFO  main (com.ppx.terminal.TerminalClient:679) - The following profiles are active: dev
+2019-07-05 14:48:02,644 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:90) - Tomcat initialized with port(s): 9010 (http)
+2019-07-05 14:48:02,687 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Initializing ProtocolHandler ["http-nio-9010"]
+2019-07-05 14:48:02,704 INFO  main (org.apache.catalina.core.StandardService:173) - Starting service [Tomcat]
+2019-07-05 14:48:02,705 INFO  main (org.apache.catalina.core.StandardEngine:173) - Starting Servlet engine: [Apache Tomcat/9.0.19]
+2019-07-05 14:48:02,878 INFO  main (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring embedded WebApplicationContext
+2019-07-05 14:48:02,878 INFO  main (org.springframework.web.context.ContextLoader:296) - Root WebApplicationContext: initialization completed in 2082 ms
+2019-07-05 14:48:03,428 INFO  main (org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler:171) - Initializing ExecutorService 'taskScheduler'
+2019-07-05 14:48:03,545 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Starting ProtocolHandler ["http-nio-9010"]
+2019-07-05 14:48:03,591 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:204) - Tomcat started on port(s): 9010 (http) with context path ''
+2019-07-05 14:48:03,596 INFO  main (com.ppx.terminal.TerminalClient:59) - Started TerminalClient in 3.372 seconds (JVM running for 5.705)
+2019-07-05 14:56:06,670 INFO  http-nio-9010-exec-1 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-07-05 14:56:06,671 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:524) - Initializing Servlet 'dispatcherServlet'
+2019-07-05 14:56:06,682 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:546) - Completed initialization in 11 ms
+2019-07-05 15:00:20,228 ERROR http-nio-9010-exec-1 (com.ppx.terminal.netty.client.MyClientHandler:57) - Port is currently in use
+2019-07-05 15:00:32,770 ERROR http-nio-9010-exec-2 (com.ppx.terminal.netty.client.MyClientHandler:57) - Port is currently in use
+2019-07-05 15:02:14,183 ERROR http-nio-9010-exec-6 (com.ppx.terminal.netty.client.MyClientHandler:57) - Port is currently in use
+2019-07-05 15:15:25,283 ERROR http-nio-9010-exec-7 (com.ppx.terminal.netty.client.MyClientHandler:70) - Port is currently in use
+2019-07-05 15:23:41,502 INFO  main (com.ppx.terminal.TerminalClient:50) - Starting TerminalClient on LAPTOP-OI83Q8E1 with PID 10136 (E:\eclipse-workspace-201809\terminal\client\target\classes started by LENOVO in E:\eclipse-workspace-201809\terminal\client)
+2019-07-05 15:23:41,510 DEBUG main (com.ppx.terminal.TerminalClient:53) - Running with Spring Boot v2.1.5.RELEASE, Spring v5.1.7.RELEASE
+2019-07-05 15:23:41,510 INFO  main (com.ppx.terminal.TerminalClient:679) - The following profiles are active: dev
+2019-07-05 15:23:43,617 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:90) - Tomcat initialized with port(s): 9010 (http)
+2019-07-05 15:23:43,654 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Initializing ProtocolHandler ["http-nio-9010"]
+2019-07-05 15:23:43,670 INFO  main (org.apache.catalina.core.StandardService:173) - Starting service [Tomcat]
+2019-07-05 15:23:43,671 INFO  main (org.apache.catalina.core.StandardEngine:173) - Starting Servlet engine: [Apache Tomcat/9.0.19]
+2019-07-05 15:23:43,833 INFO  main (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring embedded WebApplicationContext
+2019-07-05 15:23:43,833 INFO  main (org.springframework.web.context.ContextLoader:296) - Root WebApplicationContext: initialization completed in 2258 ms
+2019-07-05 15:23:44,390 INFO  main (org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler:171) - Initializing ExecutorService 'taskScheduler'
+2019-07-05 15:23:44,511 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Starting ProtocolHandler ["http-nio-9010"]
+2019-07-05 15:23:44,553 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:204) - Tomcat started on port(s): 9010 (http) with context path ''
+2019-07-05 15:23:44,558 INFO  main (com.ppx.terminal.TerminalClient:59) - Started TerminalClient in 3.502 seconds (JVM running for 5.965)
+2019-07-05 15:25:18,486 INFO  http-nio-9010-exec-1 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-07-05 15:25:18,487 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:524) - Initializing Servlet 'dispatcherServlet'
+2019-07-05 15:25:18,497 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:546) - Completed initialization in 9 ms
+2019-07-05 15:28:32,349 ERROR http-nio-9010-exec-6 (com.ppx.terminal.mvc.app.TestContoller:60) - Port is currently in use
+2019-07-05 15:28:34,201 ERROR http-nio-9010-exec-9 (com.ppx.terminal.mvc.app.TestContoller:60) - Port is currently in use
+2019-07-05 15:30:50,910 ERROR http-nio-9010-exec-4 (com.ppx.terminal.mvc.app.TestContoller:60) - Port is currently in use
+2019-07-05 15:30:51,673 ERROR http-nio-9010-exec-5 (com.ppx.terminal.mvc.app.TestContoller:60) - Port is currently in use
+2019-07-05 15:30:52,277 ERROR http-nio-9010-exec-8 (com.ppx.terminal.mvc.app.TestContoller:60) - Port is currently in use
+2019-07-05 15:30:53,070 ERROR http-nio-9010-exec-2 (com.ppx.terminal.mvc.app.TestContoller:60) - Port is currently in use
+2019-07-05 15:30:53,529 ERROR http-nio-9010-exec-4 (com.ppx.terminal.mvc.app.TestContoller:60) - Port is currently in use
+2019-07-05 15:30:54,489 ERROR http-nio-9010-exec-7 (com.ppx.terminal.mvc.app.TestContoller:60) - Port is currently in use
+2019-07-05 15:31:01,889 ERROR http-nio-9010-exec-10 (com.ppx.terminal.mvc.app.TestContoller:60) - Port is currently in use
+2019-07-05 15:31:02,746 ERROR http-nio-9010-exec-3 (com.ppx.terminal.mvc.app.TestContoller:60) - Port is currently in use
+2019-07-05 15:31:03,516 ERROR http-nio-9010-exec-6 (com.ppx.terminal.mvc.app.TestContoller:60) - Port is currently in use
+2019-07-05 15:31:29,541 INFO  main (com.ppx.terminal.TerminalClient:50) - Starting TerminalClient on LAPTOP-OI83Q8E1 with PID 8620 (E:\eclipse-workspace-201809\terminal\client\target\classes started by LENOVO in E:\eclipse-workspace-201809\terminal\client)
+2019-07-05 15:31:29,549 DEBUG main (com.ppx.terminal.TerminalClient:53) - Running with Spring Boot v2.1.5.RELEASE, Spring v5.1.7.RELEASE
+2019-07-05 15:31:29,550 INFO  main (com.ppx.terminal.TerminalClient:679) - The following profiles are active: dev
+2019-07-05 15:31:31,381 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:90) - Tomcat initialized with port(s): 9010 (http)
+2019-07-05 15:31:31,419 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Initializing ProtocolHandler ["http-nio-9010"]
+2019-07-05 15:31:31,434 INFO  main (org.apache.catalina.core.StandardService:173) - Starting service [Tomcat]
+2019-07-05 15:31:31,434 INFO  main (org.apache.catalina.core.StandardEngine:173) - Starting Servlet engine: [Apache Tomcat/9.0.19]
+2019-07-05 15:31:31,600 INFO  main (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring embedded WebApplicationContext
+2019-07-05 15:31:31,600 INFO  main (org.springframework.web.context.ContextLoader:296) - Root WebApplicationContext: initialization completed in 1975 ms
+2019-07-05 15:31:32,134 INFO  main (org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler:171) - Initializing ExecutorService 'taskScheduler'
+2019-07-05 15:31:32,251 INFO  main (org.apache.coyote.http11.Http11NioProtocol:173) - Starting ProtocolHandler ["http-nio-9010"]
+2019-07-05 15:31:32,296 INFO  main (org.springframework.boot.web.embedded.tomcat.TomcatWebServer:204) - Tomcat started on port(s): 9010 (http) with context path ''
+2019-07-05 15:31:32,301 INFO  main (com.ppx.terminal.TerminalClient:59) - Started TerminalClient in 3.233 seconds (JVM running for 5.552)
+2019-07-05 15:31:36,776 INFO  http-nio-9010-exec-1 (org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173) - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-07-05 15:31:36,777 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:524) - Initializing Servlet 'dispatcherServlet'
+2019-07-05 15:31:36,787 INFO  http-nio-9010-exec-1 (org.springframework.web.servlet.DispatcherServlet:546) - Completed initialization in 10 ms
