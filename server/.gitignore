@@ -1,2 +1,7 @@
-/.settings
+/target/
+/bin/
+/.settings/
+.classpath
 .project
+/src/main/resources/rebel.xml
+/img/
