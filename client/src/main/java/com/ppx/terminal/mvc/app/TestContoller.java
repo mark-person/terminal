@@ -32,23 +32,19 @@ public class TestContoller {
 	
 	@Autowired
 	private TestServiceImpl impl;
-	// private Logger logger = LoggerFactory.getLogger(TestContoller.class);
 	
-	// >>>>>>>>>...test...
 	@RequestMapping("/test")
 	public ModelAndView test() {
 		ModelAndView mv = new ModelAndView("app/test/test");
 		return mv;
 	}
 	
-	// >>>>>>>>>...test...
 	@RequestMapping("/listSerialPorts") @ResponseBody
 	public List<String> listSerialPorts() {
 		List<String> returnList = impl.listSerialPorts();
 		return returnList;
 	}
 	
-	// >>>>>>>>>...test...
 	@RequestMapping("/testConnect") @ResponseBody
 	public List<String> testConnect() {
 		String PORT_NAME = "COM1";
