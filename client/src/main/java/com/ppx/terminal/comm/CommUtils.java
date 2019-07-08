@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.ppx.terminal.comm.Test.SerialReader;
-
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
@@ -37,6 +35,9 @@ public class CommUtils {
                 InputStream inputStream = serialPort.getInputStream();
                 // OutputStream outputStream = serialPort.getOutputStream();
                 // (new Thread(new SerialWriter(outputStream))).start();
+                
+                SerialReader.readerMsg = null;
+                
                 serialPort.addEventListener(new SerialReader(inputStream));
                 serialPort.notifyOnDataAvailable(true);
             }
@@ -45,7 +46,17 @@ public class CommUtils {
     }
 	
 	
-	public static void sendMessage(SerialPort serialPort, String string) throws IOException {
+	public static void sendMessageOneWay(SerialPort serialPort, String string) throws IOException {
+		try (OutputStream outputStream = serialPort.getOutputStream()) {
+			outputStream.write(string.getBytes());
+			outputStream.flush();
+		}
+		
+		// OutputStream outputStream = serialPort.getOutputStream();
+		// (new Thread(new SerialWriter(outputStream, string))).start();
+    }
+	
+	public static void sendMessageTwoWay(SerialPort serialPort, String string) throws IOException {
 		try (OutputStream outputStream = serialPort.getOutputStream()) {
 			outputStream.write(string.getBytes());
 			outputStream.flush();
