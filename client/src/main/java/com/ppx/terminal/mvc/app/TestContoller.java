@@ -129,7 +129,7 @@ public class TestContoller {
 				}
 			}
 			
-			long t = (System.nanoTime() - t1) / 1000000 * 1000;
+			long t = (System.nanoTime() - t1) / (1000000);
 			returnList.add("PORT_NAME:" + PORT_NAME + "|" + commandStr + "|time out:" + t);
 			return returnList;
 		}
