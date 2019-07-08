@@ -40,8 +40,6 @@ public class SerialReader implements SerialPortEventListener {
                 }
                 SerialReader.readerMsg = new String(buffer);
         	}
-            
-            // System.out.println(new String(buffer));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

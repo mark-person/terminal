@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,8 +29,6 @@ import gnu.io.SerialPort;
 public class TestContoller {
 	private static Logger logger = LoggerFactory.getLogger(TestContoller.class);
 	
-	@Autowired
-	private TestServiceImpl impl;
 	
 	@RequestMapping("/test")
 	public ModelAndView test() {
@@ -41,7 +38,7 @@ public class TestContoller {
 	
 	@RequestMapping("/listSerialPorts") @ResponseBody
 	public List<String> listSerialPorts() {
-		List<String> returnList = impl.listSerialPorts();
+		List<String> returnList = CommUtils.listSerialPorts();
 		return returnList;
 	}
 	
