@@ -9,7 +9,7 @@ LOG_FILE=${LOG_PATH}log_`date +"%Y%m%d"`.txt
 
 read oldPid < ${APP_PATH}pid
 kill -9 ${oldPid}
-nohup java -Dspring.profiles.active=dev ${JAVA_OPTS} -jar ${APP_PATH}terminal-0.0.1-SNAPSHOT.jar >> ${LOG_FILE} 2>&1 &
+nohup java -Dspring.profiles.active=dev ${JAVA_OPTS} -jar ${APP_PATH}terminal-client-0.0.1-SNAPSHOT.jar >> ${LOG_FILE} 2>&1 &
 pid=$!
 echo ${pid} > ${APP_PATH}pid
 ps ${pid}
