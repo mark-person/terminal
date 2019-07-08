@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ppx.terminal.log;
+package com.ppx.terminal.common.log;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -6,7 +6,7 @@ package com.ppx.terminal.netty.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ppx.terminal.log.HeartbeatLogger;
+import com.ppx.terminal.common.log.HeartbeatLogger;
 import com.ppx.terminal.watchdog.Watchdog;
 
 import io.netty.channel.ChannelFuture;

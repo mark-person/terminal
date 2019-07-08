@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.ppx.terminal.log.HeartbeatLogger;
+import com.ppx.terminal.common.log.HeartbeatLogger;
 import com.ppx.terminal.netty.client.DiscardClient;
 
 
