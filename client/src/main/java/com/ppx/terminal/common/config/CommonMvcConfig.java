@@ -8,17 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 
 
-
-/**
- * MVC配置，由项目创建配置
- * @author mark
- * @date 2018年12月15日
- */
-
 /**
  * 
  * @author mark
- * @date 2019年6月27日
+ * @date 2019年7月8日
  */
 @Configuration
 public class CommonMvcConfig extends WebMvcConfigurationSupport {
