@@ -58,6 +58,19 @@ create table ter_client (
 /* 每个终端不一样的密码，防止每多个终端使用相同的client_id登录 */
 ALTER TABLE ter_client ADD UNIQUE INDEX idx_ter_client_password (client_password ASC) VISIBLE;
 
+create table ter_cell (
+	cell_id		varchar(10) not null,
+	cell_bit	varchar(16) not null,
+	cell_code	varchar(8),
+	primary key(cell_id)
+);
+alter table ter_cell add unique index idx_ter_cell_bit (cell_bit asc) visible,
+	add unique index idx_ter_cell_code (cell_code asc) visible;
+
+
+
+
+
 
 
 
