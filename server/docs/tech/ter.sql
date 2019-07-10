@@ -7,7 +7,7 @@ create table ter_log_start (
 );
 
 create table ter_log_heart (
-  client_id 	varchar(32) not null,
+  client_id 	varchar(10) not null,
   heart_time 	timestamp not null default current_timestamp,
   heart_count	int not null,
   service_id	varchar(32) not null,
@@ -51,7 +51,7 @@ create table ter_client_login_service (
 
 
 create table ter_client (
-	client_id		varchar(32) not null,
+	client_id		varchar(10) not null,
 	client_password varchar(32) not null,
 	primary key(client_id)
 );
@@ -59,14 +59,41 @@ create table ter_client (
 ALTER TABLE ter_client ADD UNIQUE INDEX idx_ter_client_password (client_password ASC) VISIBLE;
 
 create table ter_cell (
+	client_id	varchar(10) not null,
 	cell_id		varchar(10) not null,
 	cell_bit	varchar(16) not null,
 	cell_code	varchar(8),
-	primary key(cell_id)
+	primary key(client_id, cell_id)
 );
 alter table ter_cell add unique index idx_ter_cell_bit (cell_bit asc) visible,
 	add unique index idx_ter_cell_code (cell_code asc) visible;
 
+	
+/**
+ * USE_CODE_INDEX
+ * 
+ */
+create table ter_config (
+	config_name  varchar(32),
+	config_int   int not null,
+	primary key(config_name)
+);
+
+create table ter_random_code (
+	code_index 	int not null auto_increment,
+	cell_code 	varchar(8) not null,
+	primary key(code_index)
+);
+alter table ter_random_code add unique index idx_ter_random_cell_code (cell_code asc) visible;
+
+
+
+	
+	
+	
+	
+	
+	
 
 
 
