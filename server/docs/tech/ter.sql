@@ -71,7 +71,7 @@ alter table ter_cell add unique index idx_ter_cell_bit (cell_bit asc) visible,
 	
 /**
  * USE_CODE_INDEX
- * 
+ * select FLOOR(10000000 + RAND() * (100000000 - 10000000))
  */
 create table ter_config (
 	config_name  varchar(32),
