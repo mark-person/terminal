@@ -3,8 +3,12 @@
  */
 package com.ppx.terminal.mvc.app;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +31,18 @@ public class TestContoller {
 	
 	@Autowired
 	private TestServiceImpl impl; 
+	
+	@RequestMapping("/header") @ResponseBody
+	public List<String> header(HttpServletRequest request) {
+		List<String> returnList = new ArrayList<String>();
+		Enumeration<String> nameEnum = request.getHeaderNames();
+		while (nameEnum.hasMoreElements()) {
+			String name = (String) nameEnum.nextElement();
+			String value = request.getHeader(name);
+			returnList.add(name + ":" + value);
+		}
+		return returnList;
+	}
 	
 	// >>>>>>>>>...test...
 	@RequestMapping("/test")
