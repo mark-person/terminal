@@ -88,7 +88,9 @@ alter table ter_random_code add unique index idx_ter_random_cell_code (cell_code
 
 
 
-create table ter_ 
+
+
+
 	
 	
 	
