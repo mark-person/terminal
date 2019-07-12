@@ -22,20 +22,20 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 
 @Controller
-@RequestMapping("/api/cell")
-public class ApiCellController {
-	
-	@Autowired
-	private ApiCellServiceImpl impl;
-	
-	
-	
-	@RequestMapping("/getCellBit") @ResponseBody
-	public Map<String, String> getCellBit(@RequestParam(required=true) String cellCode) {
-		Map<String, String> returnMap = new HashMap<String, String>(); 
-		returnMap.put("code", impl.getCellBit(cellCode));
-		return returnMap;
+@RequestMapping("/testApi")
+public class TestApiController {
+
+	@RequestMapping("/test") @ResponseBody
+	public String test() {
+		
+		RestTemplate rest = new RestTemplate();
+		ResponseEntity<JsonNode> jsonObject = rest.postForEntity("http://localhost:9001/api/cell/getCellBit?cellCode=15785369", 
+				null, JsonNode.class);
+		System.out.println("xxxxout:" + jsonObject.getBody().get("code").textValue());
+		
+		return "test";
 	}
+
 	
 	
 }
