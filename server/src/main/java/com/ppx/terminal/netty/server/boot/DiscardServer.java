@@ -24,7 +24,7 @@ import io.netty.handler.logging.LoggingHandler;
 @Service
 public class DiscardServer {
 
-    public void run(WebApplicationContext context, int port, String nettyPassword) throws Exception {
+    public void run(WebApplicationContext context, int port) throws Exception {
     	EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {

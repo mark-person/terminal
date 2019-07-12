@@ -32,15 +32,12 @@ public class TerminalServer implements CommandLineRunner {
 	@Value("${netty.port}")
 	private Integer nettyPort;
 	
-	@Value("${netty.password}")
-	private String nettyPassword;
-	
 	@Autowired
     private WebApplicationContext context;
 	
 	@Override
     public void run(String... strings) throws Exception {
-        discardServer.run(context, nettyPort, nettyPassword);
+        discardServer.run(context, nettyPort);
     }
 
 }

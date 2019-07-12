@@ -10,9 +10,10 @@ public class ApiInterceptor implements HandlerInterceptor {
 	
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
+    	//  accessKey=&timestamp=&sign=
     	
-    	// AccessKey&SecretKey （开放平台）
-    	// 请求携带参数AccessKey和Sign，只有拥有合法的身份AccessKey和正确的签名Sign才能放行
+    	// accessKey&secretKey
+    	// 请求携带参数accessKey和sign，只有拥有合法的身份accessKey和正确的签名sign才能放行
     	// timestamp+nonce方案
     	
         
