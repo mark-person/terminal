@@ -30,7 +30,9 @@ public class BufferedServletRequestWrapper extends HttpServletRequestWrapper {
 			baos.write(buff, 0, read);
 		}
 		this.buffer = baos.toByteArray();
+		
 	}
+	
 	
 	@Override
 	public ServletInputStream getInputStream() throws IOException {

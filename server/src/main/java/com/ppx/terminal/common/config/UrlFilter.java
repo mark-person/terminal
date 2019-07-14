@@ -16,23 +16,31 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Component;
 
-@Component
-@WebFilter(urlPatterns = "/api/*")
+// @Component
+@WebFilter(urlPatterns = {"/testApi/test"}, filterName = "UrlFilter")
 public class UrlFilter implements Filter {
  
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-    	System.out.println("000000000000000");
     }
  
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-    	System.out.println("xxxxx001:" + request.getParameter("cellCode"));
+    	
     	if (request instanceof HttpServletRequest) {
-            ServletRequest requestWrapper = new BufferedServletRequestWrapper((HttpServletRequest) request);
-            System.out.println("xxxxx002:" + requestWrapper.getParameter("cellCode"));
-            chain.doFilter(requestWrapper, response);
+    		  
+        
+           // System.out.println("99999999990:" + ((HttpServletRequest)request).getRequestURI());
+            
+            if (((HttpServletRequest)request).getRequestURI().startsWith("/api/")) {
+                ServletRequest requestWrapper = new BufferedServletRequestWrapper((HttpServletRequest) request);
+            	 chain.doFilter(requestWrapper, response);
+            }
+            else {
+            	chain.doFilter(request, response);
+            }
+           
         } else {
             chain.doFilter(request, response);
         }
