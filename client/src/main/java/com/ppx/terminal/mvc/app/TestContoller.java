@@ -6,6 +6,7 @@ package com.ppx.terminal.mvc.app;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.core.config.plugins.convert.HexConverter;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,11 +64,17 @@ public class TestContoller {
 		return returnList;
 	}
 	
+	// 57 4B 4C 59 09 00 82 01 83 
+	
 	@RequestMapping("/sendCommandOneWay") @ResponseBody
 	public List<String> sendCommandOneWay() {
 		synchronized (this) {
 			String PORT_NAME = "COM1";
-			String commandStr = "001";
+			String commandStr = "57 4B 4C 59 09 00 82 01 83 ";
+			
+			commandStr = new String(HexConverter.parseHexBinary("57")) 
+					+ new String(HexConverter.parseHexBinary("4B"));
+			System.out.println(".....commandStr:");
 			
 			List<String> returnList = new ArrayList<String>();
 			SerialPort sp = null;
