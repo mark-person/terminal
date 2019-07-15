@@ -13,11 +13,15 @@ import org.apache.tomcat.util.codec.binary.Base64;
 
 
 
+
 /**
+ * // O5fviq3DGCB5NrHcl/JP6+xxF6s=
+ * // System.out.println("99999999:" + HmacSHA1.genHMAC("111", "2222"));
  * @author mark
  * @date 2019年7月15日
  */
 public class HmacSHA1 {  
+	
 	  
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";  
     
