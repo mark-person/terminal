@@ -29,6 +29,9 @@ public class ApiCellController {
 	
 	@RequestMapping("/getCellBit") @ResponseBody
 	public Map<String, Object> getCellBit(@RequestParam(required=true) String cellCode) {
+		
+		// int i = 1 / 0;
+		
 		return ApiReturn.of("cellCode", impl.getCellBit(cellCode));
 	}
 	

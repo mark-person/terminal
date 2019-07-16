@@ -4,24 +4,21 @@
 package com.ppx.terminal.mvc.api;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.ppx.terminal.common.util.HmacSHA1;
+import com.ppx.terminal.mvc.api.util.ApiClientUtils;
+import com.ppx.terminal.mvc.api.util.ApiReturnBody;
 
 /**
  * @author mark
@@ -48,7 +45,7 @@ public class TestApiController {
 		paramMap.add("a", "3");
 		paramMap.add("para", "中国");
 		
-		String sign = getSign(paramMap);
+		String sign = ApiClientUtils.getSign(paramMap);
 		paramMap.add("sign", sign);
 		
 		// 报文:accessKey=007&timestamp=2019-07-16+11%3A38%3A01&cellCode=15785369&a=2&a=1&a=3&para=%E4%B8%AD%E5%9B%BD&sign=HhYehulocThgsnRm1sS1kbm8LOE%3D
@@ -78,16 +75,102 @@ public class TestApiController {
 	}
 
 	
-	private String getSign(MultiValueMap<String, String> paramMap) {
-		StringBuffer sb = new StringBuffer();
-		List<String> paraList = new ArrayList<String>();
-		paraList.addAll(paramMap.keySet());
-		Collections.sort(paraList);
-		for (String name : paraList) {
-			List<String> vList = paramMap.get(name);
-			String v = StringUtils.collectionToDelimitedString(vList, "");
-			sb.append(name).append(v);
-		}
-		return HmacSHA1.genHMAC(sb.toString(), "SIGN_KEY");
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping("/test2") @ResponseBody
+	public Map<String, String> test2() {
+		
+		RestTemplate rest = new RestTemplate();
+		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		paramMap.add("accessKey", "007");
+		paramMap.add("timestamp", sdf.format(new Date()));
+		paramMap.add("cellCode", "15785369");
+		paramMap.add("a", "2");
+		paramMap.add("a", "1");
+		paramMap.add("a", "3");
+		paramMap.add("para", "中国");
+		
+		String sign = ApiClientUtils.getSign(paramMap);
+		paramMap.add("sign", sign);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		System.out.println("0000000000000001");
+		
+		
+		ResponseEntity<Map> jsonObject = rest.postForEntity("http://localhost:9001/api/cell/getCellBit", 
+				paramMap, Map.class);
+		Map<String, Object> apiReturn = jsonObject.getBody();
+		
+		
+		ApiReturnBody r = new ApiReturnBody(apiReturn);
+		System.out.println("000000:" + r.getCode());
+		System.out.println("111111:" + r.getMsg());
+		System.out.println("222222:" + r.get("cellCode"));
+		
+//		Integer code = (Integer)apiReturn.get("code");
+//		if (code != null && code == 0) {
+//			System.out.println(".......ok:" + apiReturn.get("cellCode"));
+//		}
+//		else {
+//			System.out.println(".......error:" + apiReturn);
+//		}
+//		
+		
+		String returnMsg = "";
+		
+		
+		
+		Map<String, String> returnMap = new HashMap<String, String>();
+		returnMap.put("r", returnMsg);
+		return returnMap;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+
+	@RequestMapping("/test3") @ResponseBody
+	public Map<String, String> test3() {
+		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
+		paramMap.add("cellCode", "15785369");
+		
+		ApiReturnBody r = ApiClientUtils.call("http://localhost:9001/api/cell/getCellBit", paramMap);
+		
+		String returnMsg = "" + r.toString();
+		
+		Map<String, String> returnMap = new HashMap<String, String>();
+		returnMap.put("r", returnMsg);
+		return returnMap;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

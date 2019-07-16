@@ -1,0 +1,91 @@
+/**
+ * 
+ */
+package com.ppx.terminal.mvc.api.util;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
+
+import com.ppx.terminal.common.util.HmacSHA1;
+
+/**
+ * @author mark
+ * @date 2019年7月12日
+ */
+public class ApiClientUtils {
+	public static String API_SECRET_KEY = "";
+	
+	public static String getSign(MultiValueMap<String, String> paramMap) {
+		StringBuffer sb = new StringBuffer();
+		List<String> paraList = new ArrayList<String>();
+		paraList.addAll(paramMap.keySet());
+		Collections.sort(paraList);
+		for (String name : paraList) {
+			List<String> vList = paramMap.get(name);
+			String v = StringUtils.collectionToDelimitedString(vList, "");
+			sb.append(name).append(v);
+		}
+		return HmacSHA1.genHMAC(sb.toString(), "SIGN_KEY");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public static ApiReturnBody call(String url, Map<String, List<String>> paraMap) {
+		RestTemplate rest = new RestTemplate();
+		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		paramMap.add("accessKey", "007");
+		paramMap.add("timestamp", sdf.format(new Date()));
+		paramMap.putAll(paraMap);
+		String sign = ApiClientUtils.getSign(paramMap);
+		paramMap.add("sign", sign);
+		
+		
+		
+		ResponseEntity<Map> jsonObject = rest.postForEntity("http://localhost:9001/api/cell/getCellBit", 
+				paramMap, Map.class);
+		Map<String, Object> apiReturn = jsonObject.getBody();
+		
+		
+		return new ApiReturnBody(apiReturn);
+		
+	}
+	
+}
