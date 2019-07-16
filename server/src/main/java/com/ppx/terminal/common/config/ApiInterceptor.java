@@ -1,5 +1,6 @@
 package com.ppx.terminal.common.config;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,15 +22,31 @@ public class ApiInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
-		
+		String accessKey = request.getParameter("accessKey1");
+		String timestamp = request.getParameter("timestamp");
 		String sign = request.getParameter("sign");
+		
+		if (Strings.isEmpty(accessKey)) {
+			
+			response.setContentType("application/json;charset=UTF-8");
+			
+			try (PrintWriter pw = response.getWriter();) {
+				pw.write("{\"code\":40001, \"msg\":\"xxxx\"}");
+			}
+			
+			
+			return false;
+		}
+		
+		
+		
 		System.out.println(".........requsign:" + sign);
 		
 		String paraSign = getParaSign(request);
 		System.out.println(".........paraSign:" + paraSign);
         
         
-        
+        System.out.println("..........:" + request.getParameter("para"));
 		
 		
 		// accessKey=&timestamp=&sign=

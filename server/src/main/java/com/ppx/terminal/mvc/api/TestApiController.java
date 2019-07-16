@@ -4,11 +4,11 @@
 package com.ppx.terminal.mvc.api;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -31,7 +31,7 @@ import com.ppx.terminal.common.util.HmacSHA1;
 public class TestApiController {
 
 	@RequestMapping("/test") @ResponseBody
-	public String test() {
+	public Map<String, String> test() {
 		
 		
 		//HttpHeaders headers = new HttpHeaders();
@@ -46,19 +46,29 @@ public class TestApiController {
 		paramMap.add("a", "2");
 		paramMap.add("a", "1");
 		paramMap.add("a", "3");
+		paramMap.add("para", "中国");
 		
 		String sign = getSign(paramMap);
 		paramMap.add("sign", sign);
 		
+		// 报文:accessKey=007&timestamp=2019-07-16+11%3A38%3A01&cellCode=15785369&a=2&a=1&a=3&para=%E4%B8%AD%E5%9B%BD&sign=HhYehulocThgsnRm1sS1kbm8LOE%3D
 		ResponseEntity<JsonNode> jsonObject = rest.postForEntity("http://localhost:9001/api/cell/getCellBit", 
 				paramMap, JsonNode.class);
+		
+		System.out.println("xxxxxx1x:" + jsonObject.hasBody());
+		JsonNode jsonNode = jsonObject.getBody();
+		if (jsonNode == null) {
+			
+		}
+		System.out.println("xxxxxx:jsonNode:" + jsonNode);
 		
 		System.out.println("return value:" + jsonObject.getBody().get("code").textValue());
 		
 		
+		Map<String, String> returnMap = new HashMap<String, String>();
+		returnMap.put("sss", "999");
 		
-		
-		return "test";
+		return returnMap;
 	}
 
 	
