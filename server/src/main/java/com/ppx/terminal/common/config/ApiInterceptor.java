@@ -1,90 +1,54 @@
 package com.ppx.terminal.common.config;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ppx.terminal.common.util.HmacSHA1;
+import com.ppx.terminal.common.util.ApiUtils;
 
 public class ApiInterceptor implements HandlerInterceptor {
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
-		String accessKey = request.getParameter("accessKey1");
+		String accessKey = request.getParameter("accessKey");
 		String timestamp = request.getParameter("timestamp");
 		String sign = request.getParameter("sign");
 		
 		if (Strings.isEmpty(accessKey)) {
-			
-			response.setContentType("application/json;charset=UTF-8");
-			
-			try (PrintWriter pw = response.getWriter();) {
-				pw.write("{\"code\":40001, \"msg\":\"xxxx\"}");
+			return ApiUtils.returnErrorJson(response, 40001, "accessKey is empty");
+		}
+		if (Strings.isEmpty(timestamp)) {
+			return ApiUtils.returnErrorJson(response, 40002, "timestamp is empty");
+		}
+		else {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			try {
+				Date timestampDate = sdf.parse(timestamp);
+				long differTime = System.currentTimeMillis() - timestampDate.getTime();
+				// 15 minute
+				if (differTime > 15 * 60 * 1000) {
+					return ApiUtils.returnErrorJson(response, 40003, "timestamp more than 15 minutes");
+				}
+			} catch (Exception e) {
+				return ApiUtils.returnErrorJson(response, 40004, "timestamp format exception");
 			}
-			
-			
-			return false;
+		}
+		if (Strings.isEmpty(sign)) {
+			return ApiUtils.returnErrorJson(response, 40005, "sign is empty");
 		}
 		
+		if (!sign.equals(ApiUtils.getParaSign(request))) {
+			return ApiUtils.returnErrorJson(response, 40006, "sign error");
+		}
 		
-		
-		System.out.println(".........requsign:" + sign);
-		
-		String paraSign = getParaSign(request);
-		System.out.println(".........paraSign:" + paraSign);
-        
-        
-        System.out.println("..........:" + request.getParameter("para"));
-		
-		
-		// accessKey=&timestamp=&sign=
-//		String accessKey = request.getParameter("accessKey");
-//		String timestamp = request.getParameter("timestamp");
-//		String sign = request.getParameter("sign");
-		// System.out.println("queryString:" + request.getp);
-
-		// accessKey&secretKey
-		// 请求携带参数accessKey和sign，只有拥有合法的身份accessKey和正确的签名sign才能放行
-		// timestamp+nonce方案
-
-		// ApiUtils.API_SECRET_KEY;
-
-		
-
 		return true;
-	}
-	
-	
-	private String getParaSign(HttpServletRequest request) {
-		StringBuffer sb = new StringBuffer();
-		List<String> paraNameList = new ArrayList<String>();
-        Enumeration<String> paraNames = request.getParameterNames();
-        while (paraNames.hasMoreElements()) {
-        	String paraName = paraNames.nextElement();
-        	if (!"sign".equals(paraName)) {
-        		paraNameList.add(paraName);
-        	}
-		}
-        Collections.sort(paraNameList);
-        for (String name : paraNameList) {
-			String[] vArray = request.getParameterValues(name);
-			List<String> vList = Arrays.asList(vArray);
-			String v = StringUtils.collectionToDelimitedString(vList, "");
-			sb.append(name).append(v);
-		}
-        return HmacSHA1.genHMAC(sb.toString(), "SIGN_KEY");
 	}
 
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,

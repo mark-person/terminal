@@ -33,15 +33,11 @@ public class TestApiController {
 	@RequestMapping("/test") @ResponseBody
 	public Map<String, String> test() {
 		
-		
-		//HttpHeaders headers = new HttpHeaders();
-		
-		
 		RestTemplate rest = new RestTemplate();
 		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
 		
 		paramMap.add("accessKey", "007");
-		paramMap.add("timestamp", "2019-07-16 11:38:01");
+		paramMap.add("timestamp", "2019-07-16 14:16:01");
 		paramMap.add("cellCode", "15785369");
 		paramMap.add("a", "2");
 		paramMap.add("a", "1");
@@ -55,19 +51,19 @@ public class TestApiController {
 		ResponseEntity<JsonNode> jsonObject = rest.postForEntity("http://localhost:9001/api/cell/getCellBit", 
 				paramMap, JsonNode.class);
 		
-		System.out.println("xxxxxx1x:" + jsonObject.hasBody());
-		JsonNode jsonNode = jsonObject.getBody();
-		if (jsonNode == null) {
-			
+		JsonNode bodyNode = jsonObject.getBody();
+		if (bodyNode == null) {
+			System.out.println("body is null:");
 		}
-		System.out.println("xxxxxx:jsonNode:" + jsonNode);
-		
-		System.out.println("return value:" + jsonObject.getBody().get("code").textValue());
-		
+		else if (bodyNode.get("code") == null) {
+			System.out.println("code is null");
+		}
+		else {
+			System.out.println("return value:" + bodyNode.get("code").textValue());
+		}
 		
 		Map<String, String> returnMap = new HashMap<String, String>();
-		returnMap.put("sss", "999");
-		
+		returnMap.put("r", "OK");
 		return returnMap;
 	}
 
