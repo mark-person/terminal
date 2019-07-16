@@ -3,8 +3,6 @@
  */
 package com.ppx.terminal.mvc.api;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -27,18 +25,29 @@ public class TestApiController {
 	@RequestMapping("/test") @ResponseBody
 	public String test() {
 		
+		
+		//HttpHeaders headers = new HttpHeaders();
+		
+		
 		RestTemplate rest = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();
-		
-		
 		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
 		paramMap.add("cellCode", "15785369");
+		paramMap.add("a", "2");
+		paramMap.add("a", "1");
+		paramMap.add("a", "3");
+		ResponseEntity<JsonNode> jsonObject = rest.postForEntity("http://localhost:777/api/cell/getCellBit", 
+				paramMap, JsonNode.class);
+		
 		
 		
 		// HttpEntity<String> formEntity = new HttpEntity<String>(paramMap, headers);
 		
-		ResponseEntity<JsonNode> jsonObject = rest.postForEntity("http://localhost:9001/api/cell/getCellBit", 
-				paramMap, JsonNode.class);
+//		ResponseEntity<JsonNode> jsonObject = rest.postForEntity("http://localhost:9001/api/cell/getCellBit", 
+//				paramMap, JsonNode.class);
+		
+		
+		
+		
 		System.out.println("xxxxout:" + jsonObject.getBody().get("code").textValue());
 		
 		return "test";
