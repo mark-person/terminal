@@ -3,8 +3,10 @@
  */
 package com.ppx.terminal.mvc.api;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +38,10 @@ public class TestApiController {
 		RestTemplate rest = new RestTemplate();
 		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
 		paramMap.add("accessKey", "007");
-		paramMap.add("timestamp", "2019-07-16 14:16:01");
+		paramMap.add("timestamp", sdf.format(new Date()));
 		paramMap.add("cellCode", "15785369");
 		paramMap.add("a", "2");
 		paramMap.add("a", "1");
@@ -51,19 +55,25 @@ public class TestApiController {
 		ResponseEntity<JsonNode> jsonObject = rest.postForEntity("http://localhost:9001/api/cell/getCellBit", 
 				paramMap, JsonNode.class);
 		
+		String returnMsg = "";
+		
 		JsonNode bodyNode = jsonObject.getBody();
+		
+		System.out.println("xxxxxxxxxxxxxxx:" + bodyNode);
 		if (bodyNode == null) {
-			System.out.println("body is null:");
+			returnMsg = "body is null";
 		}
 		else if (bodyNode.get("code") == null) {
-			System.out.println("code is null");
+			returnMsg = "code is null";
 		}
 		else {
-			System.out.println("return value:" + bodyNode.get("code").textValue());
+			returnMsg = "return value:"
+					+ bodyNode.get("code").intValue() + "|"
+					+ (bodyNode.get("msg") == null ? "" : bodyNode.get("msg").asText());
 		}
 		
 		Map<String, String> returnMap = new HashMap<String, String>();
-		returnMap.put("r", "OK");
+		returnMap.put("r", returnMsg);
 		return returnMap;
 	}
 

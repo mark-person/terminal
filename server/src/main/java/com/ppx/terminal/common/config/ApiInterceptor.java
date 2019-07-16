@@ -10,6 +10,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ppx.terminal.common.util.ApiReturn;
 import com.ppx.terminal.common.util.ApiUtils;
 
 public class ApiInterceptor implements HandlerInterceptor {
@@ -22,10 +23,10 @@ public class ApiInterceptor implements HandlerInterceptor {
 		String sign = request.getParameter("sign");
 		
 		if (Strings.isEmpty(accessKey)) {
-			return ApiUtils.returnErrorJson(response, 40001, "accessKey is empty");
+			return ApiReturn.errorJson(response, 50001, "accessKey is empty");
 		}
 		if (Strings.isEmpty(timestamp)) {
-			return ApiUtils.returnErrorJson(response, 40002, "timestamp is empty");
+			return ApiReturn.errorJson(response, 50002, "timestamp is empty");
 		}
 		else {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -34,18 +35,18 @@ public class ApiInterceptor implements HandlerInterceptor {
 				long differTime = System.currentTimeMillis() - timestampDate.getTime();
 				// 15 minute
 				if (differTime > 15 * 60 * 1000) {
-					return ApiUtils.returnErrorJson(response, 40003, "timestamp more than 15 minutes");
+					return ApiReturn.errorJson(response, 50003, "timestamp more than 15 minutes");
 				}
 			} catch (Exception e) {
-				return ApiUtils.returnErrorJson(response, 40004, "timestamp format exception");
+				return ApiReturn.errorJson(response, 50004, "timestamp format exception");
 			}
 		}
 		if (Strings.isEmpty(sign)) {
-			return ApiUtils.returnErrorJson(response, 40005, "sign is empty");
+			return ApiReturn.errorJson(response, 50005, "sign is empty");
 		}
 		
 		if (!sign.equals(ApiUtils.getParaSign(request))) {
-			return ApiUtils.returnErrorJson(response, 40006, "sign error");
+			return ApiReturn.errorJson(response, 50006, "sign error");
 		}
 		
 		return true;

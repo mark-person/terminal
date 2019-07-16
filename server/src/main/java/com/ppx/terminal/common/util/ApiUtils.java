@@ -3,7 +3,6 @@
  */
 package com.ppx.terminal.common.util;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,7 +10,6 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.util.StringUtils;
 
@@ -42,11 +40,5 @@ public class ApiUtils {
         return HmacSHA1.genHMAC(sb.toString(), "SIGN_KEY");
 	}
 	
-	public static boolean returnErrorJson(HttpServletResponse response, int code, String msg) throws Exception {
-		response.setContentType("application/json;charset=UTF-8");
-		try (PrintWriter pw = response.getWriter();) {
-			pw.write("{\"code\":" + code + ", \"msg\":\"" + msg + "\"}");
-		}
-		return false;
-	}
+	
 }
