@@ -5,14 +5,10 @@ package com.ppx.terminal.mvc.api.util;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -79,8 +75,10 @@ public class ApiClientUtils {
 		
 		
 		
+		@SuppressWarnings("rawtypes")
 		ResponseEntity<Map> jsonObject = rest.postForEntity("http://localhost:9001/api/cell/getCellBit", 
 				paramMap, Map.class);
+		@SuppressWarnings("unchecked")
 		Map<String, Object> apiReturn = jsonObject.getBody();
 		
 		

@@ -84,6 +84,7 @@ public class TestApiController {
 	
 	
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/test2") @ResponseBody
 	public Map<String, String> test2() {
 		
