@@ -71,8 +71,6 @@ public class ApiReturn {
 		}
 	}
 	
-	
-	
 	public static Map<String, Object> of(String key, String value) {
 		Map<String, Object> returnMap = new HashMap<String, Object>(3);
 		returnMap.putAll(SUCCESS);
