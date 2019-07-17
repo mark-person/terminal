@@ -77,6 +77,19 @@ public class TestContoller {
 		return sb.toString();
 	}
 	
+	@RequestMapping("/close") @ResponseBody
+	public String close() {
+		String msg = "isNull";
+		if (SerialPortUtils.SERIAL_PORT != null) {
+			SerialPortUtils.SERIAL_PORT.close();
+			SerialPortUtils.SERIAL_PORT = null;
+			msg = "close";
+		}
+		
+		return msg;
+	}
+	
+	
 	// 57 4B 4C 59 09 00 82 01 83 
 	@RequestMapping("/sendCommandOneWay") @ResponseBody
 	public List<String> sendCommandOneWay() {
@@ -85,7 +98,10 @@ public class TestContoller {
 			
 			String PORT_NAME = "COM1";
 			// 57 4B 4C 59 09 00 82 01 83 
+			// 57 4B 4C 59 09 00 82 01 83 
 			String commandStr = "57 4B 4C 59 09 00 82 01 83 ";
+			
+			commandStr = "574B4C590900820183";
 			
 			byte[] b = new byte[9];
 			b[0] = HexConverter.parseHexBinary("57")[0];
@@ -100,6 +116,9 @@ public class TestContoller {
 			
 			b[8] = HexConverter.parseHexBinary("83")[0];
 			
+			byte[] newB = HexConverter.parseHexBinary(commandStr);
+			
+			
 			
 			// System.out.println("9999999:" + HexConverter.parseHexBinary("82").length);
 			
@@ -112,19 +131,19 @@ public class TestContoller {
 			System.out.println(".....commandStr:" + commandStr);
 			
 			List<String> returnList = new ArrayList<String>();
-			SerialPort sp = null;
 			try {
-				sp = CommUtils.connect(PORT_NAME);
+				SerialPortUtils.SERIAL_PORT = CommUtils.connect(PORT_NAME);
 				
-				System.out.println("----------middle:" + sp);
+				System.out.println("----------middle:" + SerialPortUtils.SERIAL_PORT);
 				
-				CommUtils.sendMessageOneWay(sp, b);
+				CommUtils.sendMessageOneWay(SerialPortUtils.SERIAL_PORT, newB);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 				returnList.add("error:" + e.getMessage());
 			} finally {
-				if (sp != null) {
-					sp.close();
+				if (SerialPortUtils.SERIAL_PORT != null) {
+					SerialPortUtils.SERIAL_PORT.close();
+					SerialPortUtils.SERIAL_PORT = null;
 				}
 			}
 			
