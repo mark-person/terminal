@@ -79,6 +79,13 @@ public class CommUtils {
 		}
     }
 	
+	public static void sendMessageOneWay(SerialPort serialPort, byte[] b) throws IOException {
+		try (OutputStream outputStream = serialPort.getOutputStream()) {
+			outputStream.write(b);
+			outputStream.flush();
+		}
+    }
+	
 	public static void sendMessageTwoWay(SerialPort serialPort, String string) throws IOException {
 		try (OutputStream outputStream = serialPort.getOutputStream()) {
 			outputStream.write(string.getBytes());
