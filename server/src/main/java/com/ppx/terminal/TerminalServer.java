@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.ppx.terminal.common.util.ApiUtils;
+import com.ppx.terminal.mvc.api.util.ApiClientUtils;
 import com.ppx.terminal.netty.server.boot.DiscardServer;
 
 /**
@@ -37,6 +38,9 @@ public class TerminalServer implements CommandLineRunner {
 	@Value("${api.secretKey}")
 	private String apiSecretKey;
 	
+	@Value("${api.url}")
+	private String apiUrl;
+	
 	@Autowired
     private WebApplicationContext context;
 	
@@ -44,6 +48,12 @@ public class TerminalServer implements CommandLineRunner {
     public void run(String... strings) throws Exception {
 		// API init
 		ApiUtils.API_SECRET_KEY = this.apiSecretKey;
+		
+		
+		// 用来测试api接口
+		ApiClientUtils.API_SECRET_KEY = this.apiSecretKey;
+		ApiClientUtils.API_URL = this.apiUrl;
+		
 		
 		
         discardServer.run(context, nettyPort);

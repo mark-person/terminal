@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ppx.terminal.mvc.api;
+package com.ppx.terminal.mvc.api.v1;
 
 import java.util.Map;
 
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ppx.terminal.common.util.ApiReturn;
+import com.ppx.terminal.common.util.ApiUtils;
 
 /**
  * @author mark
@@ -19,13 +20,11 @@ import com.ppx.terminal.common.util.ApiReturn;
  */
 
 @Controller
-@RequestMapping("/api/cell")
+@RequestMapping(ApiUtils.API_V1_URL + "/cell")
 public class ApiCellController {
 	
 	@Autowired
 	private ApiCellServiceImpl impl;
-	
-	
 	
 	@RequestMapping("/getCellBit") @ResponseBody
 	public Map<String, Object> getCellBit(@RequestParam(required=true) String cellCode) {

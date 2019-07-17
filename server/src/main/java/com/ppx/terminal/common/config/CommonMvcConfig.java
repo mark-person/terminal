@@ -31,7 +31,7 @@ public class CommonMvcConfig extends WebMvcConfigurationSupport {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		super.addInterceptors(registry);
-		registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/api/**");
+		registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/apiV1/**");
 	}
 	
 	@Override

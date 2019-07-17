@@ -25,6 +25,8 @@ import com.ppx.terminal.common.util.HmacSHA1;
 public class ApiClientUtils {
 	public static String API_SECRET_KEY = "";
 	
+	public static String API_URL = "";
+	
 	public static String getSign(MultiValueMap<String, String> paramMap) {
 		StringBuffer sb = new StringBuffer();
 		List<String> paraList = new ArrayList<String>();
@@ -35,7 +37,7 @@ public class ApiClientUtils {
 			String v = StringUtils.collectionToDelimitedString(vList, "");
 			sb.append(name).append(v);
 		}
-		return HmacSHA1.genHMAC(sb.toString(), "SIGN_KEY");
+		return HmacSHA1.genHMAC(sb.toString(), ApiClientUtils.API_SECRET_KEY);
 	}
 	
 	
@@ -76,8 +78,7 @@ public class ApiClientUtils {
 		
 		
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<Map> jsonObject = rest.postForEntity("http://localhost:9001/api/cell/getCellBit", 
-				paramMap, Map.class);
+		ResponseEntity<Map> jsonObject = rest.postForEntity(ApiClientUtils.API_URL + url, paramMap, Map.class);
 		@SuppressWarnings("unchecked")
 		Map<String, Object> apiReturn = jsonObject.getBody();
 		

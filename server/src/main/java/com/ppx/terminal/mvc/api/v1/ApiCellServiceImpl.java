@@ -1,4 +1,4 @@
-package com.ppx.terminal.mvc.api;
+package com.ppx.terminal.mvc.api.v1;
 
 import org.springframework.stereotype.Service;
 

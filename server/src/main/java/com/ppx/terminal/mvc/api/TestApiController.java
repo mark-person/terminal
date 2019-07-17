@@ -156,7 +156,7 @@ public class TestApiController {
 		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
 		paramMap.add("cellCode", "15785369");
 		
-		ApiReturnBody r = ApiClientUtils.call("http://localhost:9001/api/cell/getCellBit", paramMap);
+		ApiReturnBody r = ApiClientUtils.call("apiV1/cell/getCellBit", paramMap);
 		
 		String returnMsg = "" + r.toString();
 		
