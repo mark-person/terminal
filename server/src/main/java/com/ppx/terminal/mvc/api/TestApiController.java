@@ -30,6 +30,25 @@ import com.ppx.terminal.mvc.api.util.ApiReturnBody;
 public class TestApiController {
 
 	@RequestMapping("/test") @ResponseBody
+	public Map<String, String> test3() {
+		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
+		paramMap.add("cellCode", "15785369");
+		
+		ApiReturnBody r = ApiClientUtils.call("apiV1/cell/getCellBit", paramMap);
+		
+		String returnMsg = "" + r.toString();
+		
+		Map<String, String> returnMap = new HashMap<String, String>();
+		returnMap.put("r", returnMsg);
+		return returnMap;
+	}
+	
+	
+	
+	
+	
+	
+	@RequestMapping("/testtest") @ResponseBody
 	public Map<String, String> test() {
 		
 		RestTemplate rest = new RestTemplate();
@@ -73,19 +92,9 @@ public class TestApiController {
 		returnMap.put("r", returnMsg);
 		return returnMap;
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping("/test2") @ResponseBody
+	@RequestMapping("/testtest2") @ResponseBody
 	public Map<String, String> test2() {
 		
 		RestTemplate rest = new RestTemplate();
@@ -104,74 +113,19 @@ public class TestApiController {
 		String sign = ApiClientUtils.getSign(paramMap);
 		paramMap.add("sign", sign);
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		System.out.println("0000000000000001");
-		
-		
 		ResponseEntity<Map> jsonObject = rest.postForEntity("http://localhost:9001/api/cell/getCellBit", 
 				paramMap, Map.class);
 		Map<String, Object> apiReturn = jsonObject.getBody();
-		
 		
 		ApiReturnBody r = new ApiReturnBody(apiReturn);
 		System.out.println("000000:" + r.getCode());
 		System.out.println("111111:" + r.getMsg());
 		System.out.println("222222:" + r.get("cellCode"));
-		
-//		Integer code = (Integer)apiReturn.get("code");
-//		if (code != null && code == 0) {
-//			System.out.println(".......ok:" + apiReturn.get("cellCode"));
-//		}
-//		else {
-//			System.out.println(".......error:" + apiReturn);
-//		}
-//		
-		
+
 		String returnMsg = "";
 		
-		
-		
 		Map<String, String> returnMap = new HashMap<String, String>();
 		returnMap.put("r", returnMsg);
 		return returnMap;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-
-	@RequestMapping("/test3") @ResponseBody
-	public Map<String, String> test3() {
-		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
-		paramMap.add("cellCode", "15785369");
-		
-		ApiReturnBody r = ApiClientUtils.call("apiV1/cell/getCellBit", paramMap);
-		
-		String returnMsg = "" + r.toString();
-		
-		Map<String, String> returnMap = new HashMap<String, String>();
-		returnMap.put("r", returnMsg);
-		return returnMap;
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
