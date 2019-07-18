@@ -17,6 +17,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import com.ppx.terminal.common.api.ApiClientUtils;
 import com.ppx.terminal.netty.client.DiscardClient;
 
 /**
@@ -39,10 +40,13 @@ public class TerminalClient extends SpringBootServletInitializer implements Comm
 	
 	
 	
+	
 	@Autowired
     private DiscardClient discardClient;
 	@Override
     public void run(String... strings) throws Exception {
+		
+		
 	    
 	    ApplicationHome home = new ApplicationHome(getClass());
 	    String jarPath = home.getSource().getParent().replace("\\target", "");
@@ -52,6 +56,12 @@ public class TerminalClient extends SpringBootServletInitializer implements Comm
 	    try (FileReader confFileReader = new FileReader(confPath);
 	            BufferedReader bufferedReader = new BufferedReader(confFileReader);) {
 	        properties.load(bufferedReader);
+	        
+	        // 初始化API参数
+		    ApiClientUtils.API_SECRET_KEY = properties.getProperty("api.secretKey");
+			ApiClientUtils.API_URL = properties.getProperty("api.url");
+	        
+	        
 	        // 获取key对应的value值
 	        String serverIp = properties.getProperty("server.ip");
 	        String serverPort = properties.getProperty("server.port");

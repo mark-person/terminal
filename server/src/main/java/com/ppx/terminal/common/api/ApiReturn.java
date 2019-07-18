@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ppx.terminal.common.util;
+package com.ppx.terminal.common.api;
 
 import java.io.IOException;
 import java.io.PrintWriter;

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.ppx.terminal.mvc.api.util.ApiClientUtils;
-import com.ppx.terminal.mvc.api.util.ApiReturnBody;
+import com.ppx.terminal.common.api.ApiClientUtils;
+import com.ppx.terminal.common.api.ApiReturnBody;
 
 /**
  * @author mark

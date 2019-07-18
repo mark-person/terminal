@@ -71,7 +71,7 @@ public class ControllerReturn {
 		}
 	}
 	
-	public static Map<String, Object> of(String key, String value) {
+	public static Map<String, Object> of(String key, Object value) {
 		Map<String, Object> returnMap = new HashMap<String, Object>(3);
 		returnMap.putAll(SUCCESS);
 		returnMap.put(key, value);

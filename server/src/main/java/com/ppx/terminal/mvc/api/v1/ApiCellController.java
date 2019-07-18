@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ppx.terminal.common.util.ApiReturn;
-import com.ppx.terminal.common.util.ApiUtils;
+import com.ppx.terminal.common.api.ApiReturn;
+import com.ppx.terminal.common.api.ApiUtils;
 
 /**
  * @author mark

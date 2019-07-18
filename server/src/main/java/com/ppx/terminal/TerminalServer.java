@@ -11,8 +11,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.ppx.terminal.common.util.ApiUtils;
-import com.ppx.terminal.mvc.api.util.ApiClientUtils;
+import com.ppx.terminal.common.api.ApiClientUtils;
+import com.ppx.terminal.common.api.ApiUtils;
 import com.ppx.terminal.netty.server.boot.DiscardServer;
 
 /**

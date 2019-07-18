@@ -1,4 +1,4 @@
-package com.ppx.terminal.common.config;
+package com.ppx.terminal.common.api;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.ppx.terminal.common.util.ApiReturn;
-import com.ppx.terminal.common.util.ApiUtils;
 
 public class ApiInterceptor implements HandlerInterceptor {
 

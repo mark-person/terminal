@@ -1,12 +1,13 @@
 /**
  * 
  */
-package com.ppx.terminal.mvc.api.util;
+package com.ppx.terminal.common.api;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +16,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
-
-import com.ppx.terminal.common.util.HmacSHA1;
 
 /**
  * @author mark
@@ -64,6 +63,7 @@ public class ApiClientUtils {
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	public static ApiReturnBody call(String url, Map<String, List<String>> paraMap) {
 		RestTemplate rest = new RestTemplate();
 		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
@@ -75,13 +75,22 @@ public class ApiClientUtils {
 		String sign = ApiClientUtils.getSign(paramMap);
 		paramMap.add("sign", sign);
 		
-		
-		
-		@SuppressWarnings("rawtypes")
-		ResponseEntity<Map> jsonObject = rest.postForEntity(ApiClientUtils.API_URL + url, paramMap, Map.class);
-		@SuppressWarnings("unchecked")
-		Map<String, Object> apiReturn = jsonObject.getBody();
-		
+		Map<String, Object> apiReturn = null;
+		try {
+			@SuppressWarnings("rawtypes")
+			ResponseEntity<Map> jsonObject = rest.postForEntity(ApiClientUtils.API_URL + url, paramMap, Map.class);
+			apiReturn = jsonObject.getBody();
+		} catch (Exception e) {
+			apiReturn = new HashMap<String, Object>();
+			if (e.getCause() != null) {
+				apiReturn.put("code", "50060");
+				apiReturn.put("msg", e.getCause().getMessage());
+			}
+			else {
+				apiReturn.put("code", "50061");
+				apiReturn.put("msg", e.getMessage());
+			}
+		}
 		
 		return new ApiReturnBody(apiReturn);
 		

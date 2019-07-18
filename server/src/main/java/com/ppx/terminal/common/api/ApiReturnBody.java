@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ppx.terminal.mvc.api.util;
+package com.ppx.terminal.common.api;
 
 import java.util.Map;
 

@@ -12,6 +12,8 @@ import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ppx.terminal.comm.CommUtils;
 import com.ppx.terminal.comm.SerialReader;
+import com.ppx.terminal.common.api.ApiClientUtils;
+import com.ppx.terminal.common.api.ApiReturnBody;
 import com.ppx.terminal.common.controller.ControllerReturn;
 
 import gnu.io.SerialPort;
@@ -42,7 +46,14 @@ public class TestContoller {
 	
 	@RequestMapping("/openCell") @ResponseBody
 	public Map<String, Object> openCell(@RequestParam(required=true) String code) {
-		return ControllerReturn.of();
+		
+		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
+		paramMap.add("cellCode", "15785369");
+		
+		ApiReturnBody r = ApiClientUtils.call("apiV1/cell/getCellBit", paramMap);
+		System.out.println("xxxxxxxxr:" + r);
+		
+		return ControllerReturn.of("r", r.toString());
 	}
 	
 	

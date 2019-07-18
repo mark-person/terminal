@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ppx.terminal.common.util;
+package com.ppx.terminal.common.api;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
