@@ -21,6 +21,8 @@ import gnu.io.SerialPort;
  */
 public class CommUtils {
 	
+	public static final String PORT_NAME_COM1 = "COM1";
+	
 	public static List<String> listSerialPorts() {
 		List<String> returnList = new ArrayList<String>();
         @SuppressWarnings("rawtypes")
@@ -83,6 +85,8 @@ public class CommUtils {
 		System.out.println("---------------1");
 		try (OutputStream outputStream = serialPort.getOutputStream()) {
 			System.out.println("---------------2");
+			
+			// 这里会在重启时，有时会停止
 			outputStream.write(b);
 			System.out.println("---------------3");
 			outputStream.flush();

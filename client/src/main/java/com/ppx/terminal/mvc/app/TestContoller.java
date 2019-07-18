@@ -77,18 +77,6 @@ public class TestContoller {
 		return sb.toString();
 	}
 	
-	@RequestMapping("/close") @ResponseBody
-	public String close() {
-		String msg = "isNull";
-		if (SerialPortUtils.SERIAL_PORT != null) {
-			SerialPortUtils.SERIAL_PORT.close();
-			SerialPortUtils.SERIAL_PORT = null;
-			msg = "close";
-		}
-		
-		return msg;
-	}
-	
 	
 	// 57 4B 4C 59 09 00 82 01 83 
 	@RequestMapping("/sendCommandOneWay") @ResponseBody
@@ -131,19 +119,17 @@ public class TestContoller {
 			System.out.println(".....commandStr:" + commandStr);
 			
 			List<String> returnList = new ArrayList<String>();
+			
+			SerialPort sp = null;
 			try {
-				SerialPortUtils.SERIAL_PORT = CommUtils.connect(PORT_NAME);
-				
-				System.out.println("----------middle:" + SerialPortUtils.SERIAL_PORT);
-				
-				CommUtils.sendMessageOneWay(SerialPortUtils.SERIAL_PORT, newB);
+				sp = CommUtils.connect(PORT_NAME);
+				CommUtils.sendMessageOneWay(sp, newB);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 				returnList.add("error:" + e.getMessage());
 			} finally {
-				if (SerialPortUtils.SERIAL_PORT != null) {
-					SerialPortUtils.SERIAL_PORT.close();
-					SerialPortUtils.SERIAL_PORT = null;
+				if (sp != null) {
+					sp.close();
 				}
 			}
 			
