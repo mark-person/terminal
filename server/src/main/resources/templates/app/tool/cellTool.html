@@ -24,19 +24,35 @@ $(function() {
 
 
 function go() {
-	
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
 	
 	$.post(contextPath + "cellTool/listCell", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
 		var c = $("#cellTable");
+		var cellMap = [];
 		for (var i = 0; i < r.list.length; i++) {
-			c.append('<tr>');
-			c.append('<td>' + r.list[i].cell_id + '</td>');
-			c.append('<td>' + r.list[i].cell_bit + '</td>');
-			c.append('</tr>');
+			var bit = r.list[i].cell_bit;
+			cellMap[bit] = r.list[i].cell_id;
+		}
+		var n = $("#newCellTable");
+		n.html("");
+		for (var i = 0; i < r.rowList.length; i++) {
+			n.append('<tr>');
+			for (var j = 0; j < r.columnList.length; j++) {
+				var bit = r.rowList[i] + r.columnList[j];
+				n.append('<td>' + cellMap[bit] + '</td>');
+			}
+			n.append('</tr>');
 		}
 	});
+}
+
+function addRow() {
+	
+}
+
+function addColumn() {
+	
 }
 
 
@@ -60,9 +76,10 @@ number
 </div>
 
 <button onclick="go()">GO</button>
-<table id="cellTable" border="1">
+<button onclick="addRow()">+ROW</button>
+<button onclick="addColumn()">+COL</button>
 
-</table>
+<table id="newCellTable" border="1"></table>
 
 </body>
 </html>

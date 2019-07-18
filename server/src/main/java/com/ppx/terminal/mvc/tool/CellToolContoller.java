@@ -48,7 +48,17 @@ public class CellToolContoller {
 	}
 	
 	
+	@RequestMapping("/addRow") @ResponseBody
+	public Map<String, Object> addRow(String clientId, String lockerNumber) {
+		
+		return null;
+	}
 	
+	@RequestMapping("/addColumn") @ResponseBody
+	public Map<String, Object> addColumn(String clientId, String lockerNumber) {
+		
+		return null;
+	}
 	
 	
 	
