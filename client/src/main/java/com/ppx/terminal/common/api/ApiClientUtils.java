@@ -44,25 +44,6 @@ public class ApiClientUtils {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@SuppressWarnings("unchecked")
 	public static ApiReturnBody call(String url, Map<String, List<String>> paraMap) {
 		RestTemplate rest = new RestTemplate();

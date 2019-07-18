@@ -3,7 +3,6 @@
  */
 package com.ppx.terminal.common.api;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
