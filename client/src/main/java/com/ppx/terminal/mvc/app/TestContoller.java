@@ -25,6 +25,7 @@ import com.ppx.terminal.common.api.ApiClientUtils;
 import com.ppx.terminal.common.api.ApiReturnBody;
 import com.ppx.terminal.common.controller.ControllerReturn;
 
+import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 
 /**
@@ -48,12 +49,41 @@ public class TestContoller {
 	public Map<String, Object> openCell(@RequestParam(required=true) String code) {
 		
 		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
-		paramMap.add("cellCode", "15785369");
+		paramMap.add("cellCode", code);
 		
 		ApiReturnBody r = ApiClientUtils.call("apiV1/cell/getCellBit", paramMap);
-		System.out.println("xxxxxxxxr:" + r);
 		
-		return ControllerReturn.of("r", r.toString());
+		System.out.println("9999999999:" + r);
+		if (r.getCode() != 0) {
+			return ControllerReturn.error(r.getCode(), r.getMsg());
+		}
+		
+		String cellCode = (String)r.get("cellCode");
+		
+		
+		// 57 4B 4C 59 09 01 82 02 81 
+		String commandStr = "574B4C590901820281";
+		synchronized (this) {
+			byte[] commandByte = HexConverter.parseHexBinary(commandStr);
+			SerialPort sp = null;
+			try {
+				sp = CommUtils.connect(CommUtils.PORT_NAME_COM1);
+				CommUtils.sendMessageOneWay(sp, commandByte);
+			} catch (PortInUseException e) {
+				e.printStackTrace();
+				return ControllerReturn.error(50051, e.getMessage());
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				return ControllerReturn.error(50052, e.getMessage());
+			} finally {
+				if (sp != null) {
+					sp.close();
+				}
+			}
+		}
+		
+		return ControllerReturn.of("cellCode", cellCode);
 	}
 	
 	

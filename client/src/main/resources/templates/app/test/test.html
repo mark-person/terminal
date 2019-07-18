@@ -57,7 +57,7 @@ function openCell(obj) {
 			nextDiv.append(JSON.stringify(r));
 		}
 		else {
-			nextDiv.append("出错:" + r.code);
+			nextDiv.append("出错:" + r.code + "|" + r.msg);
 		}
 		
 		$(obj).attr("disabled", false);

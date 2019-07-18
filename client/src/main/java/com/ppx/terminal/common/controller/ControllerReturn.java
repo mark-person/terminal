@@ -6,6 +6,7 @@ package com.ppx.terminal.common.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,13 +25,13 @@ public class ControllerReturn {
 	
 	private static final String MSG_TITLE = "msg";
 	
-	private static Map<String, Object> SUCCESS = new HashMap<String, Object>(2);
+	private static Map<String, Object> SUCCESS = new LinkedHashMap<String, Object>(2);
 	static {
 		SUCCESS.put(CODE_TITLE, 0);
 		SUCCESS.put(MSG_TITLE, "SUCCESS");
 	}
 	
-	private static Map<String, Object> ERROR = new HashMap<String, Object>(2);
+	private static Map<String, Object> ERROR = new LinkedHashMap<String, Object>(2);
 	static {
 		ERROR.put(CODE_TITLE, 50000);
 		ERROR.put(MSG_TITLE, "ERROR");
@@ -72,7 +73,7 @@ public class ControllerReturn {
 	}
 	
 	public static Map<String, Object> of(String key, Object value) {
-		Map<String, Object> returnMap = new HashMap<String, Object>(3);
+		Map<String, Object> returnMap = new LinkedHashMap<String, Object>(3);
 		returnMap.putAll(SUCCESS);
 		returnMap.put(key, value);
 		return returnMap;

@@ -82,15 +82,10 @@ public class CommUtils {
     }
 	
 	public static void sendMessageOneWay(SerialPort serialPort, byte[] b) throws IOException {
-		System.out.println("---------------1");
 		try (OutputStream outputStream = serialPort.getOutputStream()) {
-			System.out.println("---------------2");
-			
 			// 这里会在重启时，有时会停止
 			outputStream.write(b);
-			System.out.println("---------------3");
 			outputStream.flush();
-			System.out.println("---------------4");
 		}
     }
 	

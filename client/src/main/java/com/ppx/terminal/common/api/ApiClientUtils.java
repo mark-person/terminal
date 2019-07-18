@@ -18,33 +18,17 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 /**
+ * 
  * @author mark
- * @date 2019年7月12日
+ * @date 2019年7月18日
  */
 public class ApiClientUtils {
+	
 	public static String API_SECRET_KEY = "";
 	
 	public static String API_URL = "";
 	
-	public static String getSign(MultiValueMap<String, String> paramMap) {
-		StringBuffer sb = new StringBuffer();
-		List<String> paraList = new ArrayList<String>();
-		paraList.addAll(paramMap.keySet());
-		Collections.sort(paraList);
-		for (String name : paraList) {
-			List<String> vList = paramMap.get(name);
-			String v = StringUtils.collectionToDelimitedString(vList, "");
-			sb.append(name).append(v);
-		}
-		return HmacSHA1.genHMAC(sb.toString(), ApiClientUtils.API_SECRET_KEY);
-	}
-	
-	
-	
-	
-	
-	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static ApiReturnBody call(String url, Map<String, List<String>> paraMap) {
 		RestTemplate rest = new RestTemplate();
 		MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<String, String>();
@@ -58,23 +42,33 @@ public class ApiClientUtils {
 		
 		Map<String, Object> apiReturn = null;
 		try {
-			@SuppressWarnings("rawtypes")
 			ResponseEntity<Map> jsonObject = rest.postForEntity(ApiClientUtils.API_URL + url, paramMap, Map.class);
 			apiReturn = jsonObject.getBody();
 		} catch (Exception e) {
 			apiReturn = new HashMap<String, Object>();
+			apiReturn.put("code", 50060);
 			if (e.getCause() != null) {
-				apiReturn.put("code", "50060");
 				apiReturn.put("msg", e.getCause().getMessage());
 			}
 			else {
-				apiReturn.put("code", "50061");
 				apiReturn.put("msg", e.getMessage());
 			}
 		}
 		
 		return new ApiReturnBody(apiReturn);
-		
+	}
+	
+	private static String getSign(MultiValueMap<String, String> paramMap) {
+		StringBuffer sb = new StringBuffer();
+		List<String> paraList = new ArrayList<String>();
+		paraList.addAll(paramMap.keySet());
+		Collections.sort(paraList);
+		for (String name : paraList) {
+			List<String> vList = paramMap.get(name);
+			String v = StringUtils.collectionToDelimitedString(vList, "");
+			sb.append(name).append(v);
+		}
+		return HmacSHA1.genHMAC(sb.toString(), ApiClientUtils.API_SECRET_KEY);
 	}
 	
 }

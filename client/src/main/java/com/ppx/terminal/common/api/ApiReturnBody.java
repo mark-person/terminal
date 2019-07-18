@@ -18,6 +18,7 @@ public class ApiReturnBody {
 	}
 	
 	public int getCode() {
+		System.out.println("xxxxx:" + returnBody.get("code"));
 		return (int)returnBody.get("code");
 	}
 	
@@ -30,8 +31,12 @@ public class ApiReturnBody {
 	}
 	
 	public String toString() {
-		if (returnBody == null) return "";
-		else return returnBody.toString();
+		if (returnBody == null) {
+			return "";
+		}
+		else {
+			return returnBody.toString();
+		}
 	}
 	
 	
