@@ -25,7 +25,13 @@ $(function() {
 
 function go() {
 	$.post(contextPath + "cellTool/listCell", {}, function(r) {
-	       alert(JSON.stringify(r));
+		var c = $("#cellTable");
+		for (var i = 0; i < r.list.length; i++) {
+			c.append('<tr>');
+			c.append('<td>' + r.list[i].cell_id + '</td>');
+			c.append('<td>' + r.list[i].cell_bit + '</td>');
+			c.append('</tr>');
+		}
 	});
 }
 
@@ -40,7 +46,11 @@ function go() {
 
 <button onclick="go()">GO</button>
 
-<div></div>
+<table id="cellTable" border="1">
+
+
+</table>
+
 
 
 </body>
