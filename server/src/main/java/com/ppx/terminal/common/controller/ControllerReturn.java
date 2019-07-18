@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ppx.terminal.common.api;
+package com.ppx.terminal.common.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author mark
  * @date 2019年7月16日
  */
-public class ApiReturn {
+public class ControllerReturn {
 	
 	private static final String CODE_TITLE = "code";
 	
@@ -49,7 +49,7 @@ public class ApiReturn {
 	// 业务自定义:40000~40099
 	public static Map<String, Object> of(int code, String msg) {
 		if (code >= 40000 && code <= 40099) {
-			Map<String, Object> returnMap = new HashMap<String, Object>(2);
+			Map<String, Object> returnMap = new LinkedHashMap<String, Object>(2);
 			returnMap.put(CODE_TITLE, code);
 			returnMap.put(MSG_TITLE, msg);
 			return returnMap;
@@ -62,7 +62,7 @@ public class ApiReturn {
 	// 业务自定义:50050~50099
 	public static Map<String, Object> error(int code, String msg) {
 		if (code >= 50050 && code <= 50099) {
-			Map<String, Object> returnMap = new HashMap<String, Object>(2);
+			Map<String, Object> returnMap = new LinkedHashMap<String, Object>(2);
 			returnMap.put(CODE_TITLE, code);
 			returnMap.put(MSG_TITLE, msg);
 			return returnMap;
@@ -73,7 +73,7 @@ public class ApiReturn {
 	}
 	
 	public static Map<String, Object> of(String key, Object value) {
-		Map<String, Object> returnMap = new HashMap<String, Object>(3);
+		Map<String, Object> returnMap = new LinkedHashMap<String, Object>(3);
 		returnMap.putAll(SUCCESS);
 		returnMap.put(key, value);
 		return returnMap;

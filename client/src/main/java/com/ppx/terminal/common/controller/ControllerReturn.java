@@ -49,7 +49,7 @@ public class ControllerReturn {
 	// 业务自定义:40000~40099
 	public static Map<String, Object> of(int code, String msg) {
 		if (code >= 40000 && code <= 40099) {
-			Map<String, Object> returnMap = new HashMap<String, Object>(2);
+			Map<String, Object> returnMap = new LinkedHashMap<String, Object>(2);
 			returnMap.put(CODE_TITLE, code);
 			returnMap.put(MSG_TITLE, msg);
 			return returnMap;
@@ -62,7 +62,7 @@ public class ControllerReturn {
 	// 业务自定义:50050~50099
 	public static Map<String, Object> error(int code, String msg) {
 		if (code >= 50050 && code <= 50099) {
-			Map<String, Object> returnMap = new HashMap<String, Object>(2);
+			Map<String, Object> returnMap = new LinkedHashMap<String, Object>(2);
 			returnMap.put(CODE_TITLE, code);
 			returnMap.put(MSG_TITLE, msg);
 			return returnMap;

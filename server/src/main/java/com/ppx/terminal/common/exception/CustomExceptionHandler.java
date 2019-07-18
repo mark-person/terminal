@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ppx.terminal.common.api.ApiReturn;
+import com.ppx.terminal.common.controller.ControllerReturn;
 
 
 
@@ -21,7 +21,7 @@ public class CustomExceptionHandler implements HandlerExceptionResolver {
         
         System.err.println("CustomExceptionHandler error:" + exception.getMessage());
     	
-        ApiReturn.errorJson(response, 50050, exception.getMessage());
+        ControllerReturn.errorJson(response, 50050, exception.getMessage());
         
         
         return null;

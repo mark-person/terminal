@@ -55,23 +55,12 @@ create table ter_client (
 	client_password varchar(32) not null,
 	primary key(client_id)
 );
-/* 每个终端不一样的密码，防止每多个终端使用相同的client_id登录 */
+-- 每个终端不一样的密码，防止每多个终端使用相同的client_id登录
 ALTER TABLE ter_client ADD UNIQUE INDEX idx_ter_client_password (client_password ASC) VISIBLE;
 
-create table ter_cell (
-	client_id	varchar(10) not null,
-	cell_id		varchar(10) not null,
-	cell_bit	varchar(16) not null,
-	cell_code	varchar(8),
-	primary key(client_id, cell_id)
-);
-alter table ter_cell add unique index idx_ter_cell_bit (cell_bit asc) visible,
-	add unique index idx_ter_cell_code (cell_code asc) visible;
-
-	
 /**
  * USE_CODE_INDEX
- * select FLOOR(10000000 + RAND() * (100000000 - 10000000))
+ * package com.ppx.terminal.mvc.tool
  */
 create table ter_config (
 	config_name  varchar(32),
@@ -88,7 +77,17 @@ alter table ter_random_code add unique index idx_ter_random_cell_code (cell_code
 
 
 
-
+-- cell_id:A0101
+-- 
+create table ter_cell (
+	client_id	varchar(10) not null,
+	cell_id		varchar(10) not null,
+	cell_bit	varchar(16) not null,
+	cell_code	varchar(8),
+	primary key(client_id, cell_id)
+);
+alter table ter_cell add unique index idx_ter_cell_bit (cell_bit asc) visible,
+	add unique index idx_ter_cell_code (cell_code asc) visible;
 
 
 	

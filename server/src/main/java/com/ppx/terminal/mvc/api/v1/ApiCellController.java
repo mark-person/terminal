@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ppx.terminal.common.api.ApiReturn;
 import com.ppx.terminal.common.api.ApiUtils;
+import com.ppx.terminal.common.controller.ControllerReturn;
 
 /**
  * @author mark
@@ -31,7 +31,7 @@ public class ApiCellController {
 		
 		// int i = 1 / 0;
 		
-		return ApiReturn.of("cellCode", impl.getCellBit(cellCode));
+		return ControllerReturn.of("cellCode", impl.getCellBit(cellCode));
 	}
 	
 	

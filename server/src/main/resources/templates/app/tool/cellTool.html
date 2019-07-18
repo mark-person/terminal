@@ -1,0 +1,55 @@
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title></title>
+<meta th:fragment="mobile" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<script type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
+<script type="text/javascript" th:src="@{/static/cdn/jquery.min-3.3.1.js}"></script>
+
+
+
+<script type="text/javascript" th:inline="javascript">
+
+$.ajaxSetup({
+	error: function(r, textStatus, errorThrown) {
+		alert("error:" + r.status + "|" + this.url);
+	}
+});
+
+$(function() {
+
+})
+
+
+function go() {
+	$.post(contextPath + "cellTool/listCell", {}, function(r) {
+	       alert(JSON.stringify(r));
+	});
+}
+
+
+
+
+</script>
+</head>
+
+<body>
+
+
+<button onclick="go()">GO</button>
+
+<div></div>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
