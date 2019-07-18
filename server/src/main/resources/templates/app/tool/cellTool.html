@@ -24,7 +24,11 @@ $(function() {
 
 
 function go() {
-	$.post(contextPath + "cellTool/listCell", {}, function(r) {
+	
+	var clientId = $("#clientId").val();
+	var lockerNumber = $("#lockerNumber").val();
+	
+	$.post(contextPath + "cellTool/listCell", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
 		var c = $("#cellTable");
 		for (var i = 0; i < r.list.length; i++) {
 			c.append('<tr>');
@@ -43,15 +47,22 @@ function go() {
 
 <body>
 
+<div>
+client
+<select id="clientId">
+	<option value="007">007</option>
+</select>
+number
+<select id="lockerNumber">
+	<option value="A">A</option>
+	<option value="A">B</option>
+</select>
+</div>
 
 <button onclick="go()">GO</button>
-
 <table id="cellTable" border="1">
 
-
 </table>
-
-
 
 </body>
 </html>

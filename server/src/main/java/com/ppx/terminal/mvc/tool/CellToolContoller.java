@@ -38,11 +38,13 @@ public class CellToolContoller {
 	
 	
 	@RequestMapping("/listCell") @ResponseBody
-	public Map<String, Object> listCell() {
+	public Map<String, Object> listCell(String clientId, String lockerNumber) {
 		
-		List<Map<String, Object>> list = impl.listCell();
+		List<Map<String, Object>> list = impl.listCell(clientId, lockerNumber);
+		List<String> rowList = impl.listRowNumber(clientId, lockerNumber);
+		List<String> columnList = impl.listColumnNumber(clientId, lockerNumber);
 		
-		return ControllerReturn.of("list", list);
+		return ControllerReturn.of("list", list, "rowList", rowList, "columnList", columnList);
 	}
 	
 	

@@ -79,6 +79,22 @@ public class ControllerReturn {
 		return returnMap;
 	}
 	
+	public static Map<String, Object> of(String k1, Object v1, String k2, Object v2) {
+		Map<String, Object> returnMap = new LinkedHashMap<String, Object>(4);
+		returnMap.putAll(SUCCESS);
+		returnMap.put(k1, v1);
+		returnMap.put(k2, v2);
+		return returnMap;
+	}
+	
+	public static Map<String, Object> of(String k1, Object v1, String k2, Object v2, String k3, Object v3) {
+		Map<String, Object> returnMap = new LinkedHashMap<String, Object>(5);
+		returnMap.putAll(SUCCESS);
+		returnMap.put(k1, v1);
+		returnMap.put(k2, v2);
+		returnMap.put(k3, v3);
+		return returnMap;
+	}
 	
 	
 	
