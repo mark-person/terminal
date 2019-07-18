@@ -20,7 +20,6 @@ $(function() {
 
 })
 
-
 function request(obj, uri) {
 	var initName = $(obj).text();
 	$(obj).attr("disabled",true);
@@ -41,6 +40,31 @@ function request(obj, uri) {
 	});
 }
 
+
+function openCell(obj) {
+	var code = $("#code").val();
+	
+	var initName = $(obj).text();
+	$(obj).attr("disabled",true);
+	$(obj).text("请求中...");
+	
+	$.post(contextPath + "test/openCell", {code:code}, function(r) {
+		
+		var nextDiv = $(obj).next();
+		nextDiv.empty();
+		
+		if (r.code == '0') {
+			nextDiv.append(JSON.stringify(r));
+		}
+		else {
+			nextDiv.append("出错:" + r.code);
+		}
+		
+		$(obj).attr("disabled", false);
+		$(obj).text(initName);
+	});
+}
+
 </script>
 
 </head>
@@ -54,17 +78,19 @@ function request(obj, uri) {
 	<button onclick="$('.view').empty()" style="width:120px;height:25px">clear all</button>
 </div>
 
-<div><button onclick="request(this, 'test/listSerialPorts')" style="width:120px;height:25px">list</button><div class="view"></div></div>
+<div><button type="button" onclick="request(this, 'test/listSerialPorts')" style="width:120px;height:25px">list</button><div class="view"></div></div>
 
 <br>
-<div><button onclick="request(this, 'test/testConnect')" style="width:120px;height:25px">conn</button><div class="view"></div></div>
+<div><button type="button" onclick="request(this, 'test/testConnect')" style="width:120px;height:25px">conn</button><div class="view"></div></div>
 
 <br>
-<div><button onclick="request(this, 'test/sendCommandOneWay')" style="width:120px;height:25px">one way</button><div class="view"></div></div>
-
+<div><button type="button" onclick="request(this, 'test/sendCommandOneWay')" style="width:120px;height:25px">one way</button><div class="view"></div></div>
 
 <br>
-<div><button onclick="request(this, 'test/sendCommandTwoWay')" style="width:120px;height:25px">two way</button><div class="view"></div></div>
+<div><button type="button" onclick="request(this, 'test/sendCommandTwoWay')" style="width:120px;height:25px">two way</button><div class="view"></div></div>
+
+<br>
+<input type="text" id="code" value="15785369"><button type="button" onclick="openCell(this)">GO</button><div class="view"></div></div>
 
 
 </body>

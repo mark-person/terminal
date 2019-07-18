@@ -5,6 +5,7 @@ package com.ppx.terminal.mvc.app;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.core.config.plugins.convert.HexConverter;
 import org.apache.logging.log4j.util.Strings;
@@ -12,11 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ppx.terminal.comm.CommUtils;
 import com.ppx.terminal.comm.SerialReader;
+import com.ppx.terminal.common.controller.ControllerReturn;
 
 import gnu.io.SerialPort;
 
@@ -36,6 +39,12 @@ public class TestContoller {
 		ModelAndView mv = new ModelAndView("app/test/test");
 		return mv;
 	}
+	
+	@RequestMapping("/openCell") @ResponseBody
+	public Map<String, Object> openCell(@RequestParam(required=true) String code) {
+		return ControllerReturn.of();
+	}
+	
 	
 	@RequestMapping("/listSerialPorts") @ResponseBody
 	public List<String> listSerialPorts() {
@@ -91,18 +100,18 @@ public class TestContoller {
 			
 			commandStr = "574B4C590900820183";
 			
-			byte[] b = new byte[9];
-			b[0] = HexConverter.parseHexBinary("57")[0];
-			b[1] = HexConverter.parseHexBinary("4B")[0];
-			b[2] = HexConverter.parseHexBinary("4C")[0];
-			b[3] = HexConverter.parseHexBinary("59")[0];
-			
-			b[4] = HexConverter.parseHexBinary("09")[0];
-			b[5] = HexConverter.parseHexBinary("00")[0];
-			b[6] = HexConverter.parseHexBinary("82")[0];
-			b[7] = HexConverter.parseHexBinary("01")[0];
-			
-			b[8] = HexConverter.parseHexBinary("83")[0];
+//			byte[] b = new byte[9];
+//			b[0] = HexConverter.parseHexBinary("57")[0];
+//			b[1] = HexConverter.parseHexBinary("4B")[0];
+//			b[2] = HexConverter.parseHexBinary("4C")[0];
+//			b[3] = HexConverter.parseHexBinary("59")[0];
+//			
+//			b[4] = HexConverter.parseHexBinary("09")[0];
+//			b[5] = HexConverter.parseHexBinary("00")[0];
+//			b[6] = HexConverter.parseHexBinary("82")[0];
+//			b[7] = HexConverter.parseHexBinary("01")[0];
+//			
+//			b[8] = HexConverter.parseHexBinary("83")[0];
 			
 			byte[] newB = HexConverter.parseHexBinary(commandStr);
 			
