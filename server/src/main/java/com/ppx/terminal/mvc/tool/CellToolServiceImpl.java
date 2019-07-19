@@ -41,7 +41,11 @@ public class CellToolServiceImpl extends MyDaoSupport {
 		
 		for (String c : column) {
 			String bit = s + c;
-			getJdbcTemplate().update(insertSql, clientId, lockerNumber + bit, bit);
+			getJdbcTemplate().update(insertSql, clientId, lockerNumber + bit, lockerNumber + bit);
+		}
+		
+		if (column.isEmpty()) {
+			getJdbcTemplate().update(insertSql, clientId, lockerNumber + "0101", lockerNumber + "0101");
 		}
 	}
 	
@@ -54,7 +58,11 @@ public class CellToolServiceImpl extends MyDaoSupport {
 		
 		for (String r : row) {
 			String bit = r + s;
-			getJdbcTemplate().update(insertSql, clientId, lockerNumber + bit, bit);
+			getJdbcTemplate().update(insertSql, clientId, lockerNumber + bit, lockerNumber + bit);
+		}
+		
+		if (row.isEmpty()) {
+			getJdbcTemplate().update(insertSql, clientId, lockerNumber + "0101", lockerNumber + "0101");
 		}
 	}
 	
@@ -82,8 +90,7 @@ public class CellToolServiceImpl extends MyDaoSupport {
 	
 	public void addCell(String clientId, String cellId) {
 		String insertSql = "insert into ter_cell(client_id, cell_id, cell_bit) values(?, ?, ?)";
-		String cellBit = cellId.substring(1);
-		getJdbcTemplate().update(insertSql, clientId, cellId, cellBit);
+		getJdbcTemplate().update(insertSql, clientId, cellId, cellId);
 	}
 	
 	

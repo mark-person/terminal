@@ -43,8 +43,8 @@ function go() {
 				var obj = cellMap[cellId] ? cellMap[cellId] : {};
 				var tdStr = '<a href="javascript:addCell(\'' + cellId + '\')">+</a>';
 				if (obj.cell_id) {
-					tdStr = obj.cell_id + '(' + obj.cell_bit + ')' +
-						'<a href="javascript:delCell(\'' + obj.cell_id + '\')">X</a>';
+					tdStr = obj.cell_id + '<a href="javascript:delCell(\'' + obj.cell_id + '\')">✖</a>' + '<br><input class="cmd" type="text" maxlength="8" value="' + obj.cell_bit + '">' +
+						'<a href="javascript:delCell(\'' + obj.cell_id + '\')">✔</a>🔓';
 				}
 				n.append('<td style="text-align:center">' + tdStr + '</td>');
 			}
@@ -141,12 +141,17 @@ function addCell(cellId) {
 
 <style type="text/css">
 a {text-decoration:none}
+.cmd {width:65px}
 </style>
 
 </head>
 
 <body>
 
+
+<div>
+加上状态:锁定，不能删除
+</div>
 <div>
 client
 <select id="clientId">
@@ -155,7 +160,7 @@ client
 number
 <select id="lockerNumber">
 	<option value="A">A</option>
-	<option value="A">B</option>
+	<option value="B">B</option>
 </select>
 </div>
 
