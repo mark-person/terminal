@@ -45,7 +45,6 @@ public class CellToolServiceImpl extends MyDaoSupport {
 	
 	
 	public void addRow(String clientId, String lockerNumber) {
-		
 		List<String> row = listRowNumber(clientId, lockerNumber);
 		List<String> column  = listColumnNumber(clientId, lockerNumber);
 		
@@ -56,7 +55,38 @@ public class CellToolServiceImpl extends MyDaoSupport {
 			String bit = s + c;
 			getJdbcTemplate().update(insertSql, clientId, lockerNumber + bit, bit);
 		}
+	}
+	
+	public void addColumn(String clientId, String lockerNumber) {
+		List<String> row = listRowNumber(clientId, lockerNumber);
+		List<String> column  = listColumnNumber(clientId, lockerNumber);
+		
+		String s = String.format("%02d", column.size() + 1);
+		String insertSql = "insert into ter_cell(client_id, cell_id, cell_bit) values(?, ?, ?)";
+		
+		for (String r : row) {
+			String bit = r + s;
+			getJdbcTemplate().update(insertSql, clientId, lockerNumber + bit, bit);
+		}
+	}
+	
+	
+	public void delRow(String clientId, String lockerNumber) {
+		List<String> row = listRowNumber(clientId, lockerNumber);
+		String lastRow = String.format("%02d", row.size());
+		
+		String delSql = "delete from ter_cell where client_id = ? and cell_id like ? '%'";
+		getJdbcTemplate().update(delSql, clientId, (lockerNumber + lastRow));
+	}
+	
+	public void delColumn(String clientId, String lockerNumber) {
+		List<String> column = listColumnNumber(clientId, lockerNumber);
+		String lastColumn = String.format("%02d", column.size());
+		
+		String delSql = "delete from ter_cell where client_id = ? and cell_id like ?";
+		getJdbcTemplate().update(delSql, clientId, (lockerNumber + "%" + lastColumn));
 		
 	}
+	
 	
 }

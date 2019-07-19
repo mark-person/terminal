@@ -40,7 +40,7 @@ function go() {
 			n.append('<tr>');
 			for (var j = 0; j < r.columnList.length; j++) {
 				var bit = r.rowList[i] + r.columnList[j];
-				n.append('<td>' + cellMap[bit] + '</td>');
+				n.append('<td>' + cellMap[bit] + '(' + bit + ')' + '</td>');
 			}
 			n.append('</tr>');
 		}
@@ -62,9 +62,47 @@ function addRow() {
 }
 
 function addColumn() {
+	var clientId = $("#clientId").val();
+	var lockerNumber = $("#lockerNumber").val();
+	
+	$.post(contextPath + "cellTool/addColumn", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
+		if (r.code == 0) {
+			go();
+		}
+		else {
+			alert(JSON.stringify(r));
+		}
+	})
+}
+
+function delRow() {
+	var clientId = $("#clientId").val();
+	var lockerNumber = $("#lockerNumber").val();
+	
+	$.post(contextPath + "cellTool/delRow", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
+		if (r.code == 0) {
+			go();
+		}
+		else {
+			alert(JSON.stringify(r));
+		}
+	})
 }
 
 
+function delColumn() {
+	var clientId = $("#clientId").val();
+	var lockerNumber = $("#lockerNumber").val();
+	
+	$.post(contextPath + "cellTool/delColumn", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
+		if (r.code == 0) {
+			go();
+		}
+		else {
+			alert(JSON.stringify(r));
+		}
+	})
+}
 
 
 </script>
@@ -87,6 +125,11 @@ number
 <button onclick="go()">GO</button>
 <button onclick="addRow()">+ROW</button>
 <button onclick="addColumn()">+COL</button>
+
+
+<button onclick="delRow()">-ROW</button>
+<button onclick="delColumn()">-COL</button>
+
 
 <table id="newCellTable" border="1"></table>
 
