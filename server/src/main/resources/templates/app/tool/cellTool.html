@@ -46,7 +46,7 @@ function go() {
 					tdStr = obj.cell_id + '(' + obj.cell_bit + ')' +
 						'<a href="javascript:delCell(\'' + obj.cell_id + '\')">X</a>';
 				}
-				n.append('<td>' + tdStr + '</td>');
+				n.append('<td style="text-align:center">' + tdStr + '</td>');
 			}
 			n.append('</tr>');
 		}
@@ -138,6 +138,11 @@ function addCell(cellId) {
 }
 
 </script>
+
+<style type="text/css">
+a {text-decoration:none}
+</style>
+
 </head>
 
 <body>
