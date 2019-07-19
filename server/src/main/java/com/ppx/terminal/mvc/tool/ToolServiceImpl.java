@@ -16,8 +16,8 @@ public class ToolServiceImpl extends MyDaoSupport {
 		String insertSql = "insert into ter_random_code(code_index, cell_code) values(?, ?)";
 		
 		for (int i = 1; i <= 1000; i++) {
-			String code = String.format("%08d", (int)(Math.random()*100000000));
-    		getJdbcTemplate().update(insertSql, i, code);
+			String randomCode = String.format("%08d", (int)(Math.random()*100000000));
+    		getJdbcTemplate().update(insertSql, i, randomCode);
 		}
 	}
 	

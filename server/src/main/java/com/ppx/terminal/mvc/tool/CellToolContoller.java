@@ -50,36 +50,38 @@ public class CellToolContoller {
 	
 	@RequestMapping("/addRow") @ResponseBody
 	public Map<String, Object> addRow(String clientId, String lockerNumber) {
-		
 		impl.addRow(clientId, lockerNumber);
-		
 		return ControllerReturn.of();
 	}
 	
 	@RequestMapping("/addColumn") @ResponseBody
 	public Map<String, Object> addColumn(String clientId, String lockerNumber) {
-		
 		impl.addColumn(clientId, lockerNumber);
-		
 		return ControllerReturn.of();
 	}
 	
 	@RequestMapping("/delRow") @ResponseBody
 	public Map<String, Object> delRow(String clientId, String lockerNumber) {
-		
 		impl.delRow(clientId, lockerNumber);
-		
 		return ControllerReturn.of();
 	}
 	
 	@RequestMapping("/delColumn") @ResponseBody
 	public Map<String, Object> delColumn(String clientId, String lockerNumber) {
-		
 		impl.delColumn(clientId, lockerNumber);
-		
 		return ControllerReturn.of();
 	}
 	
+	@RequestMapping("/delCell") @ResponseBody
+	public Map<String, Object> delCell(String clientId, String cellId) {
+		impl.delCell(clientId, cellId);
+		return ControllerReturn.of();
+	}
 	
+	@RequestMapping("/addCell") @ResponseBody
+	public Map<String, Object> addCell(String clientId, String cellId) {
+		impl.addCell(clientId, cellId);
+		return ControllerReturn.of();
+	}
 	
 }

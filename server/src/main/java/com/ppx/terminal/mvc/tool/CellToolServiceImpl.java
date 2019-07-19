@@ -32,18 +32,6 @@ public class CellToolServiceImpl extends MyDaoSupport {
 		return list;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public void addRow(String clientId, String lockerNumber) {
 		List<String> row = listRowNumber(clientId, lockerNumber);
 		List<String> column  = listColumnNumber(clientId, lockerNumber);
@@ -85,8 +73,21 @@ public class CellToolServiceImpl extends MyDaoSupport {
 		
 		String delSql = "delete from ter_cell where client_id = ? and cell_id like ?";
 		getJdbcTemplate().update(delSql, clientId, (lockerNumber + "%" + lastColumn));
-		
 	}
+	
+	public void delCell(String clientId, String cellId) {
+		String delSql = "delete from ter_cell where client_id = ? and cell_id = ?";
+		getJdbcTemplate().update(delSql, clientId, cellId);
+	}
+	
+	public void addCell(String clientId, String cellId) {
+		String insertSql = "insert into ter_cell(client_id, cell_id, cell_bit) values(?, ?, ?)";
+		String cellBit = cellId.substring(1);
+		getJdbcTemplate().update(insertSql, clientId, cellId, cellBit);
+	}
+	
+	
+	
 	
 	
 }

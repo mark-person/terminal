@@ -19,7 +19,7 @@ $.ajaxSetup({
 });
 
 $(function() {
-
+	
 })
 
 
@@ -31,16 +31,22 @@ function go() {
 		var c = $("#cellTable");
 		var cellMap = [];
 		for (var i = 0; i < r.list.length; i++) {
-			var bit = r.list[i].cell_bit;
-			cellMap[bit] = r.list[i].cell_id;
+			var cellId = r.list[i].cell_id;
+			cellMap[cellId] = r.list[i];
 		}
 		var n = $("#newCellTable");
 		n.html("");
 		for (var i = 0; i < r.rowList.length; i++) {
 			n.append('<tr>');
 			for (var j = 0; j < r.columnList.length; j++) {
-				var bit = r.rowList[i] + r.columnList[j];
-				n.append('<td>' + cellMap[bit] + '(' + bit + ')' + '</td>');
+				var cellId =  lockerNumber + r.rowList[i] + r.columnList[j];
+				var obj = cellMap[cellId] ? cellMap[cellId] : {};
+				var tdStr = '<a href="javascript:addCell(\'' + cellId + '\')">+</a>';
+				if (obj.cell_id) {
+					tdStr = obj.cell_id + '(' + obj.cell_bit + ')' +
+						'<a href="javascript:delCell(\'' + obj.cell_id + '\')">X</a>';
+				}
+				n.append('<td>' + tdStr + '</td>');
 			}
 			n.append('</tr>');
 		}
@@ -50,7 +56,6 @@ function go() {
 function addRow() {
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
-	
 	$.post(contextPath + "cellTool/addRow", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
 		if (r.code == 0) {
 			go();
@@ -64,7 +69,6 @@ function addRow() {
 function addColumn() {
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
-	
 	$.post(contextPath + "cellTool/addColumn", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
 		if (r.code == 0) {
 			go();
@@ -76,9 +80,10 @@ function addColumn() {
 }
 
 function delRow() {
+	if (confirm("delete last row?") == false) return;
+	
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
-	
 	$.post(contextPath + "cellTool/delRow", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
 		if (r.code == 0) {
 			go();
@@ -91,9 +96,10 @@ function delRow() {
 
 
 function delColumn() {
+	if (confirm("delete last column?") == false) return;
+	
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
-	
 	$.post(contextPath + "cellTool/delColumn", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
 		if (r.code == 0) {
 			go();
@@ -104,6 +110,32 @@ function delColumn() {
 	})
 }
 
+
+function delCell(cellId) {
+	if (confirm("delete " + cellId + "?") == false) return;
+	
+	var clientId = $("#clientId").val();
+	$.post(contextPath + "cellTool/delCell", {clientId:clientId, cellId:cellId}, function(r) {
+		if (r.code == 0) {
+			go();
+		}
+		else {
+			alert(JSON.stringify(r));
+		}
+	})
+}
+
+function addCell(cellId) {
+	var clientId = $("#clientId").val();
+	$.post(contextPath + "cellTool/addCell", {clientId:clientId, cellId:cellId}, function(r) {
+		if (r.code == 0) {
+			go();
+		}
+		else {
+			alert(JSON.stringify(r));
+		}
+	})
+}
 
 </script>
 </head>
