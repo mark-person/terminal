@@ -34,4 +34,29 @@ public class CellToolServiceImpl extends MyDaoSupport {
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public void addRow(String clientId, String lockerNumber) {
+		
+		List<String> row = listRowNumber(clientId, lockerNumber);
+		List<String> column  = listColumnNumber(clientId, lockerNumber);
+		
+		String s = String.format("%02d", row.size() + 1);
+		String insertSql = "insert into ter_cell(client_id, cell_id, cell_bit) values(?, ?, ?)";
+		
+		for (String c : column) {
+			String bit = s + c;
+			getJdbcTemplate().update(insertSql, clientId, lockerNumber + bit, bit);
+		}
+		
+	}
+	
 }

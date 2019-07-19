@@ -51,13 +51,17 @@ public class CellToolContoller {
 	@RequestMapping("/addRow") @ResponseBody
 	public Map<String, Object> addRow(String clientId, String lockerNumber) {
 		
-		return null;
+		impl.addRow(clientId, lockerNumber);
+		
+		return ControllerReturn.of();
 	}
 	
 	@RequestMapping("/addColumn") @ResponseBody
 	public Map<String, Object> addColumn(String clientId, String lockerNumber) {
 		
-		return null;
+		impl.addRow(clientId, lockerNumber);
+		
+		return ControllerReturn.of();
 	}
 	
 	

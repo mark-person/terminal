@@ -48,11 +48,20 @@ function go() {
 }
 
 function addRow() {
+	var clientId = $("#clientId").val();
+	var lockerNumber = $("#lockerNumber").val();
 	
+	$.post(contextPath + "cellTool/addRow", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
+		if (r.code == 0) {
+			go();
+		}
+		else {
+			alert(JSON.stringify(r));
+		}
+	})
 }
 
 function addColumn() {
-	
 }
 
 
