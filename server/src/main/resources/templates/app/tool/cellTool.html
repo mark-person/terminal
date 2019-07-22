@@ -15,6 +15,12 @@
 $.ajaxSetup({
 	error: function(r, textStatus, errorThrown) {
 		alert("error:" + r.status + "|" + this.url);
+	},
+	complete: function(r, textStatus, errorThrown) {
+	    var code = JSON.parse(r.responseText).code;
+		if (code != 0) {
+			alert(r.responseText);
+		}
 	}
 });
 
@@ -43,10 +49,24 @@ function go() {
 				var obj = cellMap[cellId] ? cellMap[cellId] : {};
 				var tdStr = '<a href="javascript:addCell(\'' + cellId + '\')">+</a>';
 				if (obj.cell_id) {
-					tdStr = obj.cell_id + '<a href="javascript:delCell(\'' + obj.cell_id + '\')">✖</a>' + '<br><input class="cmd" type="text" maxlength="8" value="' + obj.cell_bit + '">' +
-						'<a href="javascript:delCell(\'' + obj.cell_id + '\')">✔</a>🔓';
+					var action = '';
+					var cellClass = '';
+					var inputDisabled = '';
+					if (obj.cell_set_status == 'INIT') {
+						inputDisabled = '';
+						cellClass = 'initClass';
+						action += '<a href="#this", onclick="lockCell(this, \'' + obj.cell_id + '\')">[锁定]</a>&nbsp;';
+						action += '<a href="javascript:delCell(\'' + obj.cell_id + '\')">[删]</a>';
+					}
+					else {
+						inputDisabled = 'disabled';
+						cellClass = 'lockClass';
+						action += '<a href="javascript:unLockCell(\'' + obj.cell_id + '\')">[解锁]</a>';
+					}
+					
+					tdStr = obj.cell_id + '<br><input ' + inputDisabled + ' class="cmd" type="text" maxlength="8" value="' + obj.cell_bit + '">' + action;
 				}
-				n.append('<td style="text-align:center">' + tdStr + '</td>');
+				n.append('<td class="' + cellClass + '">' + tdStr + '</td>');
 			}
 			n.append('</tr>');
 		}
@@ -57,12 +77,7 @@ function addRow() {
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
 	$.post(contextPath + "cellTool/addRow", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
-		if (r.code == 0) {
-			go();
-		}
-		else {
-			alert(JSON.stringify(r));
-		}
+		if (r.code == 0) go();
 	})
 }
 
@@ -70,12 +85,7 @@ function addColumn() {
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
 	$.post(contextPath + "cellTool/addColumn", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
-		if (r.code == 0) {
-			go();
-		}
-		else {
-			alert(JSON.stringify(r));
-		}
+		if (r.code == 0) go();
 	})
 }
 
@@ -85,15 +95,9 @@ function delRow() {
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
 	$.post(contextPath + "cellTool/delRow", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
-		if (r.code == 0) {
-			go();
-		}
-		else {
-			alert(JSON.stringify(r));
-		}
+		if (r.code == 0) go();
 	})
 }
-
 
 function delColumn() {
 	if (confirm("delete last column?") == false) return;
@@ -101,39 +105,43 @@ function delColumn() {
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
 	$.post(contextPath + "cellTool/delColumn", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
-		if (r.code == 0) {
-			go();
-		}
-		else {
-			alert(JSON.stringify(r));
-		}
+		if (r.code == 0) go();
 	})
 }
-
 
 function delCell(cellId) {
 	if (confirm("delete " + cellId + "?") == false) return;
 	
 	var clientId = $("#clientId").val();
 	$.post(contextPath + "cellTool/delCell", {clientId:clientId, cellId:cellId}, function(r) {
-		if (r.code == 0) {
-			go();
-		}
-		else {
-			alert(JSON.stringify(r));
-		}
+		if (r.code == 0) go();
+	})
+}
+
+function lockCell(obj, cellId) {
+	var openCode = $.trim($(obj).prev().val());
+	if (openCode == "") {
+		alert("开锁码不能为空");
+		return;
+	}
+	
+	var clientId = $("#clientId").val();
+	$.post(contextPath + "cellTool/lockCell", {clientId:clientId, cellId:cellId, openCode:openCode}, function(r) {
+		if (r.code == 0) go();
+	})
+}
+
+function unLockCell(cellId) {
+	var clientId = $("#clientId").val();
+	$.post(contextPath + "cellTool/unLockCell", {clientId:clientId, cellId:cellId}, function(r) {
+		if (r.code == 0) go();
 	})
 }
 
 function addCell(cellId) {
 	var clientId = $("#clientId").val();
 	$.post(contextPath + "cellTool/addCell", {clientId:clientId, cellId:cellId}, function(r) {
-		if (r.code == 0) {
-			go();
-		}
-		else {
-			alert(JSON.stringify(r));
-		}
+		if (r.code == 0) go();
 	})
 }
 
@@ -142,6 +150,9 @@ function addCell(cellId) {
 <style type="text/css">
 a {text-decoration:none}
 .cmd {width:65px}
+.initClass {text-align:center}
+.lockClass {text-align:center; background-color:orange;}
+
 </style>
 
 </head>
@@ -149,9 +160,7 @@ a {text-decoration:none}
 <body>
 
 
-<div>
-加上状态:锁定，不能删除
-</div>
+
 <div>
 client
 <select id="clientId">

@@ -32,14 +32,11 @@ public class CellToolContoller {
 	@RequestMapping("/cellTool")
 	public ModelAndView test() {
 		ModelAndView mv = new ModelAndView("app/tool/cellTool");
-		
 		return mv;
 	}
 	
-	
 	@RequestMapping("/listCell") @ResponseBody
 	public Map<String, Object> listCell(String clientId, String lockerNumber) {
-		
 		List<Map<String, Object>> list = impl.listCell(clientId, lockerNumber);
 		List<String> rowList = impl.listRowNumber(clientId, lockerNumber);
 		List<String> columnList = impl.listColumnNumber(clientId, lockerNumber);
@@ -83,5 +80,21 @@ public class CellToolContoller {
 		impl.addCell(clientId, cellId);
 		return ControllerReturn.of();
 	}
+	
+	@RequestMapping("/lockCell") @ResponseBody
+	public Map<String, Object> lockCell(String clientId, String cellId, String openCode) {
+		int r = impl.lockCell(clientId, cellId, openCode);
+		if (r == -1) {
+			return ControllerReturn.of(40000, "开锁码已经存在");
+		}
+		return ControllerReturn.of();
+	}
+	
+	@RequestMapping("/unLockCell") @ResponseBody
+	public Map<String, Object> unLockCell(String clientId, String cellId) {
+		impl.unLockCell(clientId, cellId);
+		return ControllerReturn.of();
+	}
+	
 	
 }

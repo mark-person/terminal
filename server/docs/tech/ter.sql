@@ -80,13 +80,15 @@ alter table ter_random_code add unique index idx_ter_random_cell_code (cell_code
 -- cell_id:A0101
 -- 
 create table ter_cell (
-	client_id	varchar(10) not null,
-	cell_id		varchar(10) not null,
-	cell_bit	varchar(16) not null,
-	cell_code	varchar(8),
+	client_id		varchar(10) not null,
+	cell_id			varchar(10) not null,
+	cell_bit		varchar(16) not null,
+	cell_code		varchar(8),
+	cell_set_status varchar(5) default 'INIT' comment 'INIT:初始,LOCK:锁定',
+	cell_on_off 	varchar(5) not null default 'UNKWN' comment 'UNKWN:未知,ON:开,OFF:关',
 	primary key(client_id, cell_id)
 );
-alter table ter_cell add unique index idx_ter_cell_bit (cell_bit asc) visible,
+alter table ter_cell add unique index idx_ter_cell_bit (client_id, cell_bit) visible,
 	add unique index idx_ter_cell_code (cell_code asc) visible;
 
 
