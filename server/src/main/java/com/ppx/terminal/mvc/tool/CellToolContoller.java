@@ -35,12 +35,17 @@ public class CellToolContoller {
 		return mv;
 	}
 	
+	@RequestMapping("/cellSet")
+	public ModelAndView cellSet() {
+		ModelAndView mv = new ModelAndView("app/tool/cellSet");
+		return mv;
+	}
+	
 	@RequestMapping("/listCell") @ResponseBody
 	public Map<String, Object> listCell(String clientId, String lockerNumber) {
 		List<Map<String, Object>> list = impl.listCell(clientId, lockerNumber);
 		List<String> rowList = impl.listRowNumber(clientId, lockerNumber);
 		List<String> columnList = impl.listColumnNumber(clientId, lockerNumber);
-		
 		return ControllerReturn.of("list", list, "rowList", rowList, "columnList", columnList);
 	}
 	
@@ -81,12 +86,24 @@ public class CellToolContoller {
 		return ControllerReturn.of();
 	}
 	
-	@RequestMapping("/lockCell") @ResponseBody
-	public Map<String, Object> lockCell(String clientId, String cellId, String openCode) {
-		int r = impl.lockCell(clientId, cellId, openCode);
+	@RequestMapping("/editCell") @ResponseBody
+	public Map<String, Object> editCell(String clientId, String cellId, String openCode) {
+		int r = impl.editCell(clientId, cellId, openCode);
 		if (r == -1) {
-			return ControllerReturn.of(40000, "开锁码已经存在");
+			return ControllerReturn.of(40000, "开锁码[" + openCode + "]已经存在");
 		}
+		return ControllerReturn.of();
+	}
+	
+	@RequestMapping("/initCell") @ResponseBody
+	public Map<String, Object> initCell(String clientId, String cellId) {
+		impl.initCell(clientId, cellId);
+		return ControllerReturn.of();
+	}
+	
+	@RequestMapping("/lockCell") @ResponseBody
+	public Map<String, Object> lockCell(String clientId, String cellId) {
+		impl.initCell(clientId, cellId);
 		return ControllerReturn.of();
 	}
 	
@@ -97,4 +114,13 @@ public class CellToolContoller {
 	}
 	
 	
+	@RequestMapping("/openCell") @ResponseBody
+	public Map<String, Object> openCell(String clientId, String cellId) {
+		return ControllerReturn.of();
+	}
+	
+	@RequestMapping("/closeCell") @ResponseBody
+	public Map<String, Object> closeCell(String clientId, String cellId) {
+		return ControllerReturn.of();
+	}
 }

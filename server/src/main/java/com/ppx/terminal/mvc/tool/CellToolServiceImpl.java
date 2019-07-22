@@ -93,20 +93,30 @@ public class CellToolServiceImpl extends MyDaoSupport {
 		getJdbcTemplate().update(insertSql, clientId, cellId, cellId);
 	}
 	
-	public int lockCell(String clientId, String cellId, String openCode) {
-		String existsSql = "select count(*) from ter_cell where client_id = ? and cell_bit = ?";
-		int c = getJdbcTemplate().queryForObject(existsSql, Integer.class, clientId, openCode);
+	public int editCell(String clientId, String cellId, String openCode) {
+		String existsSql = "select count(*) from ter_cell where client_id = ? and cell_bit = ? and cell_id != ?";
+		int c = getJdbcTemplate().queryForObject(existsSql, Integer.class, clientId, openCode, cellId);
 		if (c > 0) {
 			return -1;
 		}
 		
 		String lockSql = "update ter_cell set cell_set_status = ?, cell_bit = ? where client_id = ? and cell_id = ?";
-		return getJdbcTemplate().update(lockSql, "LOCK", openCode, clientId, cellId);
+		return getJdbcTemplate().update(lockSql, "EDIT", openCode, clientId, cellId);
 	}
 	
-	public void unLockCell(String clientId, String cellId) {
+	public void initCell(String clientId, String cellId) {
 		String lockSql = "update ter_cell set cell_set_status = ? where client_id = ? and cell_id = ?";
 		getJdbcTemplate().update(lockSql, "INIT", clientId, cellId);
+	}
+	
+	public int lockCell(String clientId, String cellId) {
+		String lockSql = "update ter_cell set cell_set_status = ? where client_id = ? and cell_id = ?";
+		return getJdbcTemplate().update(lockSql, "LOCK", clientId, cellId);
+	}
+	
+	public int unLockCell(String clientId, String cellId) {
+		String lockSql = "update ter_cell set cell_set_status = ? where client_id = ? and cell_id = ?";
+		return getJdbcTemplate().update(lockSql, "EDIT", clientId, cellId);
 	}
 	
 	

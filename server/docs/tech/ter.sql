@@ -84,7 +84,7 @@ create table ter_cell (
 	cell_id			varchar(10) not null,
 	cell_bit		varchar(16) not null,
 	cell_code		varchar(8),
-	cell_set_status varchar(5) default 'INIT' comment 'INIT:初始,LOCK:锁定',
+	cell_set_status varchar(5) default 'INIT' comment 'INIT:初始,EDIT:已编辑,LOCK:锁定',
 	cell_on_off 	varchar(5) not null default 'UNKWN' comment 'UNKWN:未知,ON:开,OFF:关',
 	primary key(client_id, cell_id)
 );

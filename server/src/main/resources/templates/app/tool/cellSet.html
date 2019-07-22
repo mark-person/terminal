@@ -43,27 +43,29 @@ function go() {
 			for (var j = 0; j < r.columnList.length; j++) {
 				var cellId =  lockerNumber + r.rowList[i] + r.columnList[j];
 				var obj = cellMap[cellId] ? cellMap[cellId] : {};
-				var tdStr = '<a href="javascript:addCell(\'' + cellId + '\')">+</a>';
+				var tdStr = '';
 				if (obj.cell_id) {
 					var action = '';
 					var cellClass = '';
-					var inputDisabled = '';
 					if (obj.cell_set_status == 'INIT') {
 						inputDisabled = '';
 						cellClass = 'initClass';
-						action += '<a href="#this", onclick="editCell(this, \'' + obj.cell_id + '\')">[修改]</a>&nbsp;';
-						action += '<a href="javascript:delCell(\'' + obj.cell_id + '\')">[删]</a>';
 					}
-					if (obj.cell_set_status == 'EDIT') {
-						inputDisabled = 'disabled';
+					else if (obj.cell_set_status == 'EDIT') {
 						cellClass = 'editClass';
-						action += '<a href="javascript:initCell(\'' + obj.cell_id + '\')">[置初始]</a>';
+						action += '<a href="javascript:openCell(\'' + obj.cell_id + '\')">[开]</a>&nbsp;&nbsp;';
+						action += '<a href="javascript:closeCell(\'' + obj.cell_id + '\')">[关]</a>&nbsp;&nbsp;';
+						action += '<a href="javascript:lockCell(\'' + obj.cell_id + '\')">[锁定]</a>';
 					}
-					else {
-						inputDisabled = 'disabled';
+					else if (obj.cell_set_status == 'LOCK') {
+						cellClass = 'lockClass';
+						action += '<a href="javascript:openCell(\'' + obj.cell_id + '\')">[开]</a>&nbsp;&nbsp;';
+						action += '<a href="javascript:closeCell(\'' + obj.cell_id + '\')">[关]</a>&nbsp;&nbsp;';
+						action += '<a href="javascript:unLockCell(\'' + obj.cell_id + '\')">[解锁]</a>';
 					}
 					
-					tdStr = obj.cell_id + '<br><input ' + inputDisabled + ' class="cmd" type="text" maxlength="8" value="' + obj.cell_bit + '">' + action;
+					
+					tdStr = obj.cell_id + '<br>' + obj.cell_bit + action;
 				}
 				n.append('<td class="' + cellClass + '">' + tdStr + '</td>');
 			}
@@ -72,92 +74,50 @@ function go() {
 	});
 }
 
-function addRow() {
+function openCell(cellId) {
 	var clientId = $("#clientId").val();
-	var lockerNumber = $("#lockerNumber").val();
-	$.post(contextPath + "cellTool/addRow", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
+	$.post(contextPath + "cellTool/openCell", {clientId:clientId, cellId:cellId}, function(r) {
 		if (r.code == 0) go();
 	})
 }
 
-function addColumn() {
+
+function closeCell(cellId) {
 	var clientId = $("#clientId").val();
-	var lockerNumber = $("#lockerNumber").val();
-	$.post(contextPath + "cellTool/addColumn", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
+	$.post(contextPath + "cellTool/closeCell", {clientId:clientId, cellId:cellId}, function(r) {
 		if (r.code == 0) go();
 	})
 }
 
-function delRow() {
-	if (confirm("delete last row?") == false) return;
-	
-	var clientId = $("#clientId").val();
-	var lockerNumber = $("#lockerNumber").val();
-	$.post(contextPath + "cellTool/delRow", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
-		if (r.code == 0) go();
-	})
-}
 
-function delColumn() {
-	if (confirm("delete last column?") == false) return;
-	
-	var clientId = $("#clientId").val();
-	var lockerNumber = $("#lockerNumber").val();
-	$.post(contextPath + "cellTool/delColumn", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
-		if (r.code == 0) go();
-	})
-}
-
-function delCell(cellId) {
-	if (confirm("delete " + cellId + "?") == false) return;
-	
-	var clientId = $("#clientId").val();
-	$.post(contextPath + "cellTool/delCell", {clientId:clientId, cellId:cellId}, function(r) {
-		if (r.code == 0) go();
-	})
-}
-
-function editCell(obj, cellId) {
-	var openCode = $.trim($(obj).prev().val());
-	if (openCode == "") {
-		alert("开锁码不能为空");
-		return;
-	}
-	
-	var clientId = $("#clientId").val();
-	$.post(contextPath + "cellTool/editCell", {clientId:clientId, cellId:cellId, openCode:openCode}, function(r) {
-		if (r.code == 0) go();
-	})
-}
-
-function initCell(cellId) {
+function lockCell(cellId) {
 	var clientId = $("#clientId").val();
 	$.post(contextPath + "cellTool/initCell", {clientId:clientId, cellId:cellId}, function(r) {
 		if (r.code == 0) go();
 	})
 }
 
-function addCell(cellId) {
+function unLockCell(cellId) {
 	var clientId = $("#clientId").val();
-	$.post(contextPath + "cellTool/addCell", {clientId:clientId, cellId:cellId}, function(r) {
+	$.post(contextPath + "cellTool/unLockCell", {clientId:clientId, cellId:cellId}, function(r) {
 		if (r.code == 0) go();
 	})
 }
 
+
 </script>
 
 <style type="text/css">
-a {text-decoration:none}
+a:link, a:active{text-decoration:none}
 .cmd {width:65px}
 .initClass {text-align:center}
 .editClass {text-align:center; background-color:orange;}
+.lockClass {text-align:center; background-color:green;}
 </style>
 
 </head>
 
 <body>
-
-
 
 <div>
 client
@@ -172,14 +132,6 @@ number
 </div>
 
 <button onclick="go()">GO</button>
-<button onclick="addRow()">+ROW</button>
-<button onclick="addColumn()">+COL</button>
-
-
-<button onclick="delRow()">-ROW</button>
-<button onclick="delColumn()">-COL</button>
-
-
 <table id="newCellTable" border="1"></table>
 
 </body>
