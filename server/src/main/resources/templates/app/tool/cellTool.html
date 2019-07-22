@@ -54,7 +54,7 @@ function go() {
 						action += '<a href="#this", onclick="editCell(this, \'' + obj.cell_id + '\')">[修改]</a>&nbsp;';
 						action += '<a href="javascript:delCell(\'' + obj.cell_id + '\')">[删]</a>';
 					}
-					if (obj.cell_set_status == 'EDIT') {
+					else if (obj.cell_set_status == 'EDIT') {
 						inputDisabled = 'disabled';
 						cellClass = 'editClass';
 						action += '<a href="javascript:initCell(\'' + obj.cell_id + '\')">[置初始]</a>';

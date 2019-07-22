@@ -103,7 +103,7 @@ public class CellToolContoller {
 	
 	@RequestMapping("/lockCell") @ResponseBody
 	public Map<String, Object> lockCell(String clientId, String cellId) {
-		impl.initCell(clientId, cellId);
+		impl.lockCell(clientId, cellId);
 		return ControllerReturn.of();
 	}
 	

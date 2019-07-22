@@ -81,7 +81,6 @@ function openCell(cellId) {
 	})
 }
 
-
 function closeCell(cellId) {
 	var clientId = $("#clientId").val();
 	$.post(contextPath + "cellTool/closeCell", {clientId:clientId, cellId:cellId}, function(r) {
@@ -89,10 +88,9 @@ function closeCell(cellId) {
 	})
 }
 
-
 function lockCell(cellId) {
 	var clientId = $("#clientId").val();
-	$.post(contextPath + "cellTool/initCell", {clientId:clientId, cellId:cellId}, function(r) {
+	$.post(contextPath + "cellTool/lockCell", {clientId:clientId, cellId:cellId}, function(r) {
 		if (r.code == 0) go();
 	})
 }
@@ -103,7 +101,6 @@ function unLockCell(cellId) {
 		if (r.code == 0) go();
 	})
 }
-
 
 </script>
 
