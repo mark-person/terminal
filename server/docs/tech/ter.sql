@@ -92,6 +92,18 @@ alter table ter_cell add unique index idx_ter_cell_bit (client_id, cell_bit) vis
 	add unique index idx_ter_cell_code (cell_code asc) visible;
 
 
+create table ter_cell (
+	client_id			varchar(10) not null,
+	cell_id				varchar(10) not null,
+	open_code			varchar(16) not null comment '开锁码',
+	random_code			varchar(8) comment '开锁随机码',
+	cell_set_status 	varchar(5) default 'INI' comment 'INI:初始,EDIT:已编辑,LOCK:锁定',
+	cell_on_off 		varchar(5) not null default 'INI' comment 'INI:初始,ON:开,OFF:关',
+	primary key(client_id, cell_id)
+) comment='柜子';
+alter table ter_cell add unique index idx_ter_cell_bit (client_id, open_code) visible,
+	add unique index idx_ter_cell_code (random_code asc) visible;
+
 	
 	
 	
