@@ -118,9 +118,5 @@ public class CellToolContoller {
 	public Map<String, Object> openCell(String clientId, String cellId) {
 		return ControllerReturn.of();
 	}
-	
-	@RequestMapping("/closeCell") @ResponseBody
-	public Map<String, Object> closeCell(String clientId, String cellId) {
-		return ControllerReturn.of();
-	}
+
 }

@@ -44,28 +44,25 @@ function go() {
 				var cellId =  lockerNumber + r.rowList[i] + r.columnList[j];
 				var obj = cellMap[cellId] ? cellMap[cellId] : {};
 				var tdStr = '';
+				var cellClass = '';
 				if (obj.cell_id) {
 					var action = '';
-					var cellClass = '';
+					var open = '';
 					if (obj.cell_set_status == 'INIT') {
 						inputDisabled = '';
 						cellClass = 'initClass';
 					}
 					else if (obj.cell_set_status == 'EDIT') {
 						cellClass = 'editClass';
-						action += '<a href="javascript:openCell(\'' + obj.cell_id + '\')">[开]</a>&nbsp;&nbsp;';
-						action += '<a href="javascript:closeCell(\'' + obj.cell_id + '\')">[关]</a>&nbsp;&nbsp;';
+						open = '<a href="javascript:openCell(\'' + obj.cell_id + '\')">[开]</a>';
 						action += '<a href="javascript:lockCell(\'' + obj.cell_id + '\')">[锁定]</a>';
 					}
 					else if (obj.cell_set_status == 'LOCK') {
 						cellClass = 'lockClass';
-						action += '<a href="javascript:openCell(\'' + obj.cell_id + '\')">[开]</a>&nbsp;&nbsp;';
-						action += '<a href="javascript:closeCell(\'' + obj.cell_id + '\')">[关]</a>&nbsp;&nbsp;';
+						open = '<a href="javascript:openCell(\'' + obj.cell_id + '\')">[开]</a>';
 						action += '<a href="javascript:unLockCell(\'' + obj.cell_id + '\')">[解锁]</a>';
 					}
-					
-					
-					tdStr = obj.cell_id + '<br>' + obj.cell_bit + action;
+					tdStr = obj.cell_id + open + '<br><input disabled class="cmd" type="text" value="' + obj.cell_bit + '">' + action;
 				}
 				n.append('<td class="' + cellClass + '">' + tdStr + '</td>');
 			}
@@ -77,28 +74,23 @@ function go() {
 function openCell(cellId) {
 	var clientId = $("#clientId").val();
 	$.post(contextPath + "cellTool/openCell", {clientId:clientId, cellId:cellId}, function(r) {
-		if (r.code == 0) go();
-	})
-}
-
-function closeCell(cellId) {
-	var clientId = $("#clientId").val();
-	$.post(contextPath + "cellTool/closeCell", {clientId:clientId, cellId:cellId}, function(r) {
-		if (r.code == 0) go();
+		if (r.code === 0) {
+			alert("OK");
+		}
 	})
 }
 
 function lockCell(cellId) {
 	var clientId = $("#clientId").val();
 	$.post(contextPath + "cellTool/lockCell", {clientId:clientId, cellId:cellId}, function(r) {
-		if (r.code == 0) go();
+		if (r.code === 0) go();
 	})
 }
 
 function unLockCell(cellId) {
 	var clientId = $("#clientId").val();
 	$.post(contextPath + "cellTool/unLockCell", {clientId:clientId, cellId:cellId}, function(r) {
-		if (r.code == 0) go();
+		if (r.code === 0) go();
 	})
 }
 
@@ -106,10 +98,12 @@ function unLockCell(cellId) {
 
 <style type="text/css">
 a:link, a:active{text-decoration:none}
-.cmd {width:65px}
+.cmd {width:65px;text-align:center}
 .initClass {text-align:center}
 .editClass {text-align:center; background-color:orange;}
-.lockClass {text-align:center; background-color:green;}
+.lockClass {text-align:center; background-color:springgreen;}
+
+#newCellTable td {width:150px}
 </style>
 
 </head>

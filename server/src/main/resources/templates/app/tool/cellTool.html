@@ -44,25 +44,27 @@ function go() {
 				var cellId =  lockerNumber + r.rowList[i] + r.columnList[j];
 				var obj = cellMap[cellId] ? cellMap[cellId] : {};
 				var tdStr = '<a href="javascript:addCell(\'' + cellId + '\')">+</a>';
+				var cellClass = 'emptyClass';
 				if (obj.cell_id) {
 					var action = '';
-					var cellClass = '';
 					var inputDisabled = '';
 					if (obj.cell_set_status == 'INIT') {
-						inputDisabled = '';
 						cellClass = 'initClass';
 						action += '<a href="#this", onclick="editCell(this, \'' + obj.cell_id + '\')">[修改]</a>&nbsp;';
 						action += '<a href="javascript:delCell(\'' + obj.cell_id + '\')">[删]</a>';
 					}
 					else if (obj.cell_set_status == 'EDIT') {
-						inputDisabled = 'disabled';
 						cellClass = 'editClass';
+						inputDisabled = 'disabled';
 						action += '<a href="javascript:initCell(\'' + obj.cell_id + '\')">[置初始]</a>';
+					}
+					else if (obj.cell_set_status == 'LOCK') {
+						cellClass = 'lockClass';
+						inputDisabled = 'disabled';
 					}
 					else {
 						inputDisabled = 'disabled';
 					}
-					
 					tdStr = obj.cell_id + '<br><input ' + inputDisabled + ' class="cmd" type="text" maxlength="8" value="' + obj.cell_bit + '">' + action;
 				}
 				n.append('<td class="' + cellClass + '">' + tdStr + '</td>');
@@ -76,7 +78,7 @@ function addRow() {
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
 	$.post(contextPath + "cellTool/addRow", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
-		if (r.code == 0) go();
+		if (r.code === 0) go();
 	})
 }
 
@@ -84,7 +86,7 @@ function addColumn() {
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
 	$.post(contextPath + "cellTool/addColumn", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
-		if (r.code == 0) go();
+		if (r.code === 0) go();
 	})
 }
 
@@ -94,7 +96,7 @@ function delRow() {
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
 	$.post(contextPath + "cellTool/delRow", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
-		if (r.code == 0) go();
+		if (r.code === 0) go();
 	})
 }
 
@@ -104,7 +106,7 @@ function delColumn() {
 	var clientId = $("#clientId").val();
 	var lockerNumber = $("#lockerNumber").val();
 	$.post(contextPath + "cellTool/delColumn", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
-		if (r.code == 0) go();
+		if (r.code === 0) go();
 	})
 }
 
@@ -113,34 +115,34 @@ function delCell(cellId) {
 	
 	var clientId = $("#clientId").val();
 	$.post(contextPath + "cellTool/delCell", {clientId:clientId, cellId:cellId}, function(r) {
-		if (r.code == 0) go();
+		if (r.code === 0) go();
 	})
 }
 
 function editCell(obj, cellId) {
 	var openCode = $.trim($(obj).prev().val());
-	if (openCode == "") {
+	if (openCode === "") {
 		alert("开锁码不能为空");
 		return;
 	}
 	
 	var clientId = $("#clientId").val();
 	$.post(contextPath + "cellTool/editCell", {clientId:clientId, cellId:cellId, openCode:openCode}, function(r) {
-		if (r.code == 0) go();
+		if (r.code === 0) go();
 	})
 }
 
 function initCell(cellId) {
 	var clientId = $("#clientId").val();
 	$.post(contextPath + "cellTool/initCell", {clientId:clientId, cellId:cellId}, function(r) {
-		if (r.code == 0) go();
+		if (r.code === 0) go();
 	})
 }
 
 function addCell(cellId) {
 	var clientId = $("#clientId").val();
 	$.post(contextPath + "cellTool/addCell", {clientId:clientId, cellId:cellId}, function(r) {
-		if (r.code == 0) go();
+		if (r.code === 0) go();
 	})
 }
 
@@ -148,16 +150,20 @@ function addCell(cellId) {
 
 <style type="text/css">
 a {text-decoration:none}
-.cmd {width:65px}
+.cmd {width:65px;text-align: center;}
 .initClass {text-align:center}
+.emptyClass {text-align:center}
 .editClass {text-align:center; background-color:orange;}
+.lockClass {text-align:center; background-color:springgreen;}
+
+
+#newCellTable td {width:150px}
+
 </style>
 
 </head>
 
 <body>
-
-
 
 <div>
 client
@@ -175,19 +181,13 @@ number
 <button onclick="addRow()">+ROW</button>
 <button onclick="addColumn()">+COL</button>
 
-
 <button onclick="delRow()">-ROW</button>
 <button onclick="delColumn()">-COL</button>
-
 
 <table id="newCellTable" border="1"></table>
 
 </body>
 </html>
-
-
-
-
 
 
 
