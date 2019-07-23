@@ -37,11 +37,11 @@ public class CellToolServiceImpl extends MyDaoSupport {
 		List<String> column  = listColumnNumber(clientId, lockerNumber);
 		
 		String s = String.format("%02d", row.size() + 1);
-		String insertSql = "insert into ter_cell(client_id, cell_id, cell_bit) values(?, ?, ?)";
+		String insertSql = "insert into ter_cell(client_id, cell_id, open_code) values(?, ?, ?)";
 		
 		for (String c : column) {
-			String bit = s + c;
-			getJdbcTemplate().update(insertSql, clientId, lockerNumber + bit, lockerNumber + bit);
+			String openCode = s + c;
+			getJdbcTemplate().update(insertSql, clientId, lockerNumber + openCode, lockerNumber + openCode);
 		}
 		
 		if (column.isEmpty()) {
@@ -54,11 +54,11 @@ public class CellToolServiceImpl extends MyDaoSupport {
 		List<String> column  = listColumnNumber(clientId, lockerNumber);
 		
 		String s = String.format("%02d", column.size() + 1);
-		String insertSql = "insert into ter_cell(client_id, cell_id, cell_bit) values(?, ?, ?)";
+		String insertSql = "insert into ter_cell(client_id, cell_id, open_code) values(?, ?, ?)";
 		
 		for (String r : row) {
-			String bit = r + s;
-			getJdbcTemplate().update(insertSql, clientId, lockerNumber + bit, lockerNumber + bit);
+			String openCode = r + s;
+			getJdbcTemplate().update(insertSql, clientId, lockerNumber + openCode, lockerNumber + openCode);
 		}
 		
 		if (row.isEmpty()) {
@@ -89,18 +89,18 @@ public class CellToolServiceImpl extends MyDaoSupport {
 	}
 	
 	public void addCell(String clientId, String cellId) {
-		String insertSql = "insert into ter_cell(client_id, cell_id, cell_bit) values(?, ?, ?)";
+		String insertSql = "insert into ter_cell(client_id, cell_id, open_code) values(?, ?, ?)";
 		getJdbcTemplate().update(insertSql, clientId, cellId, cellId);
 	}
 	
 	public int editCell(String clientId, String cellId, String openCode) {
-		String existsSql = "select count(*) from ter_cell where client_id = ? and cell_bit = ? and cell_id != ?";
+		String existsSql = "select count(*) from ter_cell where client_id = ? and open_code = ? and cell_id != ?";
 		int c = getJdbcTemplate().queryForObject(existsSql, Integer.class, clientId, openCode, cellId);
 		if (c > 0) {
 			return -1;
 		}
 		
-		String lockSql = "update ter_cell set cell_set_status = ?, cell_bit = ? where client_id = ? and cell_id = ?";
+		String lockSql = "update ter_cell set cell_set_status = ?, open_code = ? where client_id = ? and cell_id = ?";
 		return getJdbcTemplate().update(lockSql, "EDIT", openCode, clientId, cellId);
 	}
 	

@@ -13,7 +13,7 @@ public class ToolServiceImpl extends MyDaoSupport {
 		String truncateSql = "truncate table ter_random_code";
 		getJdbcTemplate().update(truncateSql);
 		
-		String insertSql = "insert into ter_random_code(code_index, cell_code) values(?, ?)";
+		String insertSql = "insert into ter_random_code(code_index, random_code) values(?, ?)";
 		
 		for (int i = 1; i <= 1000; i++) {
 			String randomCode = String.format("%08d", (int)(Math.random()*100000000));
@@ -22,7 +22,7 @@ public class ToolServiceImpl extends MyDaoSupport {
 	}
 	
 	@Transactional
-	public String getCode() {
+	public String getRandomCode() {
 		String CURSOR_CODE_INDEX = "CURSOR_CODE_INDEX";
 		
 		String forUpdate = "select config_int from ter_config where config_name = ? for update";
@@ -31,7 +31,7 @@ public class ToolServiceImpl extends MyDaoSupport {
 		String updateIndex = "update ter_config set config_int = config_int + 1 where config_name = ?";
 		getJdbcTemplate().update(updateIndex, CURSOR_CODE_INDEX);
 		
-		String codeSql = "select cell_code from ter_random_code where code_index = ?";
+		String codeSql = "select random_code from ter_random_code where code_index = ?";
 		return getJdbcTemplate().queryForObject(codeSql, String.class, useCodeIndex);
 	}
 	

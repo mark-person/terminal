@@ -48,7 +48,7 @@ function go() {
 				if (obj.cell_id) {
 					var action = '';
 					var inputDisabled = '';
-					if (obj.cell_set_status == 'INIT') {
+					if (obj.cell_set_status == 'INI') {
 						cellClass = 'initClass';
 						action += '<a href="#this", onclick="editCell(this, \'' + obj.cell_id + '\')">[修改]</a>&nbsp;';
 						action += '<a href="javascript:delCell(\'' + obj.cell_id + '\')">[删]</a>';
@@ -65,7 +65,7 @@ function go() {
 					else {
 						inputDisabled = 'disabled';
 					}
-					tdStr = obj.cell_id + '<br><input ' + inputDisabled + ' class="cmd" type="text" maxlength="8" value="' + obj.cell_bit + '">' + action;
+					tdStr = obj.cell_id + '<br><input ' + inputDisabled + ' class="cmd" type="text" maxlength="8" value="' + obj.open_code + '">' + action;
 				}
 				n.append('<td class="' + cellClass + '">' + tdStr + '</td>');
 			}

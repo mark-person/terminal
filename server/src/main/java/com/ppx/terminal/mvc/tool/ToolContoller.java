@@ -40,7 +40,7 @@ public class ToolContoller {
 		// String code = impl.getCode();
 		
 		for (int i = 0; i < 100; i++) {
-			listCode.add(impl.getCode());
+			listCode.add(impl.getRandomCode());
 		}
 		
 		return listCode;

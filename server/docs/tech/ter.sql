@@ -58,27 +58,11 @@ create table ter_client (
 -- 每个终端不一样的密码，防止每多个终端使用相同的client_id登录
 ALTER TABLE ter_client ADD UNIQUE INDEX idx_ter_client_password (client_password ASC) VISIBLE;
 
-/**
- * USE_CODE_INDEX
- * package com.ppx.terminal.mvc.tool
- */
-create table ter_config (
-	config_name  varchar(32),
-	config_int   int not null,
-	primary key(config_name)
-);
 
-create table ter_random_code (
-	code_index 	int not null auto_increment,
-	cell_code 	varchar(8) not null,
-	primary key(code_index)
-);
-alter table ter_random_code add unique index idx_ter_random_cell_code (cell_code asc) visible;
 
 
 
 -- cell_id:A0101
--- 
 create table ter_cell (
 	client_id		varchar(10) not null,
 	cell_id			varchar(10) not null,
@@ -92,6 +76,10 @@ alter table ter_cell add unique index idx_ter_cell_bit (client_id, cell_bit) vis
 	add unique index idx_ter_cell_code (cell_code asc) visible;
 
 
+	
+	
+/* >>>>>>>>>>>>>>>>> */
+-- cell_id:A0101	
 create table ter_cell (
 	client_id			varchar(10) not null,
 	cell_id				varchar(10) not null,
@@ -104,7 +92,22 @@ create table ter_cell (
 alter table ter_cell add unique index idx_ter_cell_bit (client_id, open_code) visible,
 	add unique index idx_ter_cell_code (random_code asc) visible;
 
-	
+/**
+ * USE_CODE_INDEX
+ * package com.ppx.terminal.mvc.tool
+ */
+create table ter_config (
+	config_name  varchar(32),
+	config_int   int not null,
+	primary key(config_name)
+);
+
+create table ter_random_code (
+	code_index 	int not null auto_increment,
+	random_code varchar(8) not null,
+	primary key(code_index)
+);
+alter table ter_random_code add unique index idx_ter_random_cell_code (random_code asc) visible;	
 	
 	
 	

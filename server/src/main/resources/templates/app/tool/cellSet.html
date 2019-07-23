@@ -48,7 +48,7 @@ function go() {
 				if (obj.cell_id) {
 					var action = '';
 					var open = '';
-					if (obj.cell_set_status == 'INIT') {
+					if (obj.cell_set_status == 'INI') {
 						inputDisabled = '';
 						cellClass = 'initClass';
 					}
@@ -62,7 +62,7 @@ function go() {
 						open = '<a href="javascript:openCell(\'' + obj.cell_id + '\')">[开]</a>';
 						action += '<a href="javascript:unLockCell(\'' + obj.cell_id + '\')">[解锁]</a>';
 					}
-					tdStr = obj.cell_id + open + '<br><input disabled class="cmd" type="text" value="' + obj.cell_bit + '">' + action;
+					tdStr = obj.cell_id + open + '<br><input disabled class="cmd" type="text" value="' + obj.open_code + '">' + action;
 				}
 				n.append('<td class="' + cellClass + '">' + tdStr + '</td>');
 			}
