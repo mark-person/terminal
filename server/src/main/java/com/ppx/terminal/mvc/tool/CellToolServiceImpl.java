@@ -106,7 +106,7 @@ public class CellToolServiceImpl extends MyDaoSupport {
 	
 	public void initCell(String clientId, String cellId) {
 		String lockSql = "update ter_cell set cell_set_status = ? where client_id = ? and cell_id = ?";
-		getJdbcTemplate().update(lockSql, "INIT", clientId, cellId);
+		getJdbcTemplate().update(lockSql, "INI", clientId, cellId);
 	}
 	
 	public int lockCell(String clientId, String cellId) {

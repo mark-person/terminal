@@ -7,6 +7,8 @@
 <script type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
 <script type="text/javascript" th:src="@{/static/cdn/jquery.min-3.3.1.js}"></script>
 
+<link rel="stylesheet" th:href="@{/static/terminal/cell/cell.css}">
+
 <script type="text/javascript" th:inline="javascript">
 
 $.ajaxSetup({
@@ -30,16 +32,15 @@ function go() {
 	var lockerNumber = $("#lockerNumber").val();
 	
 	$.post(contextPath + "cellTool/listCell", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
-		var c = $("#cellTable");
 		var cellMap = [];
 		for (var i = 0; i < r.list.length; i++) {
 			var cellId = r.list[i].cell_id;
 			cellMap[cellId] = r.list[i];
 		}
-		var n = $("#newCellTable");
-		n.html("");
+		var cell = $("#cellTable");
+		cell.html("");
 		for (var i = 0; i < r.rowList.length; i++) {
-			n.append('<tr>');
+			cell.append('<tr>');
 			for (var j = 0; j < r.columnList.length; j++) {
 				var cellId =  lockerNumber + r.rowList[i] + r.columnList[j];
 				var obj = cellMap[cellId] ? cellMap[cellId] : {};
@@ -47,11 +48,12 @@ function go() {
 				var cellClass = 'emptyClass';
 				if (obj.cell_id) {
 					var action = '';
+					var del = '';
 					var inputDisabled = '';
 					if (obj.cell_set_status == 'INI') {
 						cellClass = 'initClass';
 						action += '<a href="#this", onclick="editCell(this, \'' + obj.cell_id + '\')">[修改]</a>&nbsp;';
-						action += '<a href="javascript:delCell(\'' + obj.cell_id + '\')">[删]</a>';
+						del = '<a href="javascript:delCell(\'' + obj.cell_id + '\')">[删]</a>';
 					}
 					else if (obj.cell_set_status == 'EDIT') {
 						cellClass = 'editClass';
@@ -65,11 +67,11 @@ function go() {
 					else {
 						inputDisabled = 'disabled';
 					}
-					tdStr = obj.cell_id + '<br><input ' + inputDisabled + ' class="cmd" type="text" maxlength="8" value="' + obj.open_code + '">' + action;
+					tdStr = obj.cell_id + del + '<br><input ' + inputDisabled + ' class="cmd" type="text" maxlength="8" value="' + obj.open_code + '">' + action;
 				}
-				n.append('<td class="' + cellClass + '">' + tdStr + '</td>');
+				cell.append('<td class="' + cellClass + '">' + tdStr + '</td>');
 			}
-			n.append('</tr>');
+			cell.append('</tr>');
 		}
 	});
 }
@@ -148,20 +150,6 @@ function addCell(cellId) {
 
 </script>
 
-<style type="text/css">
-body {font-size: 12px}
-a, a:link, a:active{text-decoration:none;color:blue}
-
-.cmd {width:65px;text-align: center;}
-.initClass {text-align:center}
-.emptyClass {text-align:center}
-.editClass {text-align:center; background-color:orange;}
-.lockClass {text-align:center; background-color:springgreen;}
-
-
-#newCellTable td {width:130px}
-
-</style>
 
 </head>
 
@@ -186,7 +174,7 @@ number
 <button onclick="delRow()">-ROW</button>
 <button onclick="delColumn()">-COL</button>
 
-<table id="newCellTable" border="1"></table>
+<table id="cellTable" border="1"></table>
 
 </body>
 </html>

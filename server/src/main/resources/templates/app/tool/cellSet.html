@@ -7,6 +7,8 @@
 <script type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
 <script type="text/javascript" th:src="@{/static/cdn/jquery.min-3.3.1.js}"></script>
 
+<link rel="stylesheet" th:href="@{/static/terminal/cell/cell.css}">
+
 <script type="text/javascript" th:inline="javascript">
 
 $.ajaxSetup({
@@ -30,16 +32,15 @@ function go() {
 	var lockerNumber = $("#lockerNumber").val();
 	
 	$.post(contextPath + "cellTool/listCell", {clientId:clientId, lockerNumber:lockerNumber}, function(r) {
-		var c = $("#cellTable");
 		var cellMap = [];
 		for (var i = 0; i < r.list.length; i++) {
 			var cellId = r.list[i].cell_id;
 			cellMap[cellId] = r.list[i];
 		}
-		var n = $("#newCellTable");
-		n.html("");
+		var cell = $("#cellTable");
+		cell.html("");
 		for (var i = 0; i < r.rowList.length; i++) {
-			n.append('<tr>');
+			cell.append('<tr>');
 			for (var j = 0; j < r.columnList.length; j++) {
 				var cellId =  lockerNumber + r.rowList[i] + r.columnList[j];
 				var obj = cellMap[cellId] ? cellMap[cellId] : {};
@@ -64,9 +65,9 @@ function go() {
 					}
 					tdStr = obj.cell_id + open + '<br><input disabled class="cmd" type="text" value="' + obj.open_code + '">' + action;
 				}
-				n.append('<td class="' + cellClass + '">' + tdStr + '</td>');
+				cell.append('<td class="' + cellClass + '">' + tdStr + '</td>');
 			}
-			n.append('</tr>');
+			cell.append('</tr>');
 		}
 	});
 }
@@ -96,15 +97,7 @@ function unLockCell(cellId) {
 
 </script>
 
-<style type="text/css">
-a:link, a:active{text-decoration:none}
-.cmd {width:65px;text-align:center}
-.initClass {text-align:center}
-.editClass {text-align:center; background-color:orange;}
-.lockClass {text-align:center; background-color:springgreen;}
 
-#newCellTable td {width:150px}
-</style>
 
 </head>
 
@@ -123,7 +116,7 @@ number
 </div>
 
 <button onclick="go()">GO</button>
-<table id="newCellTable" border="1"></table>
+<table id="cellTable" border="1"></table>
 
 </body>
 </html>

@@ -1,0 +1,9 @@
+body {font-size: 12px}
+a, a:link, a:active{text-decoration:none;color:blue}
+
+.cmd {width:65px;text-align: center;}
+.initClass {text-align:center}
+.emptyClass {text-align:center}
+.editClass {text-align:center; background-color:orange;}
+.lockClass {text-align:center; background-color:springgreen;}
+#cellTable td {width:120px}
