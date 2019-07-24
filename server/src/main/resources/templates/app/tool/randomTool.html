@@ -23,13 +23,14 @@ $.ajaxSetup({
 });
 
 $(function() {
-
+	getRadomMsg();
 })
 
 
 function createCode() {
 	$.post(contextPath + "randomTool/createCode", {}, function(r) {
 		if (r.code === 0) {
+			getRadomMsg();
 			alert("OK");
 		}
 	})
@@ -38,7 +39,26 @@ function createCode() {
 function truncateCode() {
 	$.post(contextPath + "randomTool/truncateCode", {}, function(r) {
 		if (r.code === 0) {
+			getRadomMsg();
 			alert("OK");
+		}
+	})
+}
+
+function getRadomMsg() {
+	$.post(contextPath + "randomTool/getRadomMsg", {}, function(r) {
+		if (r.code === 0) {
+			$("#randomCodeIndex").text(r.randomCodeIndex);
+			$("#randomCodeMsg").text(JSON.stringify(r.randomCodeMsg));
+		}
+	})
+}
+
+function getRandomCode() {
+	$.post(contextPath + "randomTool/getRandomCode", {}, function(r) {
+		if (r.code === 0) {
+			getRadomMsg();
+			$("#randomCode").text(r.randomCode);
 		}
 	})
 }
@@ -56,14 +76,13 @@ function truncateCode() {
 
 <div>go........</div>
 
-
-
 <button onclick="createCode()">createCode</button>
 <button onclick="truncateCode()">truncateCode</button>
 
 <table border="1">
-	<tr><td>index</td><td th:text="${randomCodeIndex}"></td></tr>
-	<tr><td>msgs</td><td th:text="${randomCodeMsg}"></td></tr>
+	<tr><td>index</td><td id="randomCodeIndex"></td></tr>
+	<tr><td>msgs</td><td id="randomCodeMsg"></td></tr>
+	<tr><td><button onclick="getRandomCode()">getRandomCode</button></td><td id="randomCode"></td></tr>
 </table>
 
 

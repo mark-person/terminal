@@ -3,8 +3,6 @@
  */
 package com.ppx.terminal.mvc.tool;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +29,15 @@ public class RandomToolContoller {
 	@RequestMapping("/randomTool")
 	public ModelAndView test() {
 		ModelAndView mv = new ModelAndView("app/tool/randomTool");
-		
-		mv.addObject("randomCodeIndex", impl.getRandomCodeIndex());
-		mv.addObject("randomCodeMsg", impl.getRandomCodeMsg());
-		
 		return mv;
 	}
+	
+	@RequestMapping("/getRadomMsg") @ResponseBody
+	public Map<String, Object> getRadomMsg() {
+		int randomCodeIndex = impl.getRandomCodeIndex();
+		Map<String, Object> randomCodeMsg = impl.getRandomCodeMsg();
+		return ControllerReturn.of("randomCodeIndex", randomCodeIndex, "randomCodeMsg", randomCodeMsg);
+	} 
 	
 	@RequestMapping("/truncateCode") @ResponseBody
 	public Map<String, Object> truncateCode() {
@@ -50,17 +51,12 @@ public class RandomToolContoller {
 		return ControllerReturn.of();
 	}
 	
-	@RequestMapping("/getCode") @ResponseBody
-	public List<String> getCode() {
+	@RequestMapping("/getRandomCode") @ResponseBody
+	public Map<String, Object> getRandomCode() {
 			
-		List<String> listCode = new ArrayList<String>();
-		// String code = impl.getCode();
+		String randomCode = impl.getRandomCode();
 		
-		for (int i = 0; i < 100; i++) {
-			listCode.add(impl.getRandomCode());
-		}
-		
-		return listCode;
+		return ControllerReturn.of("randomCode", randomCode);
 	}
 	
 	
