@@ -37,6 +37,12 @@ function createCode() {
 }
 
 function truncateCode() {
+	var password = prompt("请输入123");
+	if (password != "123") {
+		alert("输入密码错误");
+		return;
+	}
+	
 	$.post(contextPath + "randomTool/truncateCode", {}, function(r) {
 		if (r.code === 0) {
 			getRadomMsg();
@@ -62,9 +68,6 @@ function getRandomCode() {
 		}
 	})
 }
-
-
-
 
 </script>
 
