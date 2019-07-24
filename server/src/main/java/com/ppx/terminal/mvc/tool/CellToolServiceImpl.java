@@ -66,21 +66,34 @@ public class CellToolServiceImpl extends MyDaoSupport {
 		}
 	}
 	
-	
-	public void delRow(String clientId, String lockerNumber) {
+	public int delRow(String clientId, String lockerNumber) {
 		List<String> row = listRowNumber(clientId, lockerNumber);
 		String lastRow = String.format("%02d", row.size());
 		
+		String existsSql = "select count(*) from ter_cell where client_id = ? and cell_id like ? '%' and cell_set_status != 'INI'";
+		int existsC = getJdbcTemplate().queryForObject(existsSql, Integer.class, clientId, (lockerNumber + lastRow));
+		if (existsC > 0) {
+			return -1;
+		}
+		
 		String delSql = "delete from ter_cell where client_id = ? and cell_id like ? '%'";
 		getJdbcTemplate().update(delSql, clientId, (lockerNumber + lastRow));
+		return 1;
 	}
 	
-	public void delColumn(String clientId, String lockerNumber) {
+	public int delColumn(String clientId, String lockerNumber) {
 		List<String> column = listColumnNumber(clientId, lockerNumber);
 		String lastColumn = String.format("%02d", column.size());
 		
+		String existsSql = "select count(*) from ter_cell where client_id = ? and cell_id like ? and cell_set_status != 'INI'";
+		int existsC = getJdbcTemplate().queryForObject(existsSql, Integer.class, clientId, (lockerNumber + "%" + lastColumn));
+		if (existsC > 0) {
+			return -1;
+		}
+		
 		String delSql = "delete from ter_cell where client_id = ? and cell_id like ?";
 		getJdbcTemplate().update(delSql, clientId, (lockerNumber + "%" + lastColumn));
+		return 1;
 	}
 	
 	public void delCell(String clientId, String cellId) {

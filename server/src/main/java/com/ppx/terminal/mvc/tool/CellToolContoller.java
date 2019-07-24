@@ -64,13 +64,19 @@ public class CellToolContoller {
 	
 	@RequestMapping("/delRow") @ResponseBody
 	public Map<String, Object> delRow(String clientId, String lockerNumber) {
-		impl.delRow(clientId, lockerNumber);
+		int r = impl.delRow(clientId, lockerNumber);
+		if (r == -1) {
+			return ControllerReturn.of(40000, "删除失败，最后一行必须全部为初始状态");
+		}
 		return ControllerReturn.of();
 	}
 	
 	@RequestMapping("/delColumn") @ResponseBody
 	public Map<String, Object> delColumn(String clientId, String lockerNumber) {
-		impl.delColumn(clientId, lockerNumber);
+		int r = impl.delColumn(clientId, lockerNumber);
+		if (r == -1) {
+			return ControllerReturn.of(40000, "删除失败，最后一列必须全部为初始状态");
+		}
 		return ControllerReturn.of();
 	}
 	
