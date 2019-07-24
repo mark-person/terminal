@@ -155,19 +155,28 @@ function addCell(cellId) {
 
 <body>
 
+
+
+
+<table border="1">
+	<tr><td class="initClass">初始状态</td><td class="editClass">已修改状态</td><td class="lockClass">锁定状态</td></tr>
+</table>
+
+
 <div>
-client
-<select id="clientId">
-	<option value="007">007</option>
-</select>
-number
-<select id="lockerNumber">
-	<option value="A">A</option>
-	<option value="B">B</option>
-</select>
+	client
+	<select id="clientId" onchange="go()">
+		<option value="007">007</option>
+		<option value="008">008</option>
+	</select>
+	number
+	<select id="lockerNumber" onchange="go()">
+		<option value="A">A</option>
+		<option value="B">B</option>
+	</select>
 </div>
 
-<button onclick="go()">GO</button>
+
 <button onclick="addRow()">+ROW</button>
 <button onclick="addColumn()">+COL</button>
 
