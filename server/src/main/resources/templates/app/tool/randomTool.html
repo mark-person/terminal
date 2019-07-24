@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title></title>
+<meta th:fragment="mobile" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<script type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
+<script type="text/javascript" th:src="@{/static/cdn/jquery.min-3.3.1.js}"></script>
+
+
+<script type="text/javascript" th:inline="javascript">
+
+$.ajaxSetup({
+	error: function(r, textStatus, errorThrown) {
+		alert("error:" + r.status + "|" + this.url);
+	},
+	complete: function(r, textStatus, errorThrown) {
+	    var code = JSON.parse(r.responseText).code;
+		if (code != 0) {
+			alert(r.responseText);
+		}
+	}
+});
+
+$(function() {
+
+})
+
+
+function createCode() {
+	$.post(contextPath + "randomTool/createCode", {}, function(r) {
+		if (r.code === 0) {
+			alert("OK");
+		}
+	})
+}
+
+function truncateCode() {
+	$.post(contextPath + "randomTool/truncateCode", {}, function(r) {
+		if (r.code === 0) {
+			alert("OK");
+		}
+	})
+}
+
+
+
+
+</script>
+
+
+</head>
+
+<body>
+
+
+<div>go........</div>
+
+
+
+<button onclick="createCode()">createCode</button>
+<button onclick="truncateCode()">truncateCode</button>
+
+<table border="1">
+	<tr><td>index</td><td th:text="${randomCodeIndex}"></td></tr>
+	<tr><td>msgs</td><td th:text="${randomCodeMsg}"></td></tr>
+</table>
+
+
+</body>
+</html>
+
+
+
+
