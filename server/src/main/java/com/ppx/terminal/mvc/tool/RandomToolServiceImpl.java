@@ -30,11 +30,13 @@ public class RandomToolServiceImpl extends MyDaoSupport {
 	}
 	
 	public void createCode() {
+		String maxSql = "select ifnull(max(code_index), 0) + 1 from ter_random_code";
+		int maxIndex = getJdbcTemplate().queryForObject(maxSql, Integer.class);
+		
 		String insertSql = "insert into ter_random_code(code_index, random_code) values(?, ?)";
-		for (int i = 1; i <= 100; i++) {
+		int endIndex = maxIndex + 100;
+		for (int i = maxIndex; i < endIndex; i++) {
 			String randomCode = String.format("%08d", (int)(Math.random()*100000000));
-			// 77662205
-			System.out.println("xxxxxxxxxxxxxrandomCode:" + randomCode);
     		getJdbcTemplate().update(insertSql, i, randomCode);
 		}
 	}
