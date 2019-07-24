@@ -6,11 +6,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ppx.terminal.common.jdbc.MyDaoSupport;
+import com.ppx.terminal.common.util.NettyUtils;
 
 @Service
 public class RandomToolServiceImpl extends MyDaoSupport {
 	
 	private final String RANDOM_CODE_INDEX = "RANDOM_CODE_INDEX";
+	
+	public void insertRandomStart() {
+		String duplicateSql = "insert ignore into ter_config(config_name, config_int) values(?, ?)";
+		getJdbcTemplate().update(duplicateSql, RANDOM_CODE_INDEX, 1);
+	}
 	
 	public int getRandomCodeIndex() {
 		String sql = "select ifnull((select config_int from ter_config where config_name = ?), -1)";

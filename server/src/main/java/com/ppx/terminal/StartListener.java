@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
+import com.ppx.terminal.mvc.tool.RandomToolServiceImpl;
 import com.ppx.terminal.netty.server.impl.LogServiceImpl;
 
 
@@ -23,10 +24,14 @@ public class StartListener implements ApplicationListener<ContextRefreshedEvent>
 	@Autowired
 	private LogServiceImpl logServiceImpl;
 	
+	@Autowired
+	private RandomToolServiceImpl randomToolServiceImpl;
+	
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event)  {
     	logger.info("StartListener........begin");
     	logServiceImpl.insertLogStart();
+    	randomToolServiceImpl.insertRandomStart();
     	logger.info("StartListener........end");
     }
 
