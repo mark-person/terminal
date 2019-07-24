@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ppx.terminal.common.jdbc.MyDaoSupport;
-import com.ppx.terminal.common.util.NettyUtils;
 
 @Service
 public class RandomToolServiceImpl extends MyDaoSupport {
@@ -35,16 +34,28 @@ public class RandomToolServiceImpl extends MyDaoSupport {
 		getJdbcTemplate().update(truncateSql);
 	}
 	
-	public void createCode() {
-		String maxSql = "select ifnull(max(code_index), 0) + 1 from ter_random_code";
+	public int createCode(int total) {
+		int createN = 0;
+		
+		String maxSql = "select ifnull(max(code_index), 0) from ter_random_code";
 		int maxIndex = getJdbcTemplate().queryForObject(maxSql, Integer.class);
 		
-		String insertSql = "insert into ter_random_code(code_index, random_code) values(?, ?)";
-		int endIndex = maxIndex + 100;
+		String insertSql = "insert ignore into ter_random_code(code_index, random_code) values(?, ?)";
+		int endIndex = maxIndex + total;
+		
+		int codeIndex = maxIndex;
 		for (int i = maxIndex; i < endIndex; i++) {
+			codeIndex++;
 			String randomCode = String.format("%08d", (int)(Math.random()*100000000));
-    		getJdbcTemplate().update(insertSql, i, randomCode);
+    		int r = getJdbcTemplate().update(insertSql, codeIndex, randomCode);
+    		if (r == 0) {
+    			codeIndex--;
+    		}
+    		else {
+    			createN++;
+    		}
 		}
+		return createN;
 	}
 	
 	@Transactional

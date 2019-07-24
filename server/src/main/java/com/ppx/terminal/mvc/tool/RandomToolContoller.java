@@ -46,9 +46,9 @@ public class RandomToolContoller {
 	}
 	
 	@RequestMapping("/createCode") @ResponseBody
-	public Map<String, Object> createCode() {
-		impl.createCode();
-		return ControllerReturn.of();
+	public Map<String, Object> createCode(Integer total) {
+		int num = impl.createCode(total);
+		return ControllerReturn.of("num", num);
 	}
 	
 	@RequestMapping("/getRandomCode") @ResponseBody
