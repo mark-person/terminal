@@ -35,7 +35,7 @@ create table core_store (
 	store_lng		decimal (13,10) comment '经度，范围为-180~180',
 	store_lat		decimal (13,10) comment '纬度，范围为-90~90',
 	store_phone		varchar(32),
-	primary key(store_id)
+	primary key(store_no)
 );
 
 create table core_locker (

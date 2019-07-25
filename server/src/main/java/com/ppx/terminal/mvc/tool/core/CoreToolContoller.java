@@ -35,6 +35,12 @@ public class CoreToolContoller {
 		return mv;
 	}
 	
+	@RequestMapping("/listStore") @ResponseBody
+	public Map<String, Object> listStore() {
+		List<Map<String, Object>> list = impl.listStore();
+		return ControllerReturn.of("list", list);
+	}
+	
 	
 
 }

@@ -9,13 +9,18 @@
 
 $(function() {
 	
-	
+	test();
 	
 })
 
 function test() {
 	$.post(contextPath + "coreTool/listStore", {}, function(r) {
-		if (r.code === 0) go();
+		if (r.code !== 0) return;
+		
+		for (var i = 0; i < r.list.length; i++) {
+			$("#table").append('<tr><td>1111</td></tr>');
+		}
+		
 	})
 }
 
@@ -29,6 +34,10 @@ function test() {
 <body>
 
 
+<table id="table">
+<tr><td></td></tr>
+
+</table>
 
 
 
