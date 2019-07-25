@@ -26,6 +26,8 @@ function add(obj) {
 	if (para.storeNo == "") {alert("no不能为空");return}
 	para.storeName = tr.find("[name=storeName]").val();
 	para.storeAddress = tr.find("[name=storeAddress]").val();
+	para.storeLng = tr.find("[name=storeLng]").val();
+	para.storeLat = tr.find("[name=storeLat]").val();
 	$.post(contextPath + "coreTool/insertStore", para, function(r) {
 		if (r.code === 0) {alert("新增成功");query();}
 	})
@@ -39,6 +41,8 @@ function edit(obj, initStoreNo) {
 	if (para.storeNo == "") {alert("no不能为空");return}
 	para.storeName = tr.find("[name=storeName]").val();
 	para.storeAddress = tr.find("[name=storeAddress]").val();
+	para.storeLng = tr.find("[name=storeLng]").val();
+	para.storeLat = tr.find("[name=storeLat]").val();
 	$.post(contextPath + "coreTool/updateStore", para, function(r) {
 		if (r.code === 0) {alert("修改成功");query();}
 	})

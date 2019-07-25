@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title></title>
+<link th:replace="common/fragment::common"/>
+
+<script type="text/javascript" th:inline="javascript">
+
+$(function() {
+	
+	query();
+	
+})
+
+
+function getVal(v) {
+	if (v) return v;
+	return "";
+}
+
+function add(obj) {
+	var tr = $(obj).parent().parent();
+	var para = {};
+	para.lockerNo = tr.find("[name=lockerNo]").val();
+	if (para.lockerNo == "") {alert("no不能为空");return}
+	para.lockerDesc = tr.find("[name=lockerDesc]").val();
+	$.post(contextPath + "coreTool/insertLocker", para, function(r) {
+		if (r.code === 0) {alert("新增成功");query();}
+	})
+}
+
+function edit(obj, initLockerNo) {
+	var tr = $(obj).parent().parent();
+	var para = {};
+	para.initLockerNo = initLockerNo;
+	para.lockerNo = tr.find("[name=lockerNo]").val();
+	if (para.lockerNo == "") {alert("no不能为空");return}
+	para.lockerDesc = tr.find("[name=lockerDesc]").val();
+	$.post(contextPath + "coreTool/updateLocker", para, function(r) {
+		if (r.code === 0) {alert("修改成功");query();}
+	})
+}
+
+function query() {
+	$.post(contextPath + "coreTool/listLocker", {}, function(r) {
+		if (r.code !== 0) return;
+		
+		var newObj = {};
+		newObj.action = "ADD";
+		r.list.push(newObj);
+		
+		$("#tbody").html("");
+		for (var i = 0; i < r.list.length; i++) {
+			var v = r.list[i];
+			var actionStr = '';
+			if (v.action == "ADD") actionStr = '<button type="button" onclick="add(this)">add</button>';
+			else actionStr = '<button type="button" onclick="edit(this, \'' + v.lockerNo + '\')">edit</button>';
+			$("#tbody").append('<tr>\
+				<td><input type="text" name="lockerNo" value="' + getVal(v.lockerNo) +'"></td>\
+				<td><input type="text" name="lockerDesc" value="' + getVal(v.lockerDesc) +'"></td>\
+				<td>' + actionStr + '</td>\
+			</tr>');
+		}
+	})
+}
+
+
+
+</script>
+
+
+</head>
+
+<body>
+
+
+<table border="1">
+<thead><tr><td>no</td><td>desc</td></tr></thead>
+<tbody id="tbody"></tbody>
+</table>
+
+
+</body>
+</html>
+
+
+
+

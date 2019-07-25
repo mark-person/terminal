@@ -28,9 +28,9 @@ public class CoreToolContoller {
 	@Autowired
 	private CoreToolServiceImpl impl; 
 	
-	@RequestMapping("/coreTool")
-	public ModelAndView coreTool() {
-		ModelAndView mv = new ModelAndView("app/tool/core/coreTool");
+	@RequestMapping("/store")
+	public ModelAndView store() {
+		ModelAndView mv = new ModelAndView("app/tool/core/store");
 		return mv;
 	}
 	
@@ -52,4 +52,30 @@ public class CoreToolContoller {
 		return ControllerReturn.of();
 	}
 
+	
+	
+	
+	@RequestMapping("/locker")
+	public ModelAndView locker() {
+		ModelAndView mv = new ModelAndView("app/tool/core/locker");
+		return mv;
+	}
+	
+	@RequestMapping("/listLocker") @ResponseBody
+	public Map<String, Object> listLocker() {
+		List<Locker> list = impl.listLocker();
+		return ControllerReturn.of("list", list);
+	}
+	
+	@RequestMapping("/insertLocker") @ResponseBody
+	public Map<String, Object> insertLocker(Locker locker) {
+		impl.insertStore(locker);
+		return ControllerReturn.of();
+	}
+	
+	@RequestMapping("/updateLocker") @ResponseBody
+	public Map<String, Object> updateLocker(Locker locker) {
+		impl.updateStore(locker);
+		return ControllerReturn.of();
+	}
 }
