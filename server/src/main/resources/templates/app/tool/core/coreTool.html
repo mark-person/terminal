@@ -39,13 +39,13 @@ function test() {
 			var v = r.list[i];
 			var actionStr = '';
 			if (v.action == "ADD") actionStr = '<button type="button" onclick="add(this)">add</button>';
-			else actionStr = '<button type="button" onclick="edit(this, \'' + v.store_no + '\')">edit</button>';
+			else actionStr = '<button type="button" onclick="edit(this, \'' + v.storeNo + '\')">edit</button>';
 			$("#table").append('<tr>\
-				<td><input type="text" name="store_no" value="' + getVal(v.store_no) +'"></td>\
-				<td><input type="text" name="store_name" value="' + getVal(v.store_name) +'"></td>\
-				<td><input type="text" name="store_address" value="' + getVal(v.store_address) +'"></td>\
-				<td><input type="text" name="store_lng" value="' + getVal(v.store_lng) +'"></td>\
-				<td><input type="text" name="store_lat" value="' + getVal(v.store_lat) +'"></td>\
+				<td><input type="text" name="storeNo" value="' + getVal(v.storeNo) +'"></td>\
+				<td><input type="text" name="storeName" value="' + getVal(v.storeName) +'"></td>\
+				<td><input type="text" name="storeAddress" value="' + getVal(v.storeAddress) +'"></td>\
+				<td><input type="text" name="storeLng" value="' + getVal(v.storeLng) +'"></td>\
+				<td><input type="text" name="storeLat" value="' + getVal(v.storeLat) +'"></td>\
 				<td>' + actionStr + '</td>\
 			</tr>');
 		}

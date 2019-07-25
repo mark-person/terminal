@@ -28,7 +28,6 @@ public class CoreToolContoller {
 	@Autowired
 	private CoreToolServiceImpl impl; 
 	
-	
 	@RequestMapping("/coreTool")
 	public ModelAndView coreTool() {
 		ModelAndView mv = new ModelAndView("app/tool/core/coreTool");
@@ -37,7 +36,7 @@ public class CoreToolContoller {
 	
 	@RequestMapping("/listStore") @ResponseBody
 	public Map<String, Object> listStore() {
-		List<Map<String, Object>> list = impl.listStore();
+		List<Store> list = impl.listStore();
 		return ControllerReturn.of("list", list);
 	}
 	
