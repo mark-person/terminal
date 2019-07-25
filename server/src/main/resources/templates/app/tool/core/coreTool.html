@@ -3,13 +3,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <title></title>
-
+<link th:replace="common/fragment::common"/>
 
 <script type="text/javascript" th:inline="javascript">
 
 $(function() {
 	
+	
+	
 })
+
+function test() {
+	$.post(contextPath + "coreTool/listStore", {}, function(r) {
+		if (r.code === 0) go();
+	})
+}
+
 
 
 </script>
@@ -22,7 +31,8 @@ $(function() {
 
 
 
-1111111111
+
+
 </body>
 </html>
 
