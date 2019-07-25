@@ -9,7 +9,7 @@
 
 $(function() {
 	
-	test();
+	query();
 	
 })
 
@@ -20,14 +20,31 @@ function getVal(v) {
 }
 
 function add(obj) {
-	
+	var tr = $(obj).parent().parent();
+	var para = {};
+	para.storeNo = tr.find("[name=storeNo]").val();
+	if (para.storeNo == "") {alert("no不能为空");return}
+	para.storeName = tr.find("[name=storeName]").val();
+	para.storeAddress = tr.find("[name=storeAddress]").val();
+	$.post(contextPath + "coreTool/insertStore", para, function(r) {
+		if (r.code === 0) {alert("新增成功");query();}
+	})
 }
 
-function edit(obj, store_no) {
-	
+function edit(obj, initStoreNo) {
+	var tr = $(obj).parent().parent();
+	var para = {};
+	para.initStoreNo = initStoreNo;
+	para.storeNo = tr.find("[name=storeNo]").val();
+	if (para.storeNo == "") {alert("no不能为空");return}
+	para.storeName = tr.find("[name=storeName]").val();
+	para.storeAddress = tr.find("[name=storeAddress]").val();
+	$.post(contextPath + "coreTool/updateStore", para, function(r) {
+		if (r.code === 0) {alert("修改成功");query();}
+	})
 }
 
-function test() {
+function query() {
 	$.post(contextPath + "coreTool/listStore", {}, function(r) {
 		if (r.code !== 0) return;
 		
@@ -35,12 +52,13 @@ function test() {
 		newObj.action = "ADD";
 		r.list.push(newObj);
 		
+		$("#tbody").html("");
 		for (var i = 0; i < r.list.length; i++) {
 			var v = r.list[i];
 			var actionStr = '';
 			if (v.action == "ADD") actionStr = '<button type="button" onclick="add(this)">add</button>';
 			else actionStr = '<button type="button" onclick="edit(this, \'' + v.storeNo + '\')">edit</button>';
-			$("#table").append('<tr>\
+			$("#tbody").append('<tr>\
 				<td><input type="text" name="storeNo" value="' + getVal(v.storeNo) +'"></td>\
 				<td><input type="text" name="storeName" value="' + getVal(v.storeName) +'"></td>\
 				<td><input type="text" name="storeAddress" value="' + getVal(v.storeAddress) +'"></td>\
@@ -63,11 +81,14 @@ function test() {
 
 
 <table id="table" border="1">
+<thead>
 <tr>
 	<td>no</td><td>name</td><td>addr</td><td>lng</td><td>lat</td><td>action</td>
 </tr>
-	
+</thead>
+<tbody id="tbody">
 
+</tbody>
 </table>
 
 

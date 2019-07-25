@@ -40,6 +40,16 @@ public class CoreToolContoller {
 		return ControllerReturn.of("list", list);
 	}
 	
+	@RequestMapping("/insertStore") @ResponseBody
+	public Map<String, Object> insertStore(Store store) {
+		impl.insertStore(store);
+		return ControllerReturn.of();
+	}
 	
+	@RequestMapping("/updateStore") @ResponseBody
+	public Map<String, Object> updateStore(Store store) {
+		impl.updateStore(store);
+		return ControllerReturn.of();
+	}
 
 }

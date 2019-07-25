@@ -1,14 +1,10 @@
 package com.ppx.terminal.mvc.tool.core;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ppx.terminal.common.controller.ControllerReturn;
 import com.ppx.terminal.common.jdbc.MyDaoSupport;
 
 @Service
@@ -22,7 +18,16 @@ public class CoreToolServiceImpl extends MyDaoSupport {
 		return list;
 	}
 	
+	public void insertStore(Store s) {
+		String sql = "insert into core_store(store_no, store_name, store_address) "
+				+ "values(?, ?, ?)";
+		getJdbcTemplate().update(sql, s.getStoreNo(), s.getStoreName(), s.getStoreAddress());
+	}
 	
-	
+	public void updateStore(Store s) {
+		String sql = "update core_store set store_no = ?, store_name = ?, store_address = ?"
+				+ " where store_no = ?";
+		getJdbcTemplate().update(sql, s.getStoreNo(), s.getStoreName(), s.getStoreAddress(), s.getInitStoreNo());
+	}
 	
 }

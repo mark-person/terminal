@@ -14,6 +14,16 @@ public class Store {
 	private String storeLng;
 	private String storeLat;
 	private String storePhone;
+	
+	private String initStoreNo;
+	
+	public String getInitStoreNo() {
+		return initStoreNo;
+	}
+
+	public void setInitStoreNo(String initStoreNo) {
+		this.initStoreNo = initStoreNo;
+	}
 
 	public String getStoreNo() {
 		return storeNo;
