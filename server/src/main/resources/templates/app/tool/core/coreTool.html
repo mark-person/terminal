@@ -13,14 +13,42 @@ $(function() {
 	
 })
 
+
+function getVal(v) {
+	if (v) return v;
+	return "";
+}
+
+function add(obj) {
+	
+}
+
+function edit(obj, store_no) {
+	
+}
+
 function test() {
 	$.post(contextPath + "coreTool/listStore", {}, function(r) {
 		if (r.code !== 0) return;
 		
-		for (var i = 0; i < r.list.length; i++) {
-			$("#table").append('<tr><td>1111</td></tr>');
-		}
+		var newObj = {};
+		newObj.action = "ADD";
+		r.list.push(newObj);
 		
+		for (var i = 0; i < r.list.length; i++) {
+			var v = r.list[i];
+			var actionStr = '';
+			if (v.action == "ADD") actionStr = '<button type="button" onclick="add(this)">add</button>';
+			else actionStr = '<button type="button" onclick="edit(this, \'' + v.store_no + '\')">edit</button>';
+			$("#table").append('<tr>\
+				<td><input type="text" name="store_no" value="' + getVal(v.store_no) +'"></td>\
+				<td><input type="text" name="store_name" value="' + getVal(v.store_name) +'"></td>\
+				<td><input type="text" name="store_address" value="' + getVal(v.store_address) +'"></td>\
+				<td><input type="text" name="store_lng" value="' + getVal(v.store_lng) +'"></td>\
+				<td><input type="text" name="store_lat" value="' + getVal(v.store_lat) +'"></td>\
+				<td>' + actionStr + '</td>\
+			</tr>');
+		}
 	})
 }
 
@@ -34,8 +62,11 @@ function test() {
 <body>
 
 
-<table id="table">
-<tr><td></td></tr>
+<table id="table" border="1">
+<tr>
+	<td>no</td><td>name</td><td>addr</td><td>lng</td><td>lat</td><td>action</td>
+</tr>
+	
 
 </table>
 
