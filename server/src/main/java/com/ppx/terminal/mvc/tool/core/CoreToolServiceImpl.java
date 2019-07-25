@@ -28,6 +28,13 @@ public class CoreToolServiceImpl extends MyDaoSupport {
 		getJdbcTemplate().update(sql, s.getStoreNo(), s.getStoreName(), s.getStoreAddress(), s.getStoreLng(), s.getStoreLat(), s.getInitStoreNo());
 	}
 	
+	public void deleteStore(String storeNo) {
+		String sql = "delete from core_store where store_no = ?";
+		getJdbcTemplate().update(sql, storeNo);
+	}
+	
+	
+	
 	
 	
 	
@@ -49,4 +56,8 @@ public class CoreToolServiceImpl extends MyDaoSupport {
 		getJdbcTemplate().update(sql, s.getLockerNo(), s.getLockerDesc(), s.getInitLockerNo());
 	}
 	
+	public void deleteLocker(String lockerNo) {
+		String sql = "delete from core_locker where locker_no = ?";
+		getJdbcTemplate().update(sql, lockerNo);
+	}
 }

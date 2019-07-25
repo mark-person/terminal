@@ -51,6 +51,12 @@ public class CoreToolContoller {
 		impl.updateStore(store);
 		return ControllerReturn.of();
 	}
+	
+	@RequestMapping("/deleteStore") @ResponseBody
+	public Map<String, Object> deleteStore(String storeNo) {
+		impl.deleteStore(storeNo);
+		return ControllerReturn.of();
+	}
 
 	
 	
@@ -76,6 +82,12 @@ public class CoreToolContoller {
 	@RequestMapping("/updateLocker") @ResponseBody
 	public Map<String, Object> updateLocker(Locker locker) {
 		impl.updateStore(locker);
+		return ControllerReturn.of();
+	}
+	
+	@RequestMapping("/deleteLocker") @ResponseBody
+	public Map<String, Object> deleteLocker(String lockerNo) {
+		impl.deleteLocker(lockerNo);
 		return ControllerReturn.of();
 	}
 }

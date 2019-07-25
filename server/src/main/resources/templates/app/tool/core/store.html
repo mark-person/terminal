@@ -48,6 +48,12 @@ function edit(obj, initStoreNo) {
 	})
 }
 
+function del(storeNo) {
+	$.post(contextPath + "coreTool/deleteStore", {storeNo:storeNo}, function(r) {
+		if (r.code === 0) {alert("删除成功");query();}
+	})
+}
+
 function query() {
 	$.post(contextPath + "coreTool/listStore", {}, function(r) {
 		if (r.code !== 0) return;
@@ -61,7 +67,10 @@ function query() {
 			var v = r.list[i];
 			var actionStr = '';
 			if (v.action == "ADD") actionStr = '<button type="button" onclick="add(this)">add</button>';
-			else actionStr = '<button type="button" onclick="edit(this, \'' + v.storeNo + '\')">edit</button>';
+			else {
+				actionStr = '<button type="button" onclick="edit(this, \'' + v.storeNo + '\')">edit</button>';
+				actionStr += '<button type="button" onclick="del(\'' + v.storeNo + '\')">del</button>';
+			}
 			$("#tbody").append('<tr>\
 				<td><input type="text" name="storeNo" value="' + getVal(v.storeNo) +'"></td>\
 				<td><input type="text" name="storeName" value="' + getVal(v.storeName) +'"></td>\
