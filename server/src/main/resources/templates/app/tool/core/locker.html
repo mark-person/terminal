@@ -42,6 +42,15 @@ function edit(obj, initLockerNo) {
 	})
 }
 
+function del(lockerNo) {
+	var r = config("确认删除" + lockerNo);
+	if (r) {
+		$.post(contextPath + "coreTool/deleteLocker", {storeNo:lockerNo}, function(r) {
+			if (r.code === 0) {alert("删除成功");query();}
+		})
+	}
+}
+
 function query() {
 	$.post(contextPath + "coreTool/listLocker", {}, function(r) {
 		if (r.code !== 0) return;
@@ -55,7 +64,10 @@ function query() {
 			var v = r.list[i];
 			var actionStr = '';
 			if (v.action == "ADD") actionStr = '<button type="button" onclick="add(this)">add</button>';
-			else actionStr = '<button type="button" onclick="edit(this, \'' + v.lockerNo + '\')">edit</button>';
+			else {
+				actionStr = '<button type="button" onclick="edit(this, \'' + v.lockerNo + '\')">edit</button>';
+				actionStr += '<button type="button" onclick="del(\'' + v.lockerNo + '\')">del</button>';
+			}
 			$("#tbody").append('<tr>\
 				<td><input type="text" name="lockerNo" value="' + getVal(v.lockerNo) +'"></td>\
 				<td><input type="text" name="lockerDesc" value="' + getVal(v.lockerDesc) +'"></td>\

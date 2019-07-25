@@ -49,9 +49,12 @@ function edit(obj, initStoreNo) {
 }
 
 function del(storeNo) {
-	$.post(contextPath + "coreTool/deleteStore", {storeNo:storeNo}, function(r) {
-		if (r.code === 0) {alert("删除成功");query();}
-	})
+	var r = config("确认删除" + storeNo);
+	if (r) {
+		$.post(contextPath + "coreTool/deleteStore", {storeNo:storeNo}, function(r) {
+			if (r.code === 0) {alert("删除成功");query();}
+		})
+	}
 }
 
 function query() {
