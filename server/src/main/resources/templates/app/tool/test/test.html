@@ -19,7 +19,7 @@
 	<br>
 	<table>
 	<tr v-for="item in list">
-		<td>{{toVal(item.a)}}</td>
+		<td>{{toVal(item.a)}}|{{item.a}} <span v-if="item.a == 'a2'">X</span></td>
 	</tr>
 	</table>
 </div>
