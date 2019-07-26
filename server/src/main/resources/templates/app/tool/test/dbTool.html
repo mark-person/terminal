@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title></title>
+<script type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
+<script type="text/javascript" th:src="@{/static/vue/vue.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/vue/axios.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/vue/qs.js}"></script>
+
+<script type="text/javascript">
+var vm;
+var form;
+window.onload = function() {
+	vm = new Vue({
+	    el:'#column',
+	    data:{
+	        list:[]
+	    }
+	});
+	form = new Vue({
+	    el:'#myForm',
+	    data:{
+	        name:"ccccc....001"
+	    }
+	});
+	
+}
+
+// alert(Qs.stringify({a:'abc', b:'efg'}));
+
+function tableChange(obj) {
+	//let params = new URLSearchParams();
+	//params.append('tableName', obj.value);
+	
+	let formData = new FormData();
+	formData.append('tableName', obj.value);
+	
+
+    axios.post(contextPath + "dbTool/listColumn", formData).then(function(res){
+        
+        vm.list = res.data.list;
+    });
+}
+
+function test() {
+	var a = [];
+	for (i in form) {
+		a.push()
+	}
+	alert(JSON.stringify(form._data));
+}
+</script>
+
+</head>
+<body>
+
+<button type="button"  onclick="test()">test</button>
+
+<form id="myForm">
+	<input type="text" v-model="name">
+</form>
+
+<select id="table" onchange="tableChange(this)">
+	<option value="">请选择</option>
+	<option value="core_store">core_store</option>
+	<option value="core_locker">core_locker</option>
+</select>
+
+<select id="column">
+	<option v-for="item in list" value="{{item}}">{{item}}</option>
+</select>
+
+<div id="box">
+
+</div>
+
+
+</body>
+</html>
