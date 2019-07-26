@@ -3,10 +3,11 @@
  */
 package com.ppx.terminal.mvc.tool.test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,8 +35,21 @@ public class TestTestContoller {
 	
 	@RequestMapping("/json") @ResponseBody
 	public Map<String, Object> json() {
-		int i = 1 / 0;
-		return ControllerReturn.of();
+		
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		
+		Map<String, String> m1 = new HashMap<String, String>();
+		m1.put("a", "a1");
+		m1.put("b", "b1");
+		list.add(m1);
+		
+		Map<String, String> m2 = new HashMap<String, String>();
+		m2.put("a", "a2");
+		m2.put("b", "b2");
+		list.add(m2);
+		
+		
+		return ControllerReturn.of("list", list);
 	}
 	
 	

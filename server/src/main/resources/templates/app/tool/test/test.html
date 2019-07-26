@@ -15,8 +15,18 @@
 	<input type="button" @click="get()" value="点我异步获取数据(Get)">
 	
 	<div>{{msg}}</div>
+	
+	<br>
+	<table>
+	<tr v-for="item in list">
+		<td>{{toVal(item.a)}}</td>
+	</tr>
+	</table>
 </div>
 <script type="text/javascript">
+function toVal(v) {
+	return "aaaa";
+}
 
 
 // 添加响应拦截器
@@ -34,6 +44,7 @@ var vm = new Vue({
     el:'#box',
     data:{
         msg:'Hello World!',
+        list:[]
     },
     methods:{
         get:function() {
@@ -42,6 +53,7 @@ var vm = new Vue({
             axios.get(contextPath + "testTest/json").then(function(res){
                 // document.write(JSON.stringify(res));  
                 self.msg = 'ddd';
+                self.list = res.data.list;
             });
         }
     }
