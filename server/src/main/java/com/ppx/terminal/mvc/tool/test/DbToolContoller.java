@@ -42,6 +42,15 @@ public class DbToolContoller {
 		return ControllerReturn.of("list", list);
 	}
 	
+	@RequestMapping("/listValue") @ResponseBody
+	public Map<String, Object> listValue(String sql) {
+		
+		List<Map<String, Object>> list = impl.listValue(sql);
+		
+		return ControllerReturn.of("list", list);
+	}
+	
+	
 	
 
 }

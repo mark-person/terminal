@@ -11,6 +11,7 @@
 <script type="text/javascript">
 var vm;
 var form;
+var result;
 window.onload = function() {
 	vm = new Vue({
 	    el:'#column',
@@ -24,31 +25,36 @@ window.onload = function() {
 	        name:"ccccc....001"
 	    }
 	});
+	result = new Vue({
+	    el:'#result',
+	    data:{
+	    	title:['t1', 't2'],
+	        list:[
+	        	{a:'a1', b:'b1'},
+	        	{a:'a2', b:'b2'}
+	        ]
+	    }
+	});
 	
 }
 
 // alert(Qs.stringify({a:'abc', b:'efg'}));
 
 function tableChange(obj) {
-	//let params = new URLSearchParams();
-	//params.append('tableName', obj.value);
-	
-	let formData = new FormData();
-	formData.append('tableName', obj.value);
-	
-
-    axios.post(contextPath + "dbTool/listColumn", formData).then(function(res){
-        
+	let param = new FormData();
+	param.append('tableName', obj.value);
+    axios.post(contextPath + "dbTool/listColumn", param).then(function(res) {
         vm.list = res.data.list;
     });
 }
 
 function test() {
-	var a = [];
-	for (i in form) {
-		a.push()
-	}
-	alert(JSON.stringify(form._data));
+	// alert(JSON.stringify(form._data));
+	let param = new FormData();
+	param.append('sql', '');
+    axios.post(contextPath + "dbTool/listValue", param).then(function(res) {
+    	result.list = res.data.list;
+    });
 }
 </script>
 
@@ -61,19 +67,24 @@ function test() {
 	<input type="text" v-model="name">
 </form>
 
-<select id="table" onchange="tableChange(this)">
+<select id="table" onchange="tableChange(this)" >
 	<option value="">请选择</option>
 	<option value="core_store">core_store</option>
 	<option value="core_locker">core_locker</option>
 </select>
 
-<select id="column">
+<select id="column" multiple="multiple" size="5">
 	<option v-for="item in list" value="{{item}}">{{item}}</option>
 </select>
 
-<div id="box">
-
-</div>
+<table id="result" border="1">
+<tr>
+	<td v-for="item in title">{{item}}</td>
+</tr>
+<tr v-for="item in list">
+	<td v-for="v in item">{{v}}</td>
+</tr>
+</table>
 
 
 </body>
