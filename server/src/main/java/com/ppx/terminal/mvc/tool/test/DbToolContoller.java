@@ -28,6 +28,12 @@ public class DbToolContoller {
 	@Autowired
 	private DbToolServiceImpl impl; 
 	
+	@RequestMapping("/grid")
+	public ModelAndView test() {
+		ModelAndView mv = new ModelAndView("app/tool/test/grid");
+		return mv;
+	}
+	
 	@RequestMapping("/dbTool")
 	public ModelAndView dbTool() {
 		ModelAndView mv = new ModelAndView("app/tool/test/dbTool");
