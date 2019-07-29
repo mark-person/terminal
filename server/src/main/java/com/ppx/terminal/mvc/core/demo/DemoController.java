@@ -6,6 +6,9 @@ import java.util.Map;
 import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -15,16 +18,20 @@ import com.ppx.terminal.common.page.Page;
 
 
 @Controller
+@RequestMapping("/demo")
 public class DemoController {
 	
 	@Autowired
 	private DemoImpl impl;
 	
-	public ModelAndView test(ModelAndView mv) {
+	@GetMapping("/demo")
+	public ModelAndView demo(ModelAndView mv) {
+		mv.setViewName("app/core/demo/demo");
 		mv.addObject("list", list(new Page(), new Demo()));
 		return mv;
 	}
 	
+	@PostMapping("/list")
 	public Map<String, Object> list(Page page, Demo pojo) {
 		List<Demo> list = impl.list(page, pojo);
 		return ControllerReturn.page(page, list);

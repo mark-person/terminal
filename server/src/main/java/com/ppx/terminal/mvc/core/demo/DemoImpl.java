@@ -24,10 +24,11 @@ public class DemoImpl extends MyDaoSupport {
 		// 分开两条sql，mysql在count还会执行子查询, 总数返回0将不执行下一句
 		
 		//  mysql8支持order by和字查询count(*)优化，不支持left join优化
-		MyCriteria c = createCriteria("where").addAnd("t.demo_name like ?", "%", pojo.getDemoName(), "%");
+		MyCriteria c = createCriteria("where")
+				.addAnd("t.demo_name like ?", "%", pojo.getDemoName(), "%");
 		
 		 
-		page.addDefaultOrderName("t.test_id").addPermitOrderName("t.demo_name").addUnique("t.demo_id");
+		//page.addDefaultOrderName("t.test_id").addPermitOrderName("t.demo_name").addUnique("t.demo_id");
 		
 		StringBuilder cSql = new StringBuilder("select count(*) from core_demo t").append(c);
 		StringBuilder qSql = new StringBuilder("select * from core_demo t").append(c);
