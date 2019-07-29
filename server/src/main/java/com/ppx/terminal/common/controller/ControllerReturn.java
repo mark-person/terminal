@@ -6,11 +6,13 @@ package com.ppx.terminal.common.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ppx.terminal.common.page.Page;
 
 
 /**
@@ -44,6 +46,35 @@ public class ControllerReturn {
 		return ERROR;
 	}
 
+	public static Map<String, Object> exists(int result, String msg) {
+		if (result == 0) {
+			Map<String, Object> returnMap = new LinkedHashMap<String, Object>(2);
+			returnMap.put(CODE_TITLE, "40000");
+			returnMap.put(MSG_TITLE, msg);
+			return returnMap;
+		}
+		else {
+			return SUCCESS;
+		}
+	}
+	
+	public static Map<String, Object> page(Page page, List<?> list) {
+		Map<String, Object> returnMap = new LinkedHashMap<String, Object>(4);
+		returnMap.putAll(SUCCESS);
+		returnMap.put("page", page);
+		returnMap.put("list", list);
+		return returnMap;
+	}
+	
+	public static Map<String, Object> page(Page page, List<Object> list, String key, Object value) {
+		Map<String, Object> returnMap = new LinkedHashMap<String, Object>(5);
+		returnMap.putAll(SUCCESS);
+		returnMap.put("page", page);
+		returnMap.put("list", list);
+		returnMap.put(key, value);
+		return returnMap;
+	}
+	
 	
 	// 业务自定义:40000~40099
 	public static Map<String, Object> of(int code, String msg) {

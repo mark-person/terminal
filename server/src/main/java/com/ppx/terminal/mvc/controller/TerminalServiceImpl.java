@@ -84,10 +84,6 @@ public class TerminalServiceImpl extends MyDaoSupport {
 		String insertSql = "insert into ter_log_command(service_id, client_id, command_content, command_error) values(?, ?, ?, ?)";
 		getJdbcTemplate().update(insertSql, NettyUtils.getServiceId(), clientId, commandContent, commandError);
 	}
-
-	private int getLastInsertId() {
-    	return getJdbcTemplate().queryForObject("select LAST_INSERT_ID();", Integer.class);
-    }
 	
 	private void updateLogCommandReturn(int commandId, String commandReturn) {
 		String updateSql = "update ter_log_command set command_return = ? where command_id = ?";
