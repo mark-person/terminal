@@ -6,6 +6,7 @@
 <script type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
 <script type="text/javascript" th:src="@{/static/vue/vue.min.js}"></script>
 <script type="text/javascript" th:src="@{/static/vue/axios.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/vue/qs.js}"></script>
 <link rel="stylesheet" th:href="@{/static/terminal/demo/demo.css}">
 
 <script type="text/javascript" th:inline="javascript">
@@ -14,17 +15,34 @@ var list = [[${list}]];
 
 
 window.onload = function() {
+	
+	var mySearch = new Vue({
+	    el:'#mySearch',
+	    data:{
+	        pojo:{}
+	    },
+	    methods: {
+	    	query:function() {
+	    		pagination.gotoPage(1);
+	    	}
+	    }
+	});
+	
 	var pageTable = new Vue({
 	    el:'#myTable',
 	    data:{
 	        list:list.list,
-	        sortType:[]
+	        sortType:[],
+	        orderName:'',
+	        orderType:''
 	    },
 	    methods: {
 	    	sortPage:function(orderName, orderType) {
 	    		orderType = (orderType == 'asc' ? 'desc' : 'asc');
 	    		pageTable.sortType[orderName] = orderType;
-	    		pagination.gotoPage(1, orderName, orderType);
+	    		pageTable.orderName = orderName;
+	    		pageTable.orderType = orderType;
+	    		pagination.gotoPage(1);
 	    	}
 	    }
 	});
@@ -33,15 +51,17 @@ window.onload = function() {
 	    data:{
 	    	totalNum:Math.ceil(list.page.totalRows/list.page.pageSize),
 	    	totalRows:list.page.totalRows,
-	    	pageNumber:list.page.pageNumber
+	    	pageNumber:list.page.pageNumber,
+	    	pageSize:3
 	    },
 	    methods:{
-	    	gotoPage:function(n, orderName, orderType) {
-	    		var f = new FormData();
-	    		f.append("pageNumber", n);
-	    		f.append("orderName", orderName);
-	    		f.append("orderType", orderType);
-	            axios.post(contextPath + "demo/list", f).then(function(res) {
+	    	gotoPage:function(n) {
+	    		mySearch.pojo.pageNumber = n;
+	    		mySearch.pojo.orderName = pageTable.orderName;
+	    		mySearch.pojo.orderType = pageTable.orderType;
+	    		mySearch.pojo.pageSize = pageTable.pageSize;
+	    		
+	            axios.post(contextPath + "demo/list", Qs.stringify(mySearch.pojo)).then(function(res) {
 	            	var r = res.data;
 	            	pageTable.list = r.list;
 	            	pagination.totalNum = Math.ceil(r.page.totalRows/r.page.pageSize);
@@ -51,19 +71,6 @@ window.onload = function() {
 	    	}
 	    }
 	});
-}
-
-function query() {
-	pagination.gotoPage(2);
-}
-
-function getSortType(type) {
-	if (!type) {
-		return "arrow";
-	}
-	else  {
-		return type;
-	}
 }
 
 
@@ -77,17 +84,17 @@ function getSortType(type) {
 <body>
 
 
-<div>
-<input type="text">
-<button onclick="query()">test</button>
+<div id="mySearch">
+<input type="text"v-model="pojo.demoName">
+<button @click="query()">query</button>
 </div>
 
 <table id="myTable">
 <thead>
 	<tr>
-		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">消息类型<span :class="getSortType(sortType['demo_id'])"></span></th>
+		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">消息类型<span :class="sortType['demo_id']"></span></th>
 		<th class="active" @click="sortPage('demo_name', sortType['demo_name'])">提醒方式<span :class="sortType['demo_name']"></span></th>
-		<th>TEST</th>
+		<th>DEMO_TYPE</th>
 	</tr>
 </thead>
 <tbody>
@@ -100,7 +107,7 @@ function getSortType(type) {
 </table>
 <nav id="myPagination" class="pagination">
 	<ul>
-		<li v-if="pageNumber != 1" @click="gotoPage(1)"><span>«</span</li>
+		<li v-if="pageNumber != 1" @click="gotoPage(1)"><span>«</span>r</li>
 		<li v-if="pageNumber - 2 >= 1" @click="gotoPage(pageNumber - 2)"><span>{{pageNumber - 2}}</span></li>
 		<li v-if="pageNumber - 1 >= 1" @click="gotoPage(pageNumber - 1)"><span>{{pageNumber - 1}}</span></li>
 		<li class="active"><span>{{pageNumber}}</span></li>
@@ -108,8 +115,8 @@ function getSortType(type) {
 		<li v-if="pageNumber + 2 <= totalNum" @click="gotoPage(pageNumber + 2)"><span>{{pageNumber + 2}}</span></li>
 		<li v-if="pageNumber != totalNum" @click="gotoPage(totalNum)"><span>»</span></li>
 	</ul>
-	<select>
-		<option value="3" selected="selected">3条</option><option value="20">20条</option><option value="50">50条</option>
+	<select @change="gotoPage(1)" v-model="pageSize">
+		<option value="3" selected="selected">3条</option><option value="10">10条</option><option value="50">50条</option>
 	</select>
 	<div>共<b>{{totalRows}}</b>条记录</div>
 </nav>
