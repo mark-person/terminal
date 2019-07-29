@@ -13,6 +13,38 @@
 var list = [[${list}]];
 
 
+window.onload = function() {
+	var pageTable = new Vue({
+	    el:'#myTable',
+	    data:{
+	        list:list.list
+	    }
+	});
+	pagination = new Vue({
+	    el:'#myPagination',
+	    data:{
+	    	totalNum:Math.ceil(list.page.totalRows/list.page.pageSize),
+	    	totalRows:list.page.totalRows,
+	    	pageNumber:list.page.pageNumber
+	    },
+	    methods:{
+	    	gotoPage:function(n) {
+	            axios.post(contextPath + "demo/list", "pageNumber=" + n).then(function(res) {
+	            	var r = res.data;
+	            	pageTable.list = r.list;
+	            	pagination.totalNum = Math.ceil(r.page.totalRows/r.page.pageSize);
+	            	pagination.totalRows = r.page.totalRows;
+	            	pagination.pageNumber = r.page.pageNumber;
+	            });
+	    	}
+	    }
+	});
+}
+
+function query() {
+	pagination.gotoPage(2);
+}
+
 </script>
 
 
@@ -83,53 +115,40 @@ th.active .arrow {
 <body>
 
 
+<div>
+<input type="text">
+<button onclick="query()">test</button>
+</div>
 
-
-<table>
+<table id="myTable">
 <thead><tr><th class="active">消息类型<span class="arrow asc"></span></th><th>提醒方式</th></tr></thead>
 <tbody>
-	<tr><td>系统提醒</td><td>消息</td></tr>
-	<tr><td>系统提醒</td><td>消息</td></tr>
+	<tr v-for="item in list">
+		<td>{{item.demoId}}</td><td>{{item.demoName}}</td>
+	</tr>
 </tbody>
 </table>
 
 
 <style>
 
-.page-list-footer {
+.pagination {
     height: 40px;
     border: 1px solid #ddd;
-    padding: 5px;
+    padding-top: 6px;
     width: 100%;
-    margin-top: -15px;
+    margin-top: 2px;
 }
-
-
-.page-list-footer .pagination {
-    padding: 0;
+.pagination > ul {
+	padding: 0;
     margin-top: 0;
+	float: left;
 }
-.pagination {
-    margin: 0px;
-}
-.pull-left {
-    float: left;
-}
-.pull-left {
-    float: left!important;
-}
-.pagination {
-    display: inline-block;
-    padding-left: 0;
-    margin: 20px 0;
-    border-radius: 4px;
-}
-
-.pagination>li {
+.pagination > ul > li {
     display: inline;
 }
-
-.pagination>li>a, .pagination>li>span {
+.pagination > ul > li > span {
+	cursor:pointer;
     position: relative;
     float: left;
     padding: 6px 12px;
@@ -141,19 +160,34 @@ th.active .arrow {
     border: 1px solid #ddd;
 }
 
+.pagination > select {
+	height:34px;margin:0px 10px; border: 1px solid #ddd;float:left
+}
+.pagination > div {
+	padding: 6px 12px;
+}
 
-
+.pagination .active span {
+	color:white;
+	background-color: #337ab7;
+	border-color: #337ab7;
+	cursor:auto;
+}
 </style>
-<nav class="page-list-footer">
-		<ul id="pageNumUL" class="pagination pull-left pagination-sm"><li><a href="#this" onclick="queryPage(1)">«</a></li><li><a href="#this" onclick="queryPage(3)">3</a></li><li><a href="#this" onclick="queryPage(4)">4</a></li><li class="active"><a href="#this" onclick="queryPage(5)">5</a></li><li><a href="#this" onclick="queryPage(6)">6</a></li><li><a href="#this" onclick="queryPage(7)">7</a></li><li><a href="#this" onclick="queryPage(1377)">»</a></li></ul>
-	    <div class="page-list-footer-msg">
-		<div class="col-xs-1 input-group-sm">
-		<select onchange="$('#pageSize').val(this.value);queryPage(1)" class="pull-left" style="height:34px;margin:0px 10px; border: 1px solid #ddd;">
-			<option value="2000">全部</option><option value="15" selected="selected">10条</option><option value="25">20条</option><option value="50">50条</option>
-		</select>
-		</div>
-		<div style="padding: 6px 12px;s">共<b id="totalRows">20645</b>条记录</div>
-		</div>
+<nav id="myPagination" class="pagination">
+	<ul>
+		<li v-if="pageNumber != 1" @click="gotoPage(1)"><span>«</span</li>
+		<li v-if="pageNumber - 2 >= 1" @click="gotoPage(pageNumber - 2)"><span>{{pageNumber - 2}}</span></li>
+		<li v-if="pageNumber - 1 >= 1" @click="gotoPage(pageNumber - 1)"><span>{{pageNumber - 1}}</span></li>
+		<li class="active"><span>{{pageNumber}}</span></li>
+		<li v-if="pageNumber + 1 <= totalNum" @click="gotoPage(pageNumber + 1)"><span>{{pageNumber + 1}}</span></li>
+		<li v-if="pageNumber + 2 <= totalNum" @click="gotoPage(pageNumber + 2)"><span>{{pageNumber + 2}}</span></li>
+		<li v-if="pageNumber != totalNum" @click="gotoPage(totalNum)"><span>»</span></li>
+	</ul>
+	<select>
+		<option value="3" selected="selected">3条</option><option value="20">20条</option><option value="50">50条</option>
+	</select>
+	<div>共<b>{{totalRows}}</b>条记录</div>
 </nav>
 
 </body>
