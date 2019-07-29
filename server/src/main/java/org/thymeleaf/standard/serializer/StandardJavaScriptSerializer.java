@@ -164,7 +164,7 @@ public final class StandardJavaScriptSerializer implements IStandardJavaScriptSe
             this.mapper.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
             this.mapper.enable(JsonGenerator.Feature.ESCAPE_NON_ASCII);
             this.mapper.getFactory().setCharacterEscapes(new JacksonThymeleafCharacterEscapes());
-            this.mapper.setDateFormat(new JacksonThymeleafISO8601DateFormat());
+            // this.mapper.setDateFormat(new JacksonThymeleafISO8601DateFormat());
 
             /*
              * Now try to (conditionally) initialize support for Jackson serialization of JSR310 (java.time) objects,
