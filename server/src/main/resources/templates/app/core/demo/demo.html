@@ -6,7 +6,7 @@
 <script type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
 <script type="text/javascript" th:src="@{/static/vue/vue.min.js}"></script>
 <script type="text/javascript" th:src="@{/static/vue/axios.min.js}"></script>
-
+<link rel="stylesheet" th:href="@{/static/terminal/demo/demo.css}">
 
 <script type="text/javascript" th:inline="javascript">
 
@@ -18,10 +18,13 @@ window.onload = function() {
 	    el:'#myTable',
 	    data:{
 	        list:list.list,
-	        sortDemoId:'asc'
+	        sortType:[],
+	        columns:[{t:'消息类型'}, {t:'提醒方式'}]
 	    },
 	    methods: {
 	    	sortPage:function(orderName, orderType) {
+	    		orderType = (orderType == 'asc' ? 'desc' : 'asc');
+	    		pageTable.sortType[orderName] = orderType;
 	    		pagination.gotoPage(1, orderName, orderType);
 	    	}
 	    }
@@ -55,69 +58,19 @@ function query() {
 	pagination.gotoPage(2);
 }
 
+function getSortType(type) {
+	if (!type) {
+		return "arrow";
+	}
+	else  {
+		return type;
+	}
+}
+
+
 </script>
-
-
 <style>
-body {
-  font-family: Helvetica Neue, Arial, sans-serif;
-  font-size: 14px;
-  color: #444;
-}
 
-table {
-  border: 2px solid #42b983;
-  border-radius: 3px;
-  background-color: #fff;
-}
-
-th {
-  background-color: #42b983;
-  color: rgba(255,255,255,0.66);
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-td {
-  background-color: #f9f9f9;
-}
-
-th, td {
-  min-width: 120px;
-  padding: 10px 20px;
-}
-
-th.active {
-  color: #fff;
-}
-
-th.active .arrow {
-  opacity: 1;
-}
-
-.arrow {
-  display: inline-block;
-  vertical-align: middle;
-  width: 0;
-  height: 0;
-  margin-left: 5px;
-  opacity: 0.66;
-}
-
-.arrow.asc {
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-bottom: 4px solid #fff;
-}
-
-.arrow.dsc {
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 4px solid #fff;
-}
 
 </style>
 </head>
@@ -132,9 +85,15 @@ th.active .arrow {
 
 <table id="myTable">
 <thead>
+	<!--  
 	<tr>
-		<th class="active" @click="sortPage('demo_id', sortDemoId)">消息类型<span class="arrow {{sortDemoId)}}"></span></th>
-		<th>提醒方式</th>
+		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">消息类型<span :class="getSortType(sortType['demo_id'])"></span></th>
+		<th class="active" @click="sortPage('demo_name', sortType['demo_name'])">提醒方式<span :class="sortType['demo_name']"></span></th>
+	</tr>
+	-->
+	
+	<tr>
+		<th v-for="item in columns" @click="sortPage('demo_id', sortType['demo_id'])">{{item}}</th>
 	</tr>
 </thead>
 <tbody>
@@ -143,52 +102,6 @@ th.active .arrow {
 	</tr>
 </tbody>
 </table>
-
-
-<style>
-
-.pagination {
-    height: 40px;
-    border: 1px solid #ddd;
-    padding-top: 6px;
-    width: 100%;
-    margin-top: 2px;
-}
-.pagination > ul {
-	padding: 0;
-    margin-top: 0;
-	float: left;
-}
-.pagination > ul > li {
-    display: inline;
-}
-.pagination > ul > li > span {
-	cursor:pointer;
-    position: relative;
-    float: left;
-    padding: 6px 12px;
-    margin-left: -1px;
-    line-height: 1.42857143;
-    color: #337ab7;
-    text-decoration: none;
-    background-color: #fff;
-    border: 1px solid #ddd;
-}
-
-.pagination > select {
-	height:34px;margin:0px 10px; border: 1px solid #ddd;float:left
-}
-.pagination > div {
-	padding: 6px 12px;
-}
-
-.pagination .active span {
-	color:white;
-	background-color: #337ab7;
-	border-color: #337ab7;
-	cursor:auto;
-}
-</style>
 <nav id="myPagination" class="pagination">
 	<ul>
 		<li v-if="pageNumber != 1" @click="gotoPage(1)"><span>«</span</li>

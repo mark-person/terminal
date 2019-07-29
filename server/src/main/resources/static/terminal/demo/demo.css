@@ -1,0 +1,92 @@
+body {
+  font-family: Helvetica Neue, Arial, sans-serif;
+  font-size: 14px;
+  color: #444;
+}
+
+table {
+  border: 2px solid #42b983;
+  border-radius: 3px;
+  background-color: #fff;
+}
+
+th {
+  background-color: #42b983;
+  color: rgba(255,255,255,0.66);
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+td {
+  background-color: #f9f9f9;
+}
+
+th, td {
+  min-width: 120px;
+  padding: 10px 20px;
+}
+
+th.active {
+  color: #fff;
+}
+
+.asc {
+  display:inline-block;vertical-align: middle;width:0;height:0;margin-left:5px;opacity:0.66;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #fff;
+}
+
+.desc {
+  display:inline-block;vertical-align: middle;width:0;height:0;margin-left:5px;opacity:0.66;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #fff;
+}
+
+
+
+.pagination {
+    height: 40px;
+    border: 1px solid #ddd;
+    padding-top: 6px;
+    width: 100%;
+    margin-top: 2px;
+}
+.pagination > ul {
+	padding: 0;
+    margin-top: 0;
+	float: left;
+}
+.pagination > ul > li {
+    display: inline;
+}
+.pagination > ul > li > span {
+	cursor:pointer;
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.pagination > select {
+	height:34px;margin:0px 10px; border: 1px solid #ddd;float:left
+}
+.pagination > div {
+	padding: 6px 12px;
+}
+
+.pagination .active span {
+	color:white;
+	background-color: #337ab7;
+	border-color: #337ab7;
+	cursor:auto;
+}

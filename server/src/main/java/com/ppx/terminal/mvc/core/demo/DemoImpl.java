@@ -19,7 +19,7 @@ public class DemoImpl extends MyDaoSupport {
 		
 		
 		// 默认排序，后面加上需要从页面传过来的排序的，防止SQL注入
-		// page.addDefaultOrderName("test_id").addPermitOrderName("test_price").addUnique("test_id");
+		page.addDefaultOrderName("demo_id").addPermitOrderName("demo_name"); //.addUnique("test_id");
 
 		// 分开两条sql，mysql在count还会执行子查询, 总数返回0将不执行下一句
 		
