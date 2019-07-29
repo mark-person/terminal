@@ -17,7 +17,7 @@ public class Demo {
 	private String demoName;
 	private String demoDate;
 	private Double demoValue;
-	private Integer demo_type;
+	private Integer demoType;
 	private Date created;
 	
 	public Integer getDemoId() {
@@ -44,11 +44,11 @@ public class Demo {
 	public void setDemoValue(Double demoValue) {
 		this.demoValue = demoValue;
 	}
-	public Integer getDemo_type() {
-		return demo_type;
+	public Integer getDemoType() {
+		return demoType;
 	}
-	public void setDemo_type(Integer demo_type) {
-		this.demo_type = demo_type;
+	public void setDemoType(Integer demoType) {
+		this.demoType = demoType;
 	}
 	public Date getCreated() {
 		return created;

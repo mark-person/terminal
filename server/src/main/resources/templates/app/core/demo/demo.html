@@ -18,8 +18,7 @@ window.onload = function() {
 	    el:'#myTable',
 	    data:{
 	        list:list.list,
-	        sortType:[],
-	        columns:[{t:'消息类型'}, {t:'提醒方式'}]
+	        sortType:[]
 	    },
 	    methods: {
 	    	sortPage:function(orderName, orderType) {
@@ -85,20 +84,17 @@ function getSortType(type) {
 
 <table id="myTable">
 <thead>
-	<!--  
 	<tr>
 		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">消息类型<span :class="getSortType(sortType['demo_id'])"></span></th>
 		<th class="active" @click="sortPage('demo_name', sortType['demo_name'])">提醒方式<span :class="sortType['demo_name']"></span></th>
-	</tr>
-	-->
-	
-	<tr>
-		<th v-for="item in columns" @click="sortPage('demo_id', sortType['demo_id'])">{{item}}</th>
+		<th>TEST</th>
 	</tr>
 </thead>
 <tbody>
 	<tr v-for="item in list">
-		<td>{{item.demoId}}</td><td>{{item.demoName}}</td>
+		<td>{{item.demoId}}</td>
+		<td>{{item.demoName}}</td>
+		<td>{{item.demoType}}</td>
 	</tr>
 </tbody>
 </table>
