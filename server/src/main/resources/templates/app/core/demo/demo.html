@@ -17,7 +17,13 @@ window.onload = function() {
 	var pageTable = new Vue({
 	    el:'#myTable',
 	    data:{
-	        list:list.list
+	        list:list.list,
+	        sortDemoId:'asc'
+	    },
+	    methods: {
+	    	sortPage:function(orderName, orderType) {
+	    		pagination.gotoPage(1, orderName, orderType);
+	    	}
 	    }
 	});
 	pagination = new Vue({
@@ -28,8 +34,12 @@ window.onload = function() {
 	    	pageNumber:list.page.pageNumber
 	    },
 	    methods:{
-	    	gotoPage:function(n) {
-	            axios.post(contextPath + "demo/list", "pageNumber=" + n).then(function(res) {
+	    	gotoPage:function(n, orderName, orderType) {
+	    		var f = new FormData();
+	    		f.append("pageNumber", n);
+	    		f.append("orderName", orderName);
+	    		f.append("orderType", orderType);
+	            axios.post(contextPath + "demo/list", f).then(function(res) {
 	            	var r = res.data;
 	            	pageTable.list = r.list;
 	            	pagination.totalNum = Math.ceil(r.page.totalRows/r.page.pageSize);
@@ -121,7 +131,12 @@ th.active .arrow {
 </div>
 
 <table id="myTable">
-<thead><tr><th class="active">消息类型<span class="arrow asc"></span></th><th>提醒方式</th></tr></thead>
+<thead>
+	<tr>
+		<th class="active" @click="sortPage('demo_id', sortDemoId)">消息类型<span class="arrow {{sortDemoId)}}"></span></th>
+		<th>提醒方式</th>
+	</tr>
+</thead>
 <tbody>
 	<tr v-for="item in list">
 		<td>{{item.demoId}}</td><td>{{item.demoName}}</td>
