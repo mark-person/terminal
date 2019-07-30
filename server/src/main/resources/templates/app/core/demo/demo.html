@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<div th:replace="common/fragment::base"/>
+<link th:replace="common/fragment::base"/>
 <script type="text/javascript" th:inline="javascript">
 var list = [[${list}]];
 window.onload = function() {
@@ -28,10 +28,10 @@ window.onload = function() {
 		<td>{{item.demoType}}</td>
 	</tr>
 	</table>
-	<div th:replace="common/fragment::page"/></div>
+	<div th:replace="common/fragment::page"/>
 </div>
 
-<div th:replace="common/fragment::commonDiv"/></div>
+<div th:replace="common/fragment::commonDiv"/>
 </body>
 </html>
 
