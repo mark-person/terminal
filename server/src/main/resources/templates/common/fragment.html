@@ -9,7 +9,7 @@
 
 
 <!-- page -->
-<nav th:fragment="page" class="pagination">
+<nav th:fragment="page" class="pagination blockTemplate">
 	<ul>
 		<li v-if="pageNumber != 1" @click="gotoPage(1)"><span>«</span></li>
 		<li v-if="pageNumber - 2 >= 1" @click="gotoPage(pageNumber - 2)"><span>{{pageNumber - 2}}</span></li>

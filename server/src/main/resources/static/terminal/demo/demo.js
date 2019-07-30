@@ -20,7 +20,7 @@ function page(list, url) {
 	    	gotoPage:function(n) {
 	    		this.pojo.pageNumber = n;
 	    		loading.show();
-	            axios.post(contextPath + "demo/list", Qs.stringify(this.pojo)).then(function(res) {
+	            axios.post(contextPath + url, Qs.stringify(this.pojo)).then(function(res) {
 	            	loading.hide();
 	            	var r = res.data;
 	            	page.list = r.list;
@@ -31,6 +31,10 @@ function page(list, url) {
 	    	}
 	    }
 	});
+	
+	document.querySelector(".tableTemplate").style.display = "table";
+	document.querySelector(".blockTemplate").style.display = "block";
+	
 }
 
 

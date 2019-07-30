@@ -15,38 +15,7 @@
 var list = [[${list}]];
 
 window.onload = function() {
-	var page = new Vue({
-	    el:'#page',
-	    data:{
-	        pojo:{pageSize:3},
-	        list:list.list,
-	        sortType:[],
-	        totalNum:Math.ceil(list.page.totalRows/list.page.pageSize),
-	    	totalRows:list.page.totalRows,
-	    	pageNumber:list.page.pageNumber
-	    },
-	    methods: {
-	    	sortPage:function(orderName, orderType) {
-	    		orderType = (orderType == 'asc' ? 'desc' : 'asc');
-	    		this.sortType[orderName] = orderType;
-	    		this.pojo.orderName = orderName;
-	    		this.pojo.orderType = orderType;
-	    		this.gotoPage(1);
-	    	},
-	    	gotoPage:function(n) {
-	    		this.pojo.pageNumber = n;
-	    		loading.show();
-	            axios.post(contextPath + "demo/list", Qs.stringify(this.pojo)).then(function(res) {
-	            	loading.hide();
-	            	var r = res.data;
-	            	page.list = r.list;
-	            	page.totalNum = Math.ceil(r.page.totalRows/r.page.pageSize);
-	            	page.totalRows = r.page.totalRows;
-	            	page.pageNumber = r.page.pageNumber;
-	            });
-	    	}
-	    }
-	});
+	page(list, "demo/list");
 }
 
 
@@ -64,7 +33,7 @@ window.onload = function() {
 		<input type="text"v-model="pojo.demoName" maxlength="32">
 		<button @click="gotoPage(1)">搜索</button>
 	</div>
-	<table>
+	<table class="tableTemplate">
 	<tr>
 		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">消息类型<span :class="sortType['demo_id']"></span></th>
 		<th class="active" @click="sortPage('demo_name', sortType['demo_name'])">提醒方式<span :class="sortType['demo_name']"></span></th>
