@@ -8,9 +8,59 @@
 
 
 
+<!-- page -->
+<nav th:fragment="page" class="pagination">
+	<ul>
+		<li v-if="pageNumber != 1" @click="gotoPage(1)"><span>«</span></li>
+		<li v-if="pageNumber - 2 >= 1" @click="gotoPage(pageNumber - 2)"><span>{{pageNumber - 2}}</span></li>
+		<li v-if="pageNumber - 1 >= 1" @click="gotoPage(pageNumber - 1)"><span>{{pageNumber - 1}}</span></li>
+		<li class="active"><span>{{pageNumber}}</span></li>
+		<li v-if="pageNumber + 1 <= totalNum" @click="gotoPage(pageNumber + 1)"><span>{{pageNumber + 1}}</span></li>
+		<li v-if="pageNumber + 2 <= totalNum" @click="gotoPage(pageNumber + 2)"><span>{{pageNumber + 2}}</span></li>
+		<li v-if="pageNumber != totalNum" @click="gotoPage(totalNum)"><span>»</span></li>
+	</ul>
+	<select @change="gotoPage(1)" v-model="pojo.pageSize">
+		<option value="3">3条</option><option value="10">10条</option><option value="50">50条</option>
+	</select>
+	<div>共<b>{{totalRows}}</b>条记录</div>
+</nav>
 
 
 
+
+<!-- 共用div -->
+<div th:fragment="commonDiv">
+
+
+<div id="loading"><modal v-if="showLoading"></modal></div>
+<script type="text/x-template" id="loading-template">
+<div class="modal-mask">
+<div class="modal-wrapper">
+	<div class="modal-container" style="width:53px;height:20px"><div class="modal-header"><h3>loading</h3></div></div>
+</div>
+</div>
+</script>
+<script type="text/javascript">
+Vue.component('modal', {template: '#loading-template'});
+var loading = new Vue({
+	el: '#loading',
+	data: {
+      	showLoading: false,
+      	delayLoading: true
+	},
+	methods: {
+      	show:function() {
+      		this.delayLoading = true;
+			setTimeout(function() {loading.showLoading = (loading.delayLoading) ? true : false;}, 300);
+      	},
+      	hide:function() {
+      		this.delayLoading = false;
+      		this.showLoading = false;
+      	}
+	}
+})
+</script>
+</div>
 
 
 
