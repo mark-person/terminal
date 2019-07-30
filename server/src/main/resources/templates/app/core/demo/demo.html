@@ -17,12 +17,12 @@ var list = [[${list}]];
 window.onload = function() {
 	// register modal component
     Vue.component('modal', {
-      template: '#modal-template'
+      template: '#loading-template'
     })
-	new Vue({
+	 var loading = new Vue({
         el: '#loading',
         data: {
-          showModal: true
+        	showLoading: false
         }
       })
 	
@@ -71,7 +71,9 @@ window.onload = function() {
 	    		mySearch.pojo.orderType = pageTable.orderType;
 	    		mySearch.pojo.pageSize = pageTable.pageSize;
 	    		
+	    		loading.showLoading = true;
 	            axios.post(contextPath + "demo/list", Qs.stringify(mySearch.pojo)).then(function(res) {
+	            	loading.showLoading = false;
 	            	var r = res.data;
 	            	pageTable.list = r.list;
 	            	pagination.totalNum = Math.ceil(r.page.totalRows/r.page.pageSize);
@@ -96,7 +98,7 @@ window.onload = function() {
 
 <div id="mySearch">
 <input type="text"v-model="pojo.demoName">
-<button @click="query()">query</button>
+<button @click="query()">搜索</button>
 </div>
 
 <table id="myTable">
@@ -117,7 +119,7 @@ window.onload = function() {
 </table>
 <nav id="myPagination" class="pagination">
 	<ul>
-		<li v-if="pageNumber != 1" @click="gotoPage(1)"><span>«</span>r</li>
+		<li v-if="pageNumber != 1" @click="gotoPage(1)"><span>«</span></li>
 		<li v-if="pageNumber - 2 >= 1" @click="gotoPage(pageNumber - 2)"><span>{{pageNumber - 2}}</span></li>
 		<li v-if="pageNumber - 1 >= 1" @click="gotoPage(pageNumber - 1)"><span>{{pageNumber - 1}}</span></li>
 		<li class="active"><span>{{pageNumber}}</span></li>
@@ -131,20 +133,16 @@ window.onload = function() {
 	<div>共<b>{{totalRows}}</b>条记录</div>
 </nav>
 
-<div id="loading">
-<modal v-if="showModal">
-</modal>
-</div>
 
-<script type="text/x-template" id="modal-template">
+
+
+
+<div id="loading"><modal v-if="showLoading"></modal></div>
+<script type="text/x-template" id="loading-template">
 <div class="modal-mask">
-<div class="modal-wrapper"><div class="modal-container"><div class="modal-header"><h3>custom header</h3></div> <div class="modal-body">
-                  default body
-                </div> <div class="modal-footer">
-                  default footer
-                  <button class="modal-default-button">
-                    OK
-           </button></div></div></div></div>
+<div class="modal-wrapper">
+	<div class="modal-container" style="width:53px;height:20px"><div class="modal-header"><h3>loading</h3></div></div>
+</div>
 </div>
 </script>
 

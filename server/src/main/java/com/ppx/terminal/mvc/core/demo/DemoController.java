@@ -39,6 +39,12 @@ public class DemoController {
 	@PostMapping("/list")
 	@ResponseBody
 	public Map<String, Object> list(Page page, Demo pojo) {
+		try {
+			// Thread.sleep(1500);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 		List<Demo> list = impl.list(page, pojo);
 		return ControllerReturn.page(page, list);
 	}
