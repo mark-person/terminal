@@ -33,7 +33,7 @@ window.onload = function() {
 
 
 
-<div id="add"><add v-if="showLoading" :pojo="pojo" @ok="ok"></div>
+<div id="add"><add v-if="showLoading" :pojo="pojo" @ok="ok" :validate="validate"></div>
 <script type="text/x-template" id="add-template">
 <div class="modal-mask">
 <div class="modal-wrapper">
@@ -41,7 +41,10 @@ window.onload = function() {
 		<div class="modal-header"><h3>规则</h3></div>
 		<div class="modal-body">
 			<table>
-				<tr><th>规则名称</th><td><input type="text" v-model="pojo.demoName" maxlength="32"></tr>
+				<tr>
+					<th>规则名称</th>
+					<td><input type="text" v-model="pojo.demoName" maxlength="32"><span style="color:red">{{validate['demoName']}}</span></td>
+				</tr>
 				<tr><th>规则名称</th><td><input type="text" v-model="pojo.demoType" maxlength="32"></tr>	
 			</table>
         </div>
@@ -52,17 +55,20 @@ window.onload = function() {
 </script>
 
 <script type="text/javascript">
-Vue.component('add', {template: '#add-template', props: {pojo:Object}});
+Vue.component('add', {template: '#add-template', props: {pojo:Object,validate:Object}});
 add = new Vue({
 	el: '#add',
 	data: {
       	showLoading:true,
-      	pojo:{}
+      	pojo:{},
+      	validate:[]
 	},
 	methods: {
       	show:function() {this.showLoading = true;},
       	hide:function() {this.showLoading = false;},
       	ok:function() {
+      		this.validate['demoName'] = "不能为空";
+      		this.validate.push(1)
       		alert("out:" + JSON.stringify(this.pojo));
       	}
 	}
