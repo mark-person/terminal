@@ -67,8 +67,9 @@ add = new Vue({
       	show:function() {this.showLoading = true;},
       	hide:function() {this.showLoading = false;},
       	ok:function() {
+      		alert(this.pojo.demoName)
       		this.validate['demoName'] = "不能为空";
-      		this.validate.push(1)
+      		this.validate.push();
       		alert("out:" + JSON.stringify(this.pojo));
       	}
 	}
