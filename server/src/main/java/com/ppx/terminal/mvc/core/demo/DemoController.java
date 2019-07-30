@@ -36,7 +36,7 @@ public class DemoController {
 	@ResponseBody
 	public Map<String, Object> list(Page page, Demo pojo) {
 		try {
-			// Thread.sleep(1500);
+			// Thread.sleep(1000);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
