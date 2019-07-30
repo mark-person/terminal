@@ -14,6 +14,17 @@ import com.ppx.terminal.common.page.Page;
 
 @Service
 public class DemoImpl extends MyDaoSupport {
+	
+	/**
+	 * 1.别乱new
+2.别乱if
+3.支持分布式
+4.防SQL注入
+5.防魔法数字
+6.防并发
+7.防越权
+8.能一行代码解决的问题，别写几百行
+	 */
 
 	public List<Demo> list(Page page, Demo pojo) {
 		
@@ -50,9 +61,7 @@ public class DemoImpl extends MyDaoSupport {
     }
     
     public Map<String, Object> update(Demo bean) {
-        // 后面带不允许重名的字段（该字段需要建索引）
-        int r = updateEntity(bean, "demo_name");
-        return ControllerReturn.exists(r, "测试名称已经存在");
+        return ControllerReturn.exists(updateEntity(bean, "demo_name"), "测试名称已经存在");
     }
     
     public Map<String, Object> delete(Integer id) {
