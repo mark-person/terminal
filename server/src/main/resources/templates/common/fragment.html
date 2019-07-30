@@ -8,6 +8,14 @@
 
 
 
+<script th:fragment="base" type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
+<script th:fragment="base" type="text/javascript" th:src="@{/static/vue/vue.min.js}"></script>
+<script th:fragment="base" type="text/javascript" th:src="@{/static/vue/axios.min.js}"></script>
+<script th:fragment="base" type="text/javascript" th:src="@{/static/vue/qs.js}"></script>
+<script th:fragment="base" type="text/javascript" th:src="@{/static/terminal/demo/demo.js}"></script>
+<link   th:fragment="base" rel="stylesheet" th:href="@{/static/terminal/demo/demo.css}">
+
+
 <!-- page -->
 <nav th:fragment="page" class="pagination blockTemplate">
 	<ul>

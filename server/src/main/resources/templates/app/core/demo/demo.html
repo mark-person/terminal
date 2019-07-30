@@ -2,32 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title></title>
-<script type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
-<script type="text/javascript" th:src="@{/static/vue/vue.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/vue/axios.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/vue/qs.js}"></script>
-<script type="text/javascript" th:src="@{/static/terminal/demo/demo.js}"></script>
-<link rel="stylesheet" th:href="@{/static/terminal/demo/demo.css}">
-
+<div th:replace="common/fragment::base"/>
 <script type="text/javascript" th:inline="javascript">
-
 var list = [[${list}]];
-
 window.onload = function() {
 	page(list, "demo/list");
 }
-
-
 </script>
-<style>
-
-
-</style>
 </head>
-
 <body>
-
 <div id="page">
 	<div>
 		<input type="text"v-model="pojo.demoName" maxlength="32">
@@ -35,8 +18,8 @@ window.onload = function() {
 	</div>
 	<table class="tableTemplate">
 	<tr>
-		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">消息类型<span :class="sortType['demo_id']"></span></th>
-		<th class="active" @click="sortPage('demo_name', sortType['demo_name'])">提醒方式<span :class="sortType['demo_name']"></span></th>
+		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">DEMO_ID<span :class="sortType['demo_id']"></span></th>
+		<th class="active" @click="sortPage('demo_name', sortType['demo_name'])">DEMO_NAME<span :class="sortType['demo_name']"></span></th>
 		<th>DEMO_TYPE</th>
 	</tr>
 	<tr v-for="item in list">
@@ -50,6 +33,5 @@ window.onload = function() {
 
 <div th:replace="common/fragment::commonDiv"/></div>
 </body>
-
 </html>
 
