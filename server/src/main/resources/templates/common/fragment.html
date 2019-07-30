@@ -40,7 +40,7 @@
 <div th:fragment="commonDiv">
 
 
-<div id="loading"><modal v-if="showLoading"></modal></div>
+<div id="loading"><modal v-if="showLoading" :pojo="pojo"></modal></div>
 <script type="text/x-template" id="loading-template">
 <div class="modal-mask">
 <div class="modal-wrapper">
@@ -49,12 +49,17 @@
 </div>
 </script>
 <script type="text/javascript">
-Vue.component('modal', {template: '#loading-template'});
+Vue.component('modal', {template: '#loading-template',
+	props: {
+		pojo:Object
+	}
+});
 var loading = new Vue({
 	el: '#loading',
 	data: {
       	showLoading: false,
-      	delayLoading: true
+      	delayLoading: true,
+      	pojo:{test:'ss00001'}
 	},
 	methods: {
       	show:function() {

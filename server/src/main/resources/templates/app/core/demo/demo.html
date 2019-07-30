@@ -31,6 +31,45 @@ window.onload = function() {
 	<div th:replace="common/fragment::page"/>
 </div>
 
+
+
+<div id="add"><add v-if="showLoading" :pojo="pojo" @ok="ok"></div>
+<script type="text/x-template" id="add-template">
+<div class="modal-mask">
+<div class="modal-wrapper">
+	<div class="modal-container" style="width:500px">
+		<div class="modal-header"><h3>规则</h3></div>
+		<div class="modal-body">
+			<table>
+				<tr><th>规则名称</th><td><input type="text" v-model="pojo.demoName" maxlength="32"></tr>
+				<tr><th>规则名称</th><td><input type="text" v-model="pojo.demoType" maxlength="32"></tr>	
+			</table>
+        </div>
+		<div class="modal-footer">&nbsp;<button class="modal-default-button" @click="$emit('ok')">OK</button></div>
+	</div>
+</div>
+</div>
+</script>
+
+<script type="text/javascript">
+Vue.component('add', {template: '#add-template', props: {pojo:Object}});
+add = new Vue({
+	el: '#add',
+	data: {
+      	showLoading:true,
+      	pojo:{}
+	},
+	methods: {
+      	show:function() {this.showLoading = true;},
+      	hide:function() {this.showLoading = false;},
+      	ok:function() {
+      		alert("out:" + JSON.stringify(this.pojo));
+      	}
+	}
+})
+</script>
+
+
 <div th:replace="common/fragment::commonDiv"/>
 </body>
 </html>
