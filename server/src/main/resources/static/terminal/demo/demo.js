@@ -2,12 +2,10 @@ function page(list, url) {
 	var page = new Vue({
 	    el:'#page',
 	    data:{
-	        pojo:{pageSize:3},
+	        pojo:{},
 	        list:list.list,
 	        sortType:[],
-	        totalNum:Math.ceil(list.page.totalRows/list.page.pageSize),
-	    	totalRows:list.page.totalRows,
-	    	pageNumber:list.page.pageNumber
+	        p:list.page
 	    },
 	    methods: {
 	    	sortPage:function(orderName, orderType) {
@@ -19,14 +17,12 @@ function page(list, url) {
 	    	},
 	    	gotoPage:function(n) {
 	    		this.pojo.pageNumber = n;
+	    		this.pojo.pageSize = this.p.pageSize;
 	    		loading.show();
 	            axios.post(contextPath + url, Qs.stringify(this.pojo)).then(function(res) {
 	            	loading.hide();
-	            	var r = res.data;
-	            	page.list = r.list;
-	            	page.totalNum = Math.ceil(r.page.totalRows/r.page.pageSize);
-	            	page.totalRows = r.page.totalRows;
-	            	page.pageNumber = r.page.pageNumber;
+	            	page.list = res.data.list;
+	            	page.p = res.data.page;
 	            });
 	    	}
 	    }

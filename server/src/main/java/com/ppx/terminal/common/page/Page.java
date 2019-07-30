@@ -17,6 +17,8 @@ public class Page {
 	private int pageNumber = 1;
 
 	private int totalRows;
+	
+	private int totalNum;
 
 	private String orderName;
 
@@ -107,5 +109,15 @@ public class Page {
 			throw new RuntimeException("IllegalRequestException orderType:" + orderType);
 		}
 	}
+
+	public int getTotalNum() {
+		return totalRows / pageSize;
+	}
+
+	public void setTotalNum(int totalNum) {
+		this.totalNum = totalNum;
+	}
+	
+	
 
 }
