@@ -9,15 +9,6 @@ window.onload = function() {
 	page(list, "demo/list");
 }
 
-
-// 添加响应拦截器
-axios.interceptors.response.use(function(res) {
-	// 对响应数据做些事
-	alert(JSON.stringify(res))
-	return res;
-}, function(error) {
-	return Promise.reject(error);
-});
 </script>
 </head>
 <body>
@@ -71,14 +62,6 @@ axios.interceptors.response.use(function(res) {
 
 <script type="text/javascript">
 
-var V = {};
-V.notNull = function(v) {
-	return !v ? '不能为空' : '';
-}
-V.isNum = function(v) {
-	return /^[0-9]+$/.test(v) ? '' : '必须为数字';	
-}
-
 Vue.component('add', {template: '#add-template', props: {pojo:Object, validate:Object}});
 add = new Vue({
 	el: '#add',
@@ -92,7 +75,7 @@ add = new Vue({
 			if (this.validateBoolean == false) return {};
 			return {
 				demoName:V.notNull(this.pojo.demoName), 
-				demoType:V.notNull(this.pojo.demoType) + V.isNum(this.pojo.demoType)
+				demoType:V.notNull(this.pojo.demoType) || V.isNum(this.pojo.demoType)
 			}
 		},
 		isValid: function () {
@@ -111,7 +94,9 @@ add = new Vue({
       		loading.show();
             axios.post(contextPath + "demo/insert", Qs.stringify(this.pojo)).then(function(res) {
             	loading.hide();
-            	alert(res.data.code);
+            	if (res.data.code == 0) {
+            		
+            	}
             });
       	}
 	}

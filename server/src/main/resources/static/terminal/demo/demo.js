@@ -1,3 +1,26 @@
+
+
+axios.interceptors.response.use(function(res) {
+	var code = res.data.code;
+	alert(code)
+	if (code != 0) {
+		alert(res.data.msg);
+	}
+	return res;
+}, function(error) {
+	return Promise.reject(error);
+});
+
+
+var V = {};
+V.notNull = function(v) {
+	return !v ? '不能为空' : '';
+}
+V.isNum = function(v) {
+	return /^[0-9]+$/.test(v) ? '' : '必须为数字';	
+}
+
+
 function page(list, url) {
 	var page = new Vue({
 	    el:'#page',

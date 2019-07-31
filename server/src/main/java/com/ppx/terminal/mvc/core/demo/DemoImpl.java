@@ -51,7 +51,7 @@ public class DemoImpl extends MyDaoSupport {
 	public Map<String, Object> insert(Demo pojo) {
         // 后面带不允许重名的字段（该字段需要建索引）
 		int r = insertEntity(pojo, "demo_name");
-        return ControllerReturn.exists(r, "测试名称");
+        return ControllerReturn.exists(r, "测试名称已经存在");
     }
 	
 	public Test get(Integer id) {

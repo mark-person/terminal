@@ -45,6 +45,7 @@ public class DemoController {
 	 
 	@PostMapping("/insert") @ResponseBody
     public Map<?, ?> insert(Demo pojo) {
+		
         return impl.insert(pojo);
     }
     
