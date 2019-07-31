@@ -42,10 +42,10 @@ window.onload = function() {
 		<div class="modal-body">
 			<table>
 				<tr>
-					<th>规则名称</th>
-					<td><input type="text" v-model="pojo.demoName" maxlength="32"><span style="color:red">{{validate['demoName']}}</span></td>
+					<th style="width:100px">规则名称</th>
+					<td><input type="text" v-model="pojo.demoName" maxlength="32"><span style="color:red">{{validate.demoName}}</span></td>
 				</tr>
-				<tr><th>规则名称</th><td><input type="text" v-model="pojo.demoType" maxlength="32"></tr>	
+				<tr><th>规则名称</th><td><input type="text" v-model="pojo.demoType" maxlength="32"><span style="color:red">{{validate.demoType}}</td></tr>
 			</table>
         </div>
 		<div class="modal-footer">&nbsp;<button class="modal-default-button" @click="$emit('ok')">OK</button></div>
@@ -55,22 +55,38 @@ window.onload = function() {
 </script>
 
 <script type="text/javascript">
-Vue.component('add', {template: '#add-template', props: {pojo:Object,validate:Object}});
+
+
+
+Vue.component('add', {template: '#add-template', props: {pojo:Object, validate:Object}});
 add = new Vue({
 	el: '#add',
 	data: {
       	showLoading:true,
       	pojo:{},
-      	validate:[]
+      	validateBoolean:false
+	},
+	computed: {
+		validate:function() {
+			if (this.validateBoolean == false) return {};
+			var demoName = '';
+			demoName = (!this.pojo.demoName) ? '不能为空' : '';
+			var demoType = '';
+			demoType = (!this.pojo.demoType) ? '不能为空' : '';
+			return {demoName:demoName, demoType:demoType}
+		},
+		isValid: function () {
+			return true;
+		}
 	},
 	methods: {
       	show:function() {this.showLoading = true;},
       	hide:function() {this.showLoading = false;},
       	ok:function() {
-      		alert(this.pojo.demoName)
-      		this.validate['demoName'] = "不能为空";
-      		this.validate.push();
-      		alert("out:" + JSON.stringify(this.pojo));
+      		// alert(this.isValid);
+      		this.validateBoolean = true;
+			
+      		// alert("out:" + JSON.stringify(this.pojo));
       	}
 	}
 })
