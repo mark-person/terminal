@@ -3,7 +3,6 @@ package com.ppx.terminal.mvc.core.demo;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

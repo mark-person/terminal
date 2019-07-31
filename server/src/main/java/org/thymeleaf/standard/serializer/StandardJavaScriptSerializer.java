@@ -212,7 +212,8 @@ public final class StandardJavaScriptSerializer implements IStandardJavaScriptSe
      *
      * On the latter point, see https://github.com/FasterXML/jackson-databind/issues/1020
      */
-    private static final class JacksonThymeleafISO8601DateFormat extends DateFormat {
+    @SuppressWarnings("unused")
+	private static final class JacksonThymeleafISO8601DateFormat extends DateFormat {
 
         private static final long serialVersionUID = 1354081220093875129L;
 
@@ -230,7 +231,8 @@ public final class StandardJavaScriptSerializer implements IStandardJavaScriptSe
         private SimpleDateFormat dateFormat;
 
 
-        JacksonThymeleafISO8601DateFormat() {
+        @SuppressWarnings("unused")
+		JacksonThymeleafISO8601DateFormat() {
             super();
             this.dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZ");
             setCalendar(this.dateFormat.getCalendar());
@@ -282,7 +284,11 @@ public final class StandardJavaScriptSerializer implements IStandardJavaScriptSe
      */
     private static final class JacksonThymeleafCharacterEscapes extends CharacterEscapes {
 
-        private static final int[] CHARACTER_ESCAPES;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private static final int[] CHARACTER_ESCAPES;
         private static final SerializableString SLASH_ESCAPE;
         private static final SerializableString AMPERSAND_ESCAPE;
 

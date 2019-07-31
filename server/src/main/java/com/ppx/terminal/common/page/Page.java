@@ -111,7 +111,8 @@ public class Page {
 	}
 
 	public int getTotalNum() {
-		return totalRows / pageSize;
+		totalNum = totalRows / pageSize;
+		return totalNum;
 	}
 
 	public void setTotalNum(int totalNum) {
