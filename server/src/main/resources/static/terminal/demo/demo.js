@@ -2,7 +2,6 @@
 
 axios.interceptors.response.use(function(res) {
 	var code = res.data.code;
-	alert(code)
 	if (code != 0) {
 		alert(res.data.msg);
 	}
@@ -22,7 +21,7 @@ V.isNum = function(v) {
 
 
 function page(list, url) {
-	var page = new Vue({
+	page = new Vue({
 	    el:'#page',
 	    data:{
 	        pojo:{},
@@ -51,8 +50,8 @@ function page(list, url) {
 	    }
 	});
 	
-	// document.querySelector(".tableTemplate").style.display = "table";
-	// document.querySelector(".blockTemplate").style.display = "block";
+	document.querySelector(".tableTemplate").style.display = "table";
+	document.querySelector(".blockTemplate").style.display = "block";
 }
 
 

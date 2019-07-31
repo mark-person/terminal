@@ -14,7 +14,9 @@ window.onload = function() {
 <body>
 <div id="page">
 	<div>
-		<input type="text"v-model="pojo.demoName" maxlength="32">
+		<label style="font-size: 16px;font-weight: bold;">🔖我是规则消息</label>
+		<button onclick="add.show()">新增</button>
+		<input type="text" v-model="pojo.demoName" maxlength="32">
 		<button @click="gotoPage(1)">搜索</button>
 	</div>
 	<table class="tableTemplate">
@@ -32,7 +34,7 @@ window.onload = function() {
 	<div th:replace="common/fragment::page"/>
 </div>
 
-<div id="add"><add v-if="showLoading" :pojo="pojo" @ok="ok" :validate="validate"></div>
+<div id="add"><add v-if="showLoading" :pojo="pojo" @ok="ok" @close="hide()" :validate="validate"></div>
 <script type="text/x-template" id="add-template">
 <div class="modal-mask">
 <div class="modal-wrapper">
@@ -46,7 +48,7 @@ window.onload = function() {
 				</tr>
 				<tr>
 					<th>规则名称</th>
-					<td><input type="text" v-model="pojo.demoType" maxlength="6"><span style="color:red">{{validate.demoType}}</td>
+					<td><input type="text" v-model="pojo.demoType" maxlength="3"><span style="color:red">{{validate.demoType}}</td>
 				</tr>
 				<tr>
 					<th>date</th>
@@ -54,7 +56,12 @@ window.onload = function() {
 				</tr>
 			</table>
         </div>
-		<div class="modal-footer">&nbsp;<button class="modal-default-button" @click="$emit('ok')">OK</button></div>
+		<div class="modal-footer">&nbsp;
+			<div class="modal-default-button">
+				<button @click="$emit('close')">关闭</button>
+				<button @click="$emit('ok')">确定</button>
+			</div>
+		</div>
 	</div>
 </div>
 </div>
@@ -66,7 +73,7 @@ Vue.component('add', {template: '#add-template', props: {pojo:Object, validate:O
 add = new Vue({
 	el: '#add',
 	data: {
-      	showLoading:true,
+      	showLoading:false,
       	pojo:{},
       	validateBoolean:false
 	},
@@ -95,7 +102,8 @@ add = new Vue({
             axios.post(contextPath + "demo/insert", Qs.stringify(this.pojo)).then(function(res) {
             	loading.hide();
             	if (res.data.code == 0) {
-            		
+            		add.hide();
+            		page.gotoPage(1);
             	}
             });
       	}
