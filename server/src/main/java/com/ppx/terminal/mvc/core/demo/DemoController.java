@@ -32,8 +32,7 @@ public class DemoController {
 		return mv;
 	}
 	
-	@PostMapping("/list")
-	@ResponseBody
+	@PostMapping("/list") @ResponseBody
 	public Map<String, Object> list(Page page, Demo pojo) {
 		try {
 			// Thread.sleep(1000);
@@ -45,21 +44,24 @@ public class DemoController {
 		return ControllerReturn.page(page, list);
 	}
 	 
-    public Map<?, ?> insert(Test pojo) {
+	@PostMapping("/insert") @ResponseBody
+    public Map<?, ?> insert(Demo pojo) {
         return impl.insert(pojo);
     }
     
+	@PostMapping("/get") @ResponseBody
     public Map<?, ?> get(@RequestParam Integer id) {
         return ControllerReturn.of("pojo", impl.get(id));
     }
     
+    @PostMapping("/update") @ResponseBody
     public Map<?, ?> update(Demo pojo) {
         return impl.update(pojo);
     }
     
+    @PostMapping("/delete") @ResponseBody
     public Map<?, ?> delete(@RequestParam Integer id) {
         return impl.delete(id);
     }
 
-	
 }

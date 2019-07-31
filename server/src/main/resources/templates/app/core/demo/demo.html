@@ -8,6 +8,16 @@ var list = [[${list}]];
 window.onload = function() {
 	page(list, "demo/list");
 }
+
+
+// 添加响应拦截器
+axios.interceptors.response.use(function(res) {
+	// 对响应数据做些事
+	alert(JSON.stringify(res))
+	return res;
+}, function(error) {
+	return Promise.reject(error);
+});
 </script>
 </head>
 <body>
@@ -43,7 +53,14 @@ window.onload = function() {
 					<th style="width:100px">规则名称</th>
 					<td><input type="text" v-model="pojo.demoName" maxlength="32"><span style="color:red">{{validate.demoName}}</span></td>
 				</tr>
-				<tr><th>规则名称</th><td><input type="text" v-model="pojo.demoType" maxlength="32"><span style="color:red">{{validate.demoType}}</td></tr>
+				<tr>
+					<th>规则名称</th>
+					<td><input type="text" v-model="pojo.demoType" maxlength="6"><span style="color:red">{{validate.demoType}}</td>
+				</tr>
+				<tr>
+					<th>date</th>
+					<td><input type="date" v-model="pojo.demoDate" maxlength="32"><span style="color:red"></td>
+				</tr>
 			</table>
         </div>
 		<div class="modal-footer">&nbsp;<button class="modal-default-button" @click="$emit('ok')">OK</button></div>
@@ -53,6 +70,15 @@ window.onload = function() {
 </script>
 
 <script type="text/javascript">
+
+var V = {};
+V.notNull = function(v) {
+	return !v ? '不能为空' : '';
+}
+V.isNum = function(v) {
+	return /^[0-9]+$/.test(v) ? '' : '必须为数字';	
+}
+
 Vue.component('add', {template: '#add-template', props: {pojo:Object, validate:Object}});
 add = new Vue({
 	el: '#add',
@@ -64,13 +90,15 @@ add = new Vue({
 	computed: {
 		validate:function() {
 			if (this.validateBoolean == false) return {};
-			var demoName = '';
-			demoName = (!this.pojo.demoName) ? '不能为空' : '';
-			var demoType = '';
-			demoType = (!this.pojo.demoType) ? '不能为空' : '';
-			return {demoName:demoName, demoType:demoType}
+			return {
+				demoName:V.notNull(this.pojo.demoName), 
+				demoType:V.notNull(this.pojo.demoType) + V.isNum(this.pojo.demoType)
+			}
 		},
 		isValid: function () {
+			for (o in this.validate) {
+				if (this.validate[o] != "") return false;
+			}
 			return true;
 		}
 	},
@@ -78,9 +106,13 @@ add = new Vue({
       	show:function() {this.showLoading = true;},
       	hide:function() {this.showLoading = false;},
       	ok:function() {
-      		// alert(this.isValid);
       		this.validateBoolean = true;
-      		// alert("out:" + JSON.stringify(this.pojo));
+      		if (!this.isValid) return;
+      		loading.show();
+            axios.post(contextPath + "demo/insert", Qs.stringify(this.pojo)).then(function(res) {
+            	loading.hide();
+            	alert(res.data.code);
+            });
       	}
 	}
 })
