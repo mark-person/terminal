@@ -28,8 +28,8 @@ function page(list, url) {
 	    }
 	});
 	
-	//document.querySelector(".tableTemplate").style.display = "table";
-	//document.querySelector(".blockTemplate").style.display = "block";
+	document.querySelector(".tableTemplate").style.display = "table";
+	document.querySelector(".blockTemplate").style.display = "block";
 }
 
 

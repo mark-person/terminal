@@ -31,8 +31,6 @@ window.onload = function() {
 	<div th:replace="common/fragment::page"/>
 </div>
 
-
-
 <div id="add"><add v-if="showLoading" :pojo="pojo" @ok="ok" :validate="validate"></div>
 <script type="text/x-template" id="add-template">
 <div class="modal-mask">
@@ -55,9 +53,6 @@ window.onload = function() {
 </script>
 
 <script type="text/javascript">
-
-
-
 Vue.component('add', {template: '#add-template', props: {pojo:Object, validate:Object}});
 add = new Vue({
 	el: '#add',
@@ -85,7 +80,6 @@ add = new Vue({
       	ok:function() {
       		// alert(this.isValid);
       		this.validateBoolean = true;
-			
       		// alert("out:" + JSON.stringify(this.pojo));
       	}
 	}
