@@ -18,7 +18,32 @@ V.isNum = function(v) {
 	return /^[0-9]+$/.test(v) ? '' : '必须为数字';	
 }
 
+function initLoading() {
+	Vue.component('loading', {template: '#loading-template'});
+	loading = new Vue({
+		el: '#loading',
+		data: {
+	      	showLoading: false,
+	      	delayLoading: true
+		},
+		methods: {
+	      	show:function() {
+	      		this.delayLoading = true;
+				setTimeout(function() {loading.showLoading = (loading.delayLoading) ? true : false;}, 300);
+	      	},
+	      	hide:function() {
+	      		this.delayLoading = false;
+	      		this.showLoading = false;
+	      	}
+		}
+	})
+
+	document.querySelectorAll(".tableTemplate").forEach(function(o, i) {o.style.display = "table";})
+	document.querySelectorAll(".blockTemplate").forEach(function(o, i) {o.style.display = "block";})
+}
+ 
 function page(list, url) {
+	initLoading();
 	page = new Vue({
 	    el:'#page',
 	    data:{
@@ -47,23 +72,18 @@ function page(list, url) {
 	    	}
 	    }
 	});
-	
-	document.querySelectorAll(".tableTemplate").forEach(function(o, i) {o.style.display = "table";})
-	document.querySelectorAll(".blockTemplate").forEach(function(o, i) {o.style.display = "block";})
 }
 
 function modal(id, validateFun, okFun) {
-	Vue.component(id, {template: '#modal-template', props: {pojo:Object, validate:Object, title:String}});
+	Vue.component(id, {template: '#modal-template', props: {pojo:Object, validate:Object, modal:Object}});
 	var m = new Vue({
 		el: '#' + id,
 		data: {
-	      	showModal:false,
-	      	title:"",
-	      	pojo:{},
-	      	
+	      	modal:{showModal:false,title:'',width:'500px'},
+	      	pojo:{}
 		},
 		computed: {
-			validate:function() {
+			v:function() {
 				return validateFun(this.pojo);
 			},
 			isValid:function () {
@@ -83,7 +103,7 @@ function modal(id, validateFun, okFun) {
 	      			axios.post(contextPath + okFun, Qs.stringify(this.pojo)).then(function(res) {
 	      				loading.hide();
 	      		     	if (res.data.code == 0) {
-	      		     		self.showModal = false;
+	      		     		self.modal.showModal = false;
 	      		     		page.gotoPage(1);
 	      		     	}
 	      			})
@@ -100,17 +120,18 @@ function editModal(title, obj, url, id) {
 		loading.hide();
 		if (res.data.code == 0) {
 			obj.pojo = res.data.pojo;
-			obj.title = title;
-			obj.showModal = true;
+			obj.modal.title = title;
+			obj.modal.showModal = true;
 		}
 	})
 }
 
 function showModal(title, obj) {
-	obj.title = title;
+	obj.modal.title = title;
 	obj.pojo = {};
-	obj.showModal = true;
+	obj.modal.showModal = true;
 }
+
 
 
 

@@ -51,16 +51,15 @@ function edit(id) {
 
 
 <div id="modal" class="blockTemplate">
-<modal v-if="showModal" :pojo="pojo" @ok="ok" @close="showModal = false" :validate="validate" :title="title">
-<h3 slot="title">{{title}}</h3>
+<modal v-if="modal.showModal" :modal="modal" :pojo="pojo" :validate="v" @ok="ok" @close="modal.showModal = false">
 <table slot="body">
 	<tr>
 		<th style="width:100px">DEMO_NAME</th>
-		<td><input type="text" v-model="pojo.demoName" maxlength="32"><span class="error">{{validate.demoName}}</span></td>
+		<td><input type="text" v-model="pojo.demoName" maxlength="32"><span class="error">{{v.demoName}}</span></td>
 	</tr>
 	<tr>
 		<th>DEMO_TYPE</th>
-		<td><input type="text" v-model="pojo.demoType" maxlength="2"><span class="error">{{validate.demoType}}</td>
+		<td><input type="text" v-model="pojo.demoType" maxlength="2"><span class="error">{{v.demoType}}</td>
 	</tr>
 	<tr>
 		<th>DEMO_DATE</th>

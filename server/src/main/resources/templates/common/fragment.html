@@ -39,42 +39,16 @@
 <!-- 共用div -->
 <div th:fragment="commonDiv">
 
-
-<div id="loading"><modal v-if="showLoading" :pojo="pojo"></modal></div>
+<div id="loading"><loading v-if="showLoading"></loading></div>
 <script type="text/x-template" id="loading-template">
-<div class="modal-mask">
-<div class="modal-wrapper">
-	<div class="modal-container" style="width:53px;height:20px"><div class="modal-header"><h3>loading</h3></div></div>
-</div>
-</div>
-</script>
-<script type="text/javascript">
-Vue.component('modal', {template: '#loading-template', props: {pojo:Object}});
-var loading = new Vue({
-	el: '#loading',
-	data: {
-      	showLoading: false,
-      	delayLoading: true,
-      	pojo:{test:'loading'}
-	},
-	methods: {
-      	show:function() {
-      		this.delayLoading = true;
-			setTimeout(function() {loading.showLoading = (loading.delayLoading) ? true : false;}, 300);
-      	},
-      	hide:function() {
-      		this.delayLoading = false;
-      		this.showLoading = false;
-      	}
-	}
-})
+<div class="modal-mask"><div class="modal-wrapper"><div class="modal-container" style="width:53px;height:20px"><div class="modal-header"><h3>loading</h3></div></div></div></div>
 </script>
 
 <script type="text/x-template" id="modal-template">
 <div class="modal-mask">
 <div class="modal-wrapper">
-	<div class="modal-container" style="width:500px">
-		<div class="modal-header"><slot name="title"></h3></div>
+	<div class="modal-container" :style="'width:'+modal.width">
+		<div class="modal-header"><h3>{{modal.title}}</h3></div>
 		<div class="modal-body"><slot name="body"></slot></div>
 		<div class="modal-footer">&nbsp;
 			<div class="modal-default-button">
