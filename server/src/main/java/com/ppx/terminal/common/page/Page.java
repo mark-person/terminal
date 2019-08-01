@@ -111,7 +111,7 @@ public class Page {
 	}
 
 	public int getTotalNum() {
-		totalNum = totalRows / pageSize;
+		totalNum = (int)Math.ceil((double)totalRows / pageSize);
 		return totalNum;
 	}
 
