@@ -49,17 +49,13 @@
 </div>
 </script>
 <script type="text/javascript">
-Vue.component('modal', {template: '#loading-template',
-	props: {
-		pojo:Object
-	}
-});
+Vue.component('modal', {template: '#loading-template', props: {pojo:Object}});
 var loading = new Vue({
 	el: '#loading',
 	data: {
       	showLoading: false,
       	delayLoading: true,
-      	pojo:{test:'ss00001'}
+      	pojo:{test:'loading'}
 	},
 	methods: {
       	show:function() {
@@ -78,14 +74,12 @@ var loading = new Vue({
 <div class="modal-mask">
 <div class="modal-wrapper">
 	<div class="modal-container" style="width:500px">
-		<div class="modal-header"><h3>TEST</h3></div>
-		<div class="modal-body">
-			<slot name="body"></slot>
-        </div>
+		<div class="modal-header"><slot name="title"></h3></div>
+		<div class="modal-body"><slot name="body"></slot></div>
 		<div class="modal-footer">&nbsp;
 			<div class="modal-default-button">
+				<button @click="$emit('ok')" style="border:1px solid blue">确定</button>
 				<button @click="$emit('close')">关闭</button>
-				<button @click="$emit('ok')">确定</button>
 			</div>
 		</div>
 	</div>

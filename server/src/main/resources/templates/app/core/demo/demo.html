@@ -8,25 +8,25 @@
 var list = [[${list}]];
 window.onload = function() {
 	page(list, "demo/list");
-	
 	var validate = function(pojo) {
 		return {
 			demoName:V.notNull(pojo.demoName),
 			demoType:V.notNull(pojo.demoType) || V.isNum(pojo.demoType)
 		}
 	}
-	var demo = modal("demo", validate, "demo/insertOrUpdate");
+	myModal = modal("modal", validate, "demo/insertOrUpdate");
 }
 
 function edit(id) {
-	initModal("demo/get", id, demo);
+	editModal("修改", myModal, "demo/get", id);
 }
+
 </script>
 <body>
 <div id="page">
 	<div>
-		<label class="title" style="">我是规则消息</label>
-		<button onclick="demo.pojo = {};demo.showModal = true">新增</button>
+		<label class="title">我是标题</label>
+		<button onclick="showModal('新增', myModal)">新增</button>
 		<input type="text" v-model="pojo.demoName" maxlength="32">
 		<button @click="gotoPage(1)">搜索</button>
 	</div>
@@ -35,21 +35,24 @@ function edit(id) {
 		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">DEMO_ID<span :class="sortType['demo_id']"></span></th>
 		<th class="active" @click="sortPage('demo_name', sortType['demo_name'])">DEMO_NAME<span :class="sortType['demo_name']"></span></th>
 		<th>DEMO_TYPE</th>
+		<th>DEMO_DATE</th>
 		<th>ACTIOLN</th>
 	</tr>
 	<tr v-for="item in list">
 		<td>{{item.demoId}}</td>
 		<td>{{item.demoName}}</td>
 		<td>{{item.demoType}}</td>
-		<td><a :href="'javascript:edit(' + item.demoId + ')'">修改</a></td>
+		<td>{{item.demoDate}}</td>
+		<td><a href="#this" @click="edit(item.demoId)">修改</a></td>
 	</tr>
 	</table>
 	<div th:replace="common/fragment::page"/>
 </div>
 
 
-<div id="demo" class="blockTemplate">
-<demo v-if="showModal" :pojo="pojo" @ok="ok" @close="showModal = false" :validate="validate">
+<div id="modal" class="blockTemplate">
+<modal v-if="showModal" :pojo="pojo" @ok="ok" @close="showModal = false" :validate="validate" :title="title">
+<h3 slot="title">{{title}}</h3>
 <table slot="body">
 	<tr>
 		<th style="width:100px">DEMO_NAME</th>
@@ -64,7 +67,7 @@ function edit(id) {
 		<td><input type="date" v-model="pojo.demoDate"><span class="error"></td>
 	</tr>
 </table>
-</demo>
+</modal>
 </div>
 <div th:replace="common/fragment::commonDiv"/>
 </body>

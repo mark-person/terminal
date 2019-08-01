@@ -53,12 +53,14 @@ function page(list, url) {
 }
 
 function modal(id, validateFun, okFun) {
-	Vue.component(id, {template: '#modal-template', props: {pojo:Object, validate:Object}});
+	Vue.component(id, {template: '#modal-template', props: {pojo:Object, validate:Object, title:String}});
 	var m = new Vue({
 		el: '#' + id,
 		data: {
 	      	showModal:false,
-	      	pojo:{}
+	      	title:"",
+	      	pojo:{},
+	      	
 		},
 		computed: {
 			validate:function() {
@@ -92,15 +94,22 @@ function modal(id, validateFun, okFun) {
 	return m;
 }
 
-function initModal(url, id, obj) {
+function editModal(title, obj, url, id) {
 	loading.show();
 	axios.post(contextPath + "demo/get", "id=" + id).then(function(res) {
 		loading.hide();
 		if (res.data.code == 0) {
 			obj.pojo = res.data.pojo;
+			obj.title = title;
 			obj.showModal = true;
 		}
 	})
+}
+
+function showModal(title, obj) {
+	obj.title = title;
+	obj.pojo = {};
+	obj.showModal = true;
 }
 
 
