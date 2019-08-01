@@ -21,7 +21,7 @@ window.onload = function() {
 <div id="page">
 	<div>
 		<label class="title" style="">我是规则消息</label>
-		<button onclick="add.pojo = {};add.showModal = true">新增</button>
+		<button onclick="demo.pojo = {};demo.showModal = true">新增</button>
 		<input type="text" v-model="pojo.demoName" maxlength="32">
 		<button @click="gotoPage(1)">搜索</button>
 	</div>
@@ -36,15 +36,15 @@ window.onload = function() {
 		<td>{{item.demoId}}</td>
 		<td>{{item.demoName}}</td>
 		<td>{{item.demoType}}</td>
-		<td><a :href="'javascript:editDemo(' + item.demoId + ')'">修改</a></td>
+		<td><a :href="'javascript:edit(' + item.demoId + ')'">修改</a></td>
 	</tr>
 	</table>
 	<div th:replace="common/fragment::page"/>
 </div>
 
 
-<div id="add" class="blockTemplate">
-<add v-if="showModal" :pojo="pojo" @ok="ok" @close="showModal = false" :validate="validate">
+<div id="demo" class="blockTemplate">
+<demo v-if="showModal" :pojo="pojo" @ok="ok" @close="showModal = false" :validate="validate">
 <table slot="body">
 	<tr>
 		<th style="width:100px">规则名称</th>
@@ -59,7 +59,7 @@ window.onload = function() {
 		<td><input type="date" v-model="pojo.demoDate"><span class="error"></td>
 	</tr>
 </table>
-</add>
+</demo>
 </div>
 <script type="text/javascript">
 var validateFun = function(pojo) {
@@ -68,46 +68,18 @@ var validateFun = function(pojo) {
 		demoType:V.notNull(pojo.demoType) || V.isNum(pojo.demoType)
 	}
 }
-var add = modal("add", validateFun, "demo/insert");
-</script>
-
-
-<div id="edit" class="blockTemplate">
-<add v-if="showModal" :pojo="pojo" @ok="ok" @close="showModal = false" :validate="validate">
-<table slot="body">
-	<tr>
-		<th style="width:100px">规则名称</th>
-		<td><input type="text" v-model="pojo.demoName" maxlength="32"><span class="error">{{validate.demoName}}</span></td>
-	</tr>
-	<tr>
-		<th>规则名称</th>
-		<td><input type="text" v-model="pojo.demoType" maxlength="2"><span class="error">{{validate.demoType}}</td>
-	</tr>
-	<tr>
-		<th>提醒日期</th>
-		<td><input type="date" v-model="pojo.demoDate"><span class="error"></td>
-	</tr>
-</table>
-</add>
-</div>
-<script type="text/javascript">
-
-var edit = modal("edit", validateFun, "demo/update");
-
-function editDemo(id) {
+var demo = modal("demo", validateFun, "demo/insertOrUpdate");
+function edit(id) {
 	loading.show();
 	axios.post(contextPath + "demo/get", "id=" + id).then(function(res) {
 		loading.hide();
 		if (res.data.code == 0) {
-			edit.pojo = res.data.pojo;
-			edit.showModal = true;
+			demo.pojo = res.data.pojo;
+			demo.showModal = true;
 		}
 	})
 }
-
 </script>
-
-
 
 
 <div th:replace="common/fragment::commonDiv"/>

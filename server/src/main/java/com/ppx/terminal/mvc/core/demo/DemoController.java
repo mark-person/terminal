@@ -33,32 +33,25 @@ public class DemoController {
 	
 	@PostMapping("/list") @ResponseBody
 	public Map<String, Object> list(Page page, Demo pojo) {
-		try {
-			// Thread.sleep(1000);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
 		List<Demo> list = impl.list(page, pojo);
 		return ControllerReturn.page(page, list);
 	}
 	 
-	@PostMapping("/insert") @ResponseBody
+	@PostMapping("/insertOrUpdate") @ResponseBody
     public Map<?, ?> insert(Demo pojo) {
-		
-        return impl.insert(pojo);
+		if (pojo.getDemoId() == null) {
+			return impl.insert(pojo);
+		}
+		else {
+			return impl.update(pojo);
+		}
     }
     
 	@PostMapping("/get") @ResponseBody
     public Map<?, ?> get(@RequestParam Integer id) {
         return ControllerReturn.of("pojo", impl.get(id));
     }
-    
-    @PostMapping("/update") @ResponseBody
-    public Map<?, ?> update(Demo pojo) {
-        return impl.update(pojo);
-    }
-    
+
     @PostMapping("/delete") @ResponseBody
     public Map<?, ?> delete(@RequestParam Integer id) {
         return impl.delete(id);
