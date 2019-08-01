@@ -1,5 +1,4 @@
 
-
 axios.interceptors.response.use(function(res) {
 	var code = res.data.code;
 	if (code != 0) {
@@ -18,7 +17,6 @@ V.notNull = function(v) {
 V.isNum = function(v) {
 	return /^[0-9]+$/.test(v) ? '' : '必须为数字';	
 }
-
 
 function page(list, url) {
 	page = new Vue({
@@ -50,7 +48,7 @@ function page(list, url) {
 	    }
 	});
 	
-	document.querySelector(".tableTemplate").style.display = "table";
+	document.querySelectorAll(".tableTemplate").forEach(function(o, i) {o.style.display = "table";})
 	document.querySelectorAll(".blockTemplate").forEach(function(o, i) {o.style.display = "block";})
 }
 
@@ -93,5 +91,18 @@ function modal(id, validateFun, okFun) {
 	})
 	return m;
 }
+
+function initModal(url, id, obj) {
+	loading.show();
+	axios.post(contextPath + "demo/get", "id=" + id).then(function(res) {
+		loading.hide();
+		if (res.data.code == 0) {
+			obj.pojo = res.data.pojo;
+			obj.showModal = true;
+		}
+	})
+}
+
+
 
 

@@ -3,20 +3,25 @@
 <head>
 <meta charset="utf-8">
 <link th:replace="common/fragment::base"/>
+</head>
 <script type="text/javascript" th:inline="javascript">
 var list = [[${list}]];
 window.onload = function() {
 	page(list, "demo/list");
+	
+	var validate = function(pojo) {
+		return {
+			demoName:V.notNull(pojo.demoName),
+			demoType:V.notNull(pojo.demoType) || V.isNum(pojo.demoType)
+		}
+	}
+	var demo = modal("demo", validate, "demo/insertOrUpdate");
+}
+
+function edit(id) {
+	initModal("demo/get", id, demo);
 }
 </script>
-
-<style type="text/css">
-.title {font-size: 16px;font-weight: bold;}
-.title:before {content:"🔖";}
-
-.error {color:red}
-</style>
-</head>
 <body>
 <div id="page">
 	<div>
@@ -47,41 +52,20 @@ window.onload = function() {
 <demo v-if="showModal" :pojo="pojo" @ok="ok" @close="showModal = false" :validate="validate">
 <table slot="body">
 	<tr>
-		<th style="width:100px">规则名称</th>
+		<th style="width:100px">DEMO_NAME</th>
 		<td><input type="text" v-model="pojo.demoName" maxlength="32"><span class="error">{{validate.demoName}}</span></td>
 	</tr>
 	<tr>
-		<th>规则名称</th>
+		<th>DEMO_TYPE</th>
 		<td><input type="text" v-model="pojo.demoType" maxlength="2"><span class="error">{{validate.demoType}}</td>
 	</tr>
 	<tr>
-		<th>提醒日期</th>
+		<th>DEMO_DATE</th>
 		<td><input type="date" v-model="pojo.demoDate"><span class="error"></td>
 	</tr>
 </table>
 </demo>
 </div>
-<script type="text/javascript">
-var validateFun = function(pojo) {
-	return {
-		demoName:V.notNull(pojo.demoName),
-		demoType:V.notNull(pojo.demoType) || V.isNum(pojo.demoType)
-	}
-}
-var demo = modal("demo", validateFun, "demo/insertOrUpdate");
-function edit(id) {
-	loading.show();
-	axios.post(contextPath + "demo/get", "id=" + id).then(function(res) {
-		loading.hide();
-		if (res.data.code == 0) {
-			demo.pojo = res.data.pojo;
-			demo.showModal = true;
-		}
-	})
-}
-</script>
-
-
 <div th:replace="common/fragment::commonDiv"/>
 </body>
 </html>
