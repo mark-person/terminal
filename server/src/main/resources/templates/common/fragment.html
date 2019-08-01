@@ -73,6 +73,25 @@ var loading = new Vue({
 	}
 })
 </script>
+
+<script type="text/x-template" id="modal-template">
+<div class="modal-mask">
+<div class="modal-wrapper">
+	<div class="modal-container" style="width:500px">
+		<div class="modal-header"><h3>TEST</h3></div>
+		<div class="modal-body">
+			<slot name="body"></slot>
+        </div>
+		<div class="modal-footer">&nbsp;
+			<div class="modal-default-button">
+				<button @click="$emit('close')">关闭</button>
+				<button @click="$emit('ok')">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</script>
 </div>
 
 

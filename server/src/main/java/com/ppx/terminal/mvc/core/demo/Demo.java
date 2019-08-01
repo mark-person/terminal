@@ -5,7 +5,12 @@ package com.ppx.terminal.mvc.core.demo;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ppx.terminal.common.jdbc.annotation.Id;
 import com.ppx.terminal.common.jdbc.annotation.Table;
+import com.ppx.terminal.common.util.DateUtils;
 
 /**
  * @author mark
@@ -13,8 +18,11 @@ import com.ppx.terminal.common.jdbc.annotation.Table;
  */
 @Table("core_demo")
 public class Demo {
+	@Id
 	private Integer demoId;
 	private String demoName;
+	@JsonFormat(pattern=DateUtils.DATE_PATTERN)
+	@DateTimeFormat(pattern=DateUtils.DATE_PATTERN)
 	private String demoDate;
 	private Double demoValue;
 	private Integer demoType;

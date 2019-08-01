@@ -8,14 +8,20 @@ var list = [[${list}]];
 window.onload = function() {
 	page(list, "demo/list");
 }
-
 </script>
+
+<style type="text/css">
+.title {font-size: 16px;font-weight: bold;}
+.title:before {content:"🔖";}
+
+.error {color:red}
+</style>
 </head>
 <body>
 <div id="page">
 	<div>
-		<label style="font-size: 16px;font-weight: bold;">🔖我是规则消息</label>
-		<button onclick="add.show()">新增</button>
+		<label class="title" style="">我是规则消息</label>
+		<button onclick="add.pojo = {};add.showModal = true">新增</button>
 		<input type="text" v-model="pojo.demoName" maxlength="32">
 		<button @click="gotoPage(1)">搜索</button>
 	</div>
@@ -24,92 +30,84 @@ window.onload = function() {
 		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">DEMO_ID<span :class="sortType['demo_id']"></span></th>
 		<th class="active" @click="sortPage('demo_name', sortType['demo_name'])">DEMO_NAME<span :class="sortType['demo_name']"></span></th>
 		<th>DEMO_TYPE</th>
+		<th>ACTIOLN</th>
 	</tr>
 	<tr v-for="item in list">
 		<td>{{item.demoId}}</td>
 		<td>{{item.demoName}}</td>
 		<td>{{item.demoType}}</td>
+		<td><a :href="'javascript:editDemo(' + item.demoId + ')'">修改</a></td>
 	</tr>
 	</table>
 	<div th:replace="common/fragment::page"/>
 </div>
 
-<div id="add"><add v-if="showLoading" :pojo="pojo" @ok="ok" @close="hide()" :validate="validate"></div>
-<script type="text/x-template" id="add-template">
-<div class="modal-mask">
-<div class="modal-wrapper">
-	<div class="modal-container" style="width:500px">
-		<div class="modal-header"><h3>规则</h3></div>
-		<div class="modal-body">
-			<table>
-				<tr>
-					<th style="width:100px">规则名称</th>
-					<td><input type="text" v-model="pojo.demoName" maxlength="32"><span style="color:red">{{validate.demoName}}</span></td>
-				</tr>
-				<tr>
-					<th>规则名称</th>
-					<td><input type="text" v-model="pojo.demoType" maxlength="3"><span style="color:red">{{validate.demoType}}</td>
-				</tr>
-				<tr>
-					<th>date</th>
-					<td><input type="date" v-model="pojo.demoDate" maxlength="32"><span style="color:red"></td>
-				</tr>
-			</table>
-        </div>
-		<div class="modal-footer">&nbsp;
-			<div class="modal-default-button">
-				<button @click="$emit('close')">关闭</button>
-				<button @click="$emit('ok')">确定</button>
-			</div>
-		</div>
-	</div>
+
+<div id="add" class="blockTemplate">
+<add v-if="showModal" :pojo="pojo" @ok="ok" @close="showModal = false" :validate="validate">
+<table slot="body">
+	<tr>
+		<th style="width:100px">规则名称</th>
+		<td><input type="text" v-model="pojo.demoName" maxlength="32"><span class="error">{{validate.demoName}}</span></td>
+	</tr>
+	<tr>
+		<th>规则名称</th>
+		<td><input type="text" v-model="pojo.demoType" maxlength="2"><span class="error">{{validate.demoType}}</td>
+	</tr>
+	<tr>
+		<th>提醒日期</th>
+		<td><input type="date" v-model="pojo.demoDate"><span class="error"></td>
+	</tr>
+</table>
+</add>
 </div>
-</div>
+<script type="text/javascript">
+var validateFun = function(pojo) {
+	return {
+		demoName:V.notNull(pojo.demoName),
+		demoType:V.notNull(pojo.demoType) || V.isNum(pojo.demoType)
+	}
+}
+var add = modal("add", validateFun, "demo/insert");
 </script>
 
+
+<div id="edit" class="blockTemplate">
+<add v-if="showModal" :pojo="pojo" @ok="ok" @close="showModal = false" :validate="validate">
+<table slot="body">
+	<tr>
+		<th style="width:100px">规则名称</th>
+		<td><input type="text" v-model="pojo.demoName" maxlength="32"><span class="error">{{validate.demoName}}</span></td>
+	</tr>
+	<tr>
+		<th>规则名称</th>
+		<td><input type="text" v-model="pojo.demoType" maxlength="2"><span class="error">{{validate.demoType}}</td>
+	</tr>
+	<tr>
+		<th>提醒日期</th>
+		<td><input type="date" v-model="pojo.demoDate"><span class="error"></td>
+	</tr>
+</table>
+</add>
+</div>
 <script type="text/javascript">
 
-Vue.component('add', {template: '#add-template', props: {pojo:Object, validate:Object}});
-add = new Vue({
-	el: '#add',
-	data: {
-      	showLoading:false,
-      	pojo:{},
-      	validateBoolean:false
-	},
-	computed: {
-		validate:function() {
-			if (this.validateBoolean == false) return {};
-			return {
-				demoName:V.notNull(this.pojo.demoName), 
-				demoType:V.notNull(this.pojo.demoType) || V.isNum(this.pojo.demoType)
-			}
-		},
-		isValid: function () {
-			for (o in this.validate) {
-				if (this.validate[o] != "") return false;
-			}
-			return true;
+var edit = modal("edit", validateFun, "demo/update");
+
+function editDemo(id) {
+	loading.show();
+	axios.post(contextPath + "demo/get", "id=" + id).then(function(res) {
+		loading.hide();
+		if (res.data.code == 0) {
+			edit.pojo = res.data.pojo;
+			edit.showModal = true;
 		}
-	},
-	methods: {
-      	show:function() {this.showLoading = true;},
-      	hide:function() {this.showLoading = false;},
-      	ok:function() {
-      		this.validateBoolean = true;
-      		if (!this.isValid) return;
-      		loading.show();
-            axios.post(contextPath + "demo/insert", Qs.stringify(this.pojo)).then(function(res) {
-            	loading.hide();
-            	if (res.data.code == 0) {
-            		add.hide();
-            		page.gotoPage(1);
-            	}
-            });
-      	}
-	}
-})
+	})
+}
+
 </script>
+
+
 
 
 <div th:replace="common/fragment::commonDiv"/>

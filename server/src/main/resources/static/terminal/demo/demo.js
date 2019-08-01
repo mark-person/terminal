@@ -13,7 +13,7 @@ axios.interceptors.response.use(function(res) {
 
 var V = {};
 V.notNull = function(v) {
-	return !v ? '不能为空' : '';
+	return !v ? '必填' : '';
 }
 V.isNum = function(v) {
 	return /^[0-9]+$/.test(v) ? '' : '必须为数字';	
@@ -51,7 +51,47 @@ function page(list, url) {
 	});
 	
 	document.querySelector(".tableTemplate").style.display = "table";
-	document.querySelector(".blockTemplate").style.display = "block";
+	document.querySelectorAll(".blockTemplate").forEach(function(o, i) {o.style.display = "block";})
+}
+
+function modal(id, validateFun, okFun) {
+	Vue.component(id, {template: '#modal-template', props: {pojo:Object, validate:Object}});
+	var m = new Vue({
+		el: '#' + id,
+		data: {
+	      	showModal:false,
+	      	pojo:{}
+		},
+		computed: {
+			validate:function() {
+				return validateFun(this.pojo);
+			},
+			isValid:function () {
+				for (o in this.validate) {
+					if (this.validate[o] != "") return false;
+				}
+				return true;
+			}
+		},
+		methods: {
+	      	ok:function() {
+	      		if (!this.isValid) return;
+	      		if (typeof okFun == "function") okFun(this.pojo);
+	      		else {
+	      			loading.show();
+	      			var self = this;
+	      			axios.post(contextPath + okFun, Qs.stringify(this.pojo)).then(function(res) {
+	      				loading.hide();
+	      		     	if (res.data.code == 0) {
+	      		     		self.showModal = false;
+	      		     		page.gotoPage(1);
+	      		     	}
+	      			})
+	      		}
+	      	}
+		}
+	})
+	return m;
 }
 
 

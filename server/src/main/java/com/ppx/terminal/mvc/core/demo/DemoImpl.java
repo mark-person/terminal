@@ -3,7 +3,6 @@ package com.ppx.terminal.mvc.core.demo;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil.Test;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 
@@ -54,14 +53,14 @@ public class DemoImpl extends MyDaoSupport {
         return ControllerReturn.exists(r, "测试名称已经存在");
     }
 	
-	public Test get(Integer id) {
-		Test pojo = getJdbcTemplate().queryForObject("select * from test where demo_id = ?",
-                BeanPropertyRowMapper.newInstance(Test.class), id);     
+	public Demo get(Integer id) {
+		Demo pojo = getJdbcTemplate().queryForObject("select demo_id, demo_name, demo_type, demo_date from core_demo where demo_id = ?",
+                BeanPropertyRowMapper.newInstance(Demo.class), id);     
         return pojo;
     }
     
-    public Map<String, Object> update(Demo bean) {
-        return ControllerReturn.exists(updateEntity(bean, "demo_name"), "测试名称已经存在");
+    public Map<String, Object> update(Demo pojo) {
+        return ControllerReturn.exists(updateEntity(pojo, "demo_name"), "测试名称已经存在");
     }
     
     public Map<String, Object> delete(Integer id) {
