@@ -12,13 +12,15 @@ axios.interceptors.response.use(function(res) {
 
 var V = {};
 V.notNull = function(v) {
-	return v === '' ? '必填' : '';
+	return v === '' || !v ? '必填' : '';
 }
 V.isInt = function(v) {
+	if (this.notNull(v) != '') return '';
 	return /^[0-9]+$/.test(v) ? '' : '必须为整数';	
 }
 V.isNum = function(v) {
-	return /^\d+\.?\d$/.test(v) ? '' : '必须为数字';
+	if (this.notNull(v) != '') return '';
+	return isNaN(v) ? '必须为数字' : '';
 }
 
 var Dict = {};

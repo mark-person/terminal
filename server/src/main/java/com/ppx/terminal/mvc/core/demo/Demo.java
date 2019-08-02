@@ -26,7 +26,7 @@ public class Demo {
 	private String demoDate;
 	private Integer demoType;
 	private Integer demoInt;
-	private Double demoNum;
+	private Float demoNum;
 	private Date created;
 
 	public Integer getDemoId() {
@@ -69,11 +69,11 @@ public class Demo {
 		this.demoInt = demoInt;
 	}
 
-	public Double getDemoNum() {
+	public Float getDemoNum() {
 		return demoNum;
 	}
 
-	public void setDemoNum(Double demoNum) {
+	public void setDemoNum(Float demoNum) {
 		this.demoNum = demoNum;
 	}
 

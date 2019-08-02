@@ -17,8 +17,8 @@ window.onload = function() {
 		return {
 			demoName:V.notNull(pojo.demoName),
 			demoType:V.notNull(pojo.demoType),
-			demoInt:V.notNull(pojo.demoType) | V.isInt(pojo.demoType),
-			demoNum:V.isNum(pojo.demoType)
+			demoInt:V.notNull(pojo.demoInt) || V.isInt(pojo.demoInt),
+			demoNum:V.isNum(pojo.demoNum)
 		}
 	}
 	myModal = modal("modal", validate, "demo/insertOrUpdate");
@@ -52,6 +52,7 @@ function getDemoType(type) {
 		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">DEMO_ID<span :class="sortType['demo_id']"></span></th>
 		<th class="active" @click="sortPage('demo_name', sortType['demo_name'])">DEMO_NAME<span :class="sortType['demo_name']"></span></th>
 		<th>DEMO_TYPE</th>
+		<th>DEMO_NUM</th>
 		<th>DEMO_DATE</th>
 		<th>ACTIOLN</th>
 	</tr>
@@ -59,6 +60,7 @@ function getDemoType(type) {
 		<td>{{item.demoId}}</td>
 		<td>{{item.demoName}}</td>
 		<td>{{getDemoType(item.demoType)}}</td>
+		<td class="right">{{item.demoNum}}</td>
 		<td>{{item.demoDate}}</td>
 		<td><a href="#this" @click="edit(item.demoId)">修改</a></td>
 	</tr>
@@ -86,7 +88,7 @@ function getDemoType(type) {
 	</tr>
 	<tr>
 		<th>DEMO_NUM</th>
-		<td><input type="text" v-model="pojo.demoNum" maxlength="7"><span class="error">{{v.demoNumt}}</span></td>
+		<td><input type="text" v-model="pojo.demoNum" maxlength="7"><span class="error">{{v.demoNum}}</span></td>
 	</tr>
 	<tr>
 		<th>DEMO_DATE</th>
