@@ -12,7 +12,7 @@ axios.interceptors.response.use(function(res) {
 
 var V = {};
 V.notNull = function(v) {
-	return v === '' || !v ? '必填' : '';
+	return v === '' || v === undefined ? '必填' : '';
 }
 V.isInt = function(v) {
 	if (this.notNull(v) != '') return '';
@@ -36,7 +36,7 @@ Dict.getDictVal = function(id, val) {
 function initLoading() {
 	loading = new Vue({
 		el: '#loading',
-		components: {'loading': httpVueLoader(contextPath + 'static/vue/common/loading.vue')},
+		components: {'loading': httpVueLoader(contextPath + 'static/vue/template/loading.vue')},
 		data: {
 			showLoading: false,
 	      	delayLoading: true
@@ -92,7 +92,7 @@ function page(list, url) {
 function modal(id, validateFun, okFun) {
 	var m = new Vue({
 		el: '#' + id,
-		components: {'modal': httpVueLoader(contextPath + 'static/vue/common/modal.vue'), props: {pojo:Object, validate:Object, modal:Object}},
+		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {pojo:Object, validate:Object, modal:Object}},
 		data: {
 	      	modal:{showModal:false,title:'',width:'500px'},
 	      	pojo:{}

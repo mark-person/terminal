@@ -12,10 +12,10 @@
  * */
 
 create table core_demo (
-  demo_id 		int not null auto_increment,
+  demo_id 		int not null auto_increment comment 'DEMO_ID,',
   demo_name 	varchar(32) not null,
   demo_date 	date,
-  demo_type		tinyint,
+  demo_type		tinyint comment 'DEDO_TYPE:T1,T2,T3',
   demo_int		int,
   demo_num	 	decimal(7,2),
   created		timestamp not null default current_timestamp,
