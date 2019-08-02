@@ -12,7 +12,7 @@ axios.interceptors.response.use(function(res) {
 
 var V = {};
 V.notNull = function(v) {
-	return !v ? '必填' : '';
+	return v === '' ? '必填' : '';
 }
 V.isNum = function(v) {
 	return /^[0-9]+$/.test(v) ? '' : '必须为数字';	
