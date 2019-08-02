@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ppx.terminal.mvc.tool.test;
+package com.ppx.terminal.mvc.core.tool;
 
 import java.util.List;
 import java.util.Map;
@@ -26,17 +26,12 @@ import com.ppx.terminal.common.controller.ControllerReturn;
 public class DbToolContoller {
 	
 	@Autowired
-	private DbToolServiceImpl impl; 
+	private DbToolImpl impl; 
 	
-	@RequestMapping("/grid")
-	public ModelAndView test() {
-		ModelAndView mv = new ModelAndView("app/tool/test/grid");
-		return mv;
-	}
 	
 	@RequestMapping("/dbTool")
 	public ModelAndView dbTool() {
-		ModelAndView mv = new ModelAndView("app/tool/test/dbTool");
+		ModelAndView mv = new ModelAndView("app/core/tool/dbTool");
 		return mv;
 	}
 	
@@ -49,9 +44,9 @@ public class DbToolContoller {
 	}
 	
 	@RequestMapping("/listValue") @ResponseBody
-	public Map<String, Object> listValue(String sql) {
+	public Map<String, Object> listValue(String tableName, String colVal) {
 		
-		List<Map<String, Object>> list = impl.listValue(sql);
+		List<Map<String, Object>> list = impl.listValue(tableName, colVal);
 		
 		return ControllerReturn.of("list", list);
 	}

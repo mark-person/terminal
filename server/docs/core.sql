@@ -12,15 +12,15 @@
  * */
 
 create table core_demo (
-  demo_id 		int not null auto_increment comment 'DEMO_ID,',
-  demo_name 	varchar(32) not null,
-  demo_date 	date,
-  demo_type		tinyint comment 'DEDO_TYPE:T1,T2,T3',
-  demo_int		int,
-  demo_num	 	decimal(7,2),
+  demo_id 		int not null auto_increment comment 'ID;其它说明',
+  demo_name 	varchar(32) not null comment '标题',
+  demo_date 	date comment '日期',
+  demo_type		varchar(5) comment '类型:NEW>新的,OLD>旧的',
+  demo_int		int comment '数量',
+  demo_num	 	decimal(7,2) comment '金额',
   created		timestamp not null default current_timestamp,
   primary key (demo_id)
-);
+) comment '样例';
 /** 如果是invisible，这样优化器就会忽略这个索引，但是索引依然存在于引擎内部 */
 ALTER TABLE core_demo ADD INDEX idx_demo_name (demo_name ASC) VISIBLE;
 

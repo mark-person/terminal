@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<link th:replace="common/fragment::base"/>
+</head>
+<script type="text/javascript" th:inline="javascript">
+var vm;
+var form;
+var result;
+window.onload = function() {
+	myForm = new Vue({
+	    el:'#myForm',
+	    data:{
+	    	tableName:'',
+	    	colVal:[],
+	    	colList:[]
+	    }
+	});
+	result = new Vue({
+	    el:'#result',
+	    data:{
+	    	title:['t1', 't2'],
+	        list:[
+	        	{a:'a1', b:'b1'},
+	        	{a:'a2', b:'b2'}
+	        ]
+	    }
+	});
+	
+}
+
+// alert(Qs.stringify({a:'abc', b:'efg'}));
+
+function tableChange(obj) {
+	let param = new FormData();
+	param.append('tableName', obj.value);
+    axios.post(contextPath + "dbTool/listColumn", param).then(function(res) {
+    	myForm.colList = res.data.list;
+    });
+}
+
+function exec() {
+	let param = new FormData();
+	param.append('tableName', myForm.tableName);
+	param.append('colVal', myForm.colVal);
+    axios.post(contextPath + "dbTool/listValue", param).then(function(res) {
+    	result.list = res.data.list;
+    });
+}
+</script>
+
+</head>
+<body>
+
+
+
+<form id="myForm">
+表:
+<select id="table" v-model="tableName" onchange="tableChange(this)" >
+	<option value="">请选择</option>
+	<option value="core_demo">core_demo</option>
+</select>
+字段:
+<select id="column" multiple="multiple" v-model="colVal" style="height:100px">
+	<option v-for="item in colList" :value="item">{{item}}</option>
+</select>
+<button type="button" onclick="exec()">执行</button>
+</form>
+
+
+<table id="result">
+<tr>
+	<th v-for="item in title">{{item}}</th>
+</tr>
+<tr v-for="item in list">
+	<td v-for="v in item">{{v}}</td>
+</tr>
+</table>
+
+
+</body>
+</html>
