@@ -24,7 +24,7 @@ public class Demo {
 	@JsonFormat(pattern = DateUtils.DATE_PATTERN)
 	@DateTimeFormat(pattern = DateUtils.DATE_PATTERN)
 	private String demoDate;
-	private Integer demoType;
+	private String demoType;
 	private Integer demoInt;
 	private Float demoNum;
 	private Date created;
@@ -53,11 +53,11 @@ public class Demo {
 		this.demoDate = demoDate;
 	}
 
-	public Integer getDemoType() {
+	public String getDemoType() {
 		return demoType;
 	}
 
-	public void setDemoType(Integer demoType) {
+	public void setDemoType(String demoType) {
 		this.demoType = demoType;
 	}
 
