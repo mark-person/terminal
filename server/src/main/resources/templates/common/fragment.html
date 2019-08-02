@@ -12,6 +12,7 @@
 <script th:fragment="base" type="text/javascript" th:src="@{/static/vue/vue.min.js}"></script>
 <script th:fragment="base" type="text/javascript" th:src="@{/static/vue/axios.min.js}"></script>
 <script th:fragment="base" type="text/javascript" th:src="@{/static/vue/qs.js}"></script>
+<script th:fragment="base" type="text/javascript" th:src="@{/static/vue/httpVueLoader.js}"></script>
 <script th:fragment="base" type="text/javascript" th:src="@{/static/terminal/demo/demo.js}"></script>
 <link   th:fragment="base" rel="stylesheet" th:href="@{/static/terminal/demo/demo.css}">
 
@@ -39,27 +40,13 @@
 <!-- 共用div -->
 <div th:fragment="commonDiv">
 
-<div id="loading"><loading v-if="showLoading"></loading></div>
-<script type="text/x-template" id="loading-template">
-<div class="modal-mask"><div class="modal-wrapper"><div class="modal-container" style="width:53px;height:20px"><div class="modal-header"><h3>loading</h3></div></div></div></div>
-</script>
 
-<script type="text/x-template" id="modal-template">
-<div class="modal-mask">
-<div class="modal-wrapper">
-	<div class="modal-container" :style="'width:'+modal.width">
-		<div class="modal-header"><h3>{{modal.title}}</h3></div>
-		<div class="modal-body"><slot name="body"></slot></div>
-		<div class="modal-footer">&nbsp;
-			<div class="modal-default-button">
-				<button @click="$emit('ok')" style="border:1px solid blue">确定</button>
-				<button @click="$emit('close')">关闭</button>
-			</div>
-		</div>
-	</div>
-</div>
-</div>
-</script>
+<div id="loading"><loading v-if="showLoading"></loading></div>
+
+
+
+
+
 </div>
 
 

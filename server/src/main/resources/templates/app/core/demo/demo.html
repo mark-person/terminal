@@ -4,8 +4,16 @@
 <meta charset="utf-8">
 <link th:replace="common/fragment::base"/>
 </head>
+
+
+
 <script type="text/javascript" th:inline="javascript">
+
+
+
 var list = [[${list}]];
+
+
 window.onload = function() {
 	page(list, "demo/list");
 	var validate = function(pojo) {
@@ -15,8 +23,6 @@ window.onload = function() {
 		}
 	}
 	myModal = modal("modal", validate, "demo/insertOrUpdate");
-	
-	// 使用.vue文件 
 }
 
 function edit(id) {

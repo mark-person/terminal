@@ -19,11 +19,11 @@ V.isNum = function(v) {
 }
 
 function initLoading() {
-	Vue.component('loading', {template: '#loading-template'});
 	loading = new Vue({
 		el: '#loading',
+		components: {'loading': httpVueLoader('http://localhost:9001/static/common/common-0.1.0.vue')},
 		data: {
-	      	showLoading: false,
+			showLoading: false,
 	      	delayLoading: true
 		},
 		methods: {
@@ -33,7 +33,7 @@ function initLoading() {
 	      	},
 	      	hide:function() {
 	      		this.delayLoading = false;
-	      		this.showLoading = false;
+	      		loading.showLoading = false;
 	      	}
 		}
 	})
@@ -75,9 +75,12 @@ function page(list, url) {
 }
 
 function modal(id, validateFun, okFun) {
-	Vue.component(id, {template: '#modal-template', props: {pojo:Object, validate:Object, modal:Object}});
+	// Vue.component(id, {template: '#modal-template', );
+	
+	
 	var m = new Vue({
 		el: '#' + id,
+		components: {'modal': httpVueLoader('http://localhost:9001/static/common/modal.vue'), props: {pojo:Object, validate:Object, modal:Object}},
 		data: {
 	      	modal:{showModal:false,title:'',width:'500px'},
 	      	pojo:{}
