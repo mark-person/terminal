@@ -14,9 +14,10 @@
 create table core_demo (
   demo_id 		int not null auto_increment,
   demo_name 	varchar(32) not null,
-  demo_date 	date default null,
-  demo_value 	decimal(7,2) default null,
+  demo_date 	date,
   demo_type		tinyint,
+  demo_int		int,
+  demo_num	 	decimal(7,2),
   created		timestamp not null default current_timestamp,
   primary key (demo_id)
 );

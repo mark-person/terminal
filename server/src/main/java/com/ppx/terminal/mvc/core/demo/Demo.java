@@ -21,50 +21,68 @@ public class Demo {
 	@Id
 	private Integer demoId;
 	private String demoName;
-	@JsonFormat(pattern=DateUtils.DATE_PATTERN)
-	@DateTimeFormat(pattern=DateUtils.DATE_PATTERN)
+	@JsonFormat(pattern = DateUtils.DATE_PATTERN)
+	@DateTimeFormat(pattern = DateUtils.DATE_PATTERN)
 	private String demoDate;
-	private Double demoValue;
 	private Integer demoType;
+	private Integer demoInt;
+	private Double demoNum;
 	private Date created;
-	
+
 	public Integer getDemoId() {
 		return demoId;
 	}
+
 	public void setDemoId(Integer demoId) {
 		this.demoId = demoId;
 	}
+
 	public String getDemoName() {
 		return demoName;
 	}
+
 	public void setDemoName(String demoName) {
 		this.demoName = demoName;
 	}
+
 	public String getDemoDate() {
 		return demoDate;
 	}
+
 	public void setDemoDate(String demoDate) {
 		this.demoDate = demoDate;
 	}
-	public Double getDemoValue() {
-		return demoValue;
-	}
-	public void setDemoValue(Double demoValue) {
-		this.demoValue = demoValue;
-	}
+
 	public Integer getDemoType() {
 		return demoType;
 	}
+
 	public void setDemoType(Integer demoType) {
 		this.demoType = demoType;
 	}
+
+	public Integer getDemoInt() {
+		return demoInt;
+	}
+
+	public void setDemoInt(Integer demoInt) {
+		this.demoInt = demoInt;
+	}
+
+	public Double getDemoNum() {
+		return demoNum;
+	}
+
+	public void setDemoNum(Double demoNum) {
+		this.demoNum = demoNum;
+	}
+
 	public Date getCreated() {
 		return created;
 	}
+
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-
-	
 
 }

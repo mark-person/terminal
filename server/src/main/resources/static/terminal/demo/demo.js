@@ -14,19 +14,21 @@ var V = {};
 V.notNull = function(v) {
 	return v === '' ? '必填' : '';
 }
+V.isInt = function(v) {
+	return /^[0-9]+$/.test(v) ? '' : '必须为整数';	
+}
 V.isNum = function(v) {
-	return /^[0-9]+$/.test(v) ? '' : '必须为数字';	
+	return /^\d+\.?\d$/.test(v) ? '' : '必须为数字';
 }
 
 var Dict = {};
 Dict.getDictVal = function(id, val) {
-	var r = "";
-	document.getElementById(id).querySelectorAll("option").forEach(function(o, i) {
-		if (o.value == val) {
-			r = o.text;
+	var option = document.getElementById(id).querySelectorAll("option");
+	for (var i = 0; i < option.length; i++) {
+		if (option[i].value == val) {
+			return option[i].text;
 		}
-	})
-	return r;
+	}
 }
 
 function initLoading() {

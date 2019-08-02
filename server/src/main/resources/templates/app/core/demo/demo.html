@@ -16,7 +16,9 @@ window.onload = function() {
 	var validate = function(pojo) {
 		return {
 			demoName:V.notNull(pojo.demoName),
-			demoType:V.notNull(pojo.demoType) || V.isNum(pojo.demoType)
+			demoType:V.notNull(pojo.demoType),
+			demoInt:V.notNull(pojo.demoType) | V.isInt(pojo.demoType),
+			demoNum:V.isNum(pojo.demoType)
 		}
 	}
 	myModal = modal("modal", validate, "demo/insertOrUpdate");
@@ -74,11 +76,17 @@ function getDemoType(type) {
 	<tr>
 		<th>DEMO_TYPE</th>
 		<td>	
-			<select v-model="pojo.demoType">
-				<option th:include="::dictType"/>
-			</select>
+			<select v-model="pojo.demoType"><option th:include="::dictType"/></select>
 			<span class="error">{{v.demoType}}</span>
 		</td>
+	</tr>
+	<tr>
+		<th>DEMO_INT</th>
+		<td><input type="text" v-model="pojo.demoInt" maxlength="5"><span class="error">{{v.demoInt}}</span></td>
+	</tr>
+	<tr>
+		<th>DEMO_NUM</th>
+		<td><input type="text" v-model="pojo.demoNum" maxlength="7"><span class="error">{{v.demoNumt}}</span></td>
 	</tr>
 	<tr>
 		<th>DEMO_DATE</th>
