@@ -27,12 +27,7 @@ function edit(id) {
 }
 
 function getDemoType(type) {
-	// 改成一个统一方法
-	var r = "";
-	document.getElementById("dictType").querySelectorAll("option").forEach(function(o, i) {
-		if (o.value == type) r = o.text;
-	});
-	return r;
+	return Dict.getDictVal("dictType", type);
 }
 </script>
 <body>
