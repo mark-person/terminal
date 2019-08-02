@@ -20,6 +20,13 @@ public class DbToolImpl extends MyDaoSupport {
 		
 		String tempSql = "select " + colVal + " from " + tableName;
 		List<Map<String, Object>> list = getJdbcTemplate().queryForList(tempSql);
+		for (Map<String, Object> map : list) {
+			map.keySet().forEach(k -> {
+				if (map.get(k) == null) {
+					map.put(k, "<NULL>");
+				}
+			});
+		}
 		return list;
 	}
 	
