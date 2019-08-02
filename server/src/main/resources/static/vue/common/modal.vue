@@ -24,7 +24,7 @@ module.exports = {
     data: function() {
         return {
             title:this.modal.title,
-            width:'500px'
+            width:this.modal.width
         }
     }
 }

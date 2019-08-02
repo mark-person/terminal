@@ -9,10 +9,7 @@
 
 <script type="text/javascript" th:inline="javascript">
 
-
-
 var list = [[${list}]];
-
 
 window.onload = function() {
 	page(list, "demo/list");
@@ -29,8 +26,22 @@ function edit(id) {
 	editModal("修改", myModal, "demo/get", id);
 }
 
+function getDemoType(type) {
+	var r = "";
+	document.getElementById("dictType").querySelectorAll("option").forEach(function(o, i) {
+		if (o.value == type) r = o.text;
+	});
+	return r;
+}
 </script>
 <body>
+
+<select id="dictType" th:fragment="dictType" style="display: none">
+	<option value="0">type_0</option>
+	<option value="2">type_2</option>
+	<option value="3">type_3</option>
+</select>
+
 <div id="page">
 	<div>
 		<label class="title">我是标题</label>
@@ -49,14 +60,13 @@ function edit(id) {
 	<tr v-for="item in list">
 		<td>{{item.demoId}}</td>
 		<td>{{item.demoName}}</td>
-		<td>{{item.demoType}}</td>
+		<td>{{getDemoType(item.demoType)}}</td>
 		<td>{{item.demoDate}}</td>
 		<td><a href="#this" @click="edit(item.demoId)">修改</a></td>
 	</tr>
 	</table>
 	<div th:replace="common/fragment::page"/>
 </div>
-
 
 <div id="modal" class="blockTemplate">
 <modal v-if="modal.showModal" :modal="modal" :pojo="pojo" :validate="v" @ok="ok" @close="modal.showModal = false">
@@ -67,7 +77,12 @@ function edit(id) {
 	</tr>
 	<tr>
 		<th>DEMO_TYPE</th>
-		<td><input type="text" v-model="pojo.demoType" maxlength="2"><span class="error">{{v.demoType}}</td>
+		<td>	
+			<select v-model="pojo.demoType">
+				<option th:include="::dictType"/>
+			</select>
+			<span class="error">{{v.demoType}}</span>
+		</td>
 	</tr>
 	<tr>
 		<th>DEMO_DATE</th>
@@ -76,7 +91,8 @@ function edit(id) {
 </table>
 </modal>
 </div>
-<div th:replace="common/fragment::commonDiv"/>
+
+<div id="loading"><loading v-if="showLoading"></loading></div>
 </body>
 </html>
 

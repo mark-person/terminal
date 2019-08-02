@@ -21,7 +21,7 @@ V.isNum = function(v) {
 function initLoading() {
 	loading = new Vue({
 		el: '#loading',
-		components: {'loading': httpVueLoader('http://localhost:9001/static/common/common-0.1.0.vue')},
+		components: {'loading': httpVueLoader(contextPath + 'static/vue/common/loading.vue')},
 		data: {
 			showLoading: false,
 	      	delayLoading: true
@@ -75,12 +75,9 @@ function page(list, url) {
 }
 
 function modal(id, validateFun, okFun) {
-	// Vue.component(id, {template: '#modal-template', );
-	
-	
 	var m = new Vue({
 		el: '#' + id,
-		components: {'modal': httpVueLoader('http://localhost:9001/static/common/modal.vue'), props: {pojo:Object, validate:Object, modal:Object}},
+		components: {'modal': httpVueLoader(contextPath + 'static/vue/common/modal.vue'), props: {pojo:Object, validate:Object, modal:Object}},
 		data: {
 	      	modal:{showModal:false,title:'',width:'500px'},
 	      	pojo:{}
@@ -90,8 +87,8 @@ function modal(id, validateFun, okFun) {
 				return validateFun(this.pojo);
 			},
 			isValid:function () {
-				for (o in this.validate) {
-					if (this.validate[o] != "") return false;
+				for (o in this.v) {
+					if (this.v[o] != "") return false;
 				}
 				return true;
 			}
