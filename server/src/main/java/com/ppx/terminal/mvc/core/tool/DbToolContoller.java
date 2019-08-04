@@ -3,6 +3,7 @@
  */
 package com.ppx.terminal.mvc.core.tool;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,26 @@ public class DbToolContoller {
 	@RequestMapping("/listColumn") @ResponseBody
 	public Map<String, Object> listColumn(String tableName) {
 		
-		List<String> list = impl.listColumn(tableName);
+		List<Map<String, Object>> list = impl.listColumn(tableName);
+		
+		// 类型;NEW:新的,OLD:旧的
+		for (Map<String, Object> map : list) {
+			String comment = (String)map.get("comment");
+			String value = (String)map.get("value");
+			if (comment.contains(";") && comment.contains(",") && comment.contains(":")) {
+				String dict = comment.split(";")[1];
+				String[] itemArray = dict.split(",");
+				List<Map<String, String>> dictList = new ArrayList<Map<String, String>>();
+				for (String item : itemArray) {
+					String n = item.split(":")[0];
+					String v = item.split(":")[1];
+					
+				}
+			}
+			
+		}
+		
+		
 		
 		return ControllerReturn.of("list", list);
 	}

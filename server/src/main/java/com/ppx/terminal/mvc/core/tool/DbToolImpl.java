@@ -12,15 +12,24 @@ public class DbToolImpl extends MyDaoSupport {
 	
 	public List<Map<String, Object>> listTable() {
 		String sql = "select TABLE_NAME value, concat(TABLE_COMMENT, '(', TABLE_NAME, ')') text "
-				+ "from information_schema.tables where table_name in ('core_demo', 'core_db_test')";
+				+ "from information_schema.tables where TABLE_NAME in ('core_demo', 'core_db_test')";
 		return getJdbcTemplate().queryForList(sql);
 	}
 	
-	public List<String> listColumn(String tableName) {
+	public List<Map<String, Object>> listColumn(String tableName) {
+		// ID -- 其它说明
+		String sql = "select COLUMN_NAME value, trim(substring_index(COLUMN_COMMENT, '--', 1)) comment "
+				+ "from information_schema.COLUMNS where TABLE_NAME = ? order by ORDINAL_POSITION";
+		List<Map<String, Object>> list = getJdbcTemplate().queryForList(sql, tableName);
 		
-		// select COLUMN_NAME, SUBSTRING_INDEX(COLUMN_COMMENT, ';', 1) from information_schema.COLUMNS where table_name = 'core_demo' order by ORDINAL_POSITION
-		String sql = "select COLUMN_NAME from information_schema.COLUMNS where table_name = ? order by ORDINAL_POSITION";
-		List<String> list = getJdbcTemplate().queryForList(sql, String.class, tableName);
+		for (Map<String, Object> map : list) {
+			String comment = (String)map.get("comment");
+			String value = (String)map.get("value");
+			String text = comment.split(";")[0] + "(" + value + ")";
+			map.put("text", text);
+		}
+		
+		
 		return list;
 	}
 	

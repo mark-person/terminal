@@ -30,7 +30,7 @@ window.onload = function() {
 	
 }
 
-// alert(Qs.stringify({a:'abc', b:'efg'}));
+
 
 function tableChange(obj) {
 	let param = new FormData();
@@ -44,7 +44,9 @@ function exec() {
 	let param = new FormData();
 	param.append('tableName', myForm.tableName);
 	param.append('colVal', myForm.colVal);
+	// alert(Qs.stringify({a:'abc', b:'efg'}));
     axios.post(contextPath + "dbTool/listValue", param).then(function(res) {
+    	result.title = myForm.colVal;
     	result.list = res.data.list;
     });
 }
@@ -63,7 +65,7 @@ function exec() {
 </select>
 字段:
 <select id="column" multiple="multiple" v-model="colVal" style="height:100px">
-	<option v-for="item in colList" :value="item">{{item}}</option>
+	<option v-for="item in colList" :value="item.value">{{item.text}}</option>
 </select>
 <button type="button" onclick="exec()">执行</button>
 </form>
