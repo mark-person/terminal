@@ -24,7 +24,12 @@ create table core_demo (
 /** 如果是invisible，这样优化器就会忽略这个索引，但是索引依然存在于引擎内部 */
 ALTER TABLE core_demo ADD INDEX idx_demo_name (demo_name ASC) VISIBLE;
 
-
+create table core_db_test (
+  test_id 		int not null auto_increment comment 'ID;其它说明',
+  test_name 	varchar(32) not null comment '名称',
+  test_date 	date comment '日期',
+  primary key (test_id)
+) comment 'DB样例';
 
 
 

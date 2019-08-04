@@ -32,6 +32,10 @@ public class DbToolContoller {
 	@RequestMapping("/dbTool")
 	public ModelAndView dbTool() {
 		ModelAndView mv = new ModelAndView("app/core/tool/dbTool");
+		
+		List<Map<String, Object>> tableList = impl.listTable();
+		mv.addObject("tableList", tableList);
+		
 		return mv;
 	}
 	
