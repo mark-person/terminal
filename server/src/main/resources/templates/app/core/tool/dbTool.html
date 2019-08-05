@@ -159,7 +159,14 @@ function getTdType(key) {
 
 
 function sqlQuery() {
-	
+	myModal.pojo.tableName = myForm.tableName;
+	myModal.pojo.columnName = myModal.key;
+	var param = Qs.stringify(myModal.pojo);
+	axios.post(contextPath + "dbTool/listSqlData", param).then(function(res) {
+    	// myModal.title = res.data.title;
+    	myModal.list = res.data.list;
+    	myModal.$forceUpdate();
+    });
 }
 
 </script>

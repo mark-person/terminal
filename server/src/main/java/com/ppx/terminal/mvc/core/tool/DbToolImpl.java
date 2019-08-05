@@ -110,10 +110,10 @@ public class DbToolImpl extends MyDaoSupport {
 		
 		if (!Strings.isEmpty(queryVal)) {
 			if (sql.contains("where")) {
-				sql = " and " + nameColumn + " like ?";
+				sql += " and " + nameColumn + " like ?";
 			}
 			else {
-				sql = " where " + nameColumn + " like ?";
+				sql += " where " + nameColumn + " like ?";
 			}
 		}
 		
