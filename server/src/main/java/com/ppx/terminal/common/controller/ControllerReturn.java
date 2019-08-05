@@ -102,6 +102,13 @@ public class ControllerReturn {
 		}
 	}
 	
+	public static Map<String, Object> of(Map<String, Object> map) {
+		Map<String, Object> returnMap = new LinkedHashMap<String, Object>();
+		returnMap.putAll(SUCCESS);
+		returnMap.putAll(map);
+		return returnMap;
+	}
+	
 	public static Map<String, Object> of(String key, Object value) {
 		Map<String, Object> returnMap = new LinkedHashMap<String, Object>(3);
 		returnMap.putAll(SUCCESS);

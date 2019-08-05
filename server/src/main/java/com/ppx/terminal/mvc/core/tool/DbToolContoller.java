@@ -89,5 +89,12 @@ public class DbToolContoller {
 	
 	
 	
+	// >>>>>>>>>>>>>>>>>>
+	@RequestMapping("/listSqlData") @ResponseBody
+	public Map<String, Object> listSqlData(String tableName, String columnName) {
+		Map<String, Object> map = impl.listSqlData(tableName, columnName);
+		return ControllerReturn.of(map);
+	}
+	
 
 }

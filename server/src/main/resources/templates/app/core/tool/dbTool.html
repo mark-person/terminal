@@ -9,6 +9,11 @@ var vm;
 var form;
 var result;
 window.onload = function() {
+	myModal = modal("modal", null, function(pojo) {
+		
+	});
+
+	
 	myForm = new Vue({
 	    el:'#myForm',
 	    data:{
@@ -25,6 +30,22 @@ window.onload = function() {
 		    dict:{},
 		    type:{},
 		    sql:{}
+	    },
+	    methods: {
+	    	getSqlVal:function(v) {
+	    		var item = v.split(":");
+	    		if (item.length >= 2) {
+	    			return item[0];
+	    		}
+	    		return "";
+	    	},
+	    	getSqlName:function(v) {
+	    		var item = v.split(":");
+	    		if (item.length >= 2) {
+	    			return item[1];
+	    		}
+	    		return "";
+	    	}
 	    }
 	});
 }
@@ -52,14 +73,14 @@ function exec() {
 	let param = new FormData();
 	param.append('tableName', myForm.tableName);
 	
-	if (myForm.colVal[myForm.colVal.length - 1] == '操作') {
-		myForm.colVal.splice(myForm.colVal.length - 1, myForm.colVal.length - 1);
-	}
+	// if (myForm.colVal[myForm.colVal.length - 1] == '操作') {
+	//	myForm.colVal.splice(myForm.colVal.length - 1, myForm.colVal.length - 1);
+	//}
 	param.append('colVal', myForm.colVal);
 	// alert(Qs.stringify({a:'abc', b:'efg'}));
     axios.post(contextPath + "dbTool/listValue", param).then(function(res) {
     	result.title = myForm.colVal;
-    	result.title.push("操作");
+     	// result.title.push("操作");
     	res.data.list.forEach(function(o, i) {
     		var id = "";
     		for (item in o) {
@@ -73,8 +94,38 @@ function exec() {
 }
 
 
+
+function selectSql(k, i) {
+	myModal.key = k;
+	myModal.index = i;
+	
+	// result.list[i - 1][k] = "10:go";
+	// Vue.set(result.list, i - 1, result.list[i - 1]);
+	
+	var param = Qs.stringify({tableName:myForm.tableName, columnName:k});
+    axios.post(contextPath + "dbTool/listSqlData", param).then(function(res) {
+    	myModal.title = res.data.title;
+    	myModal.list = res.data.list;
+    	showModal('测试',  myModal);
+    });
+}
+
+function sqlOk(item) {
+	var id = "";
+	var name = "";
+	for (i in item) {
+		name = id !== "" ? item[i] : name;
+		id = id === "" ? item[i] : id;
+	}
+	
+	var i = myModal.index;
+	result.list[i - 1][myModal.key] = id + ":" + name;
+	Vue.set(result.list, i - 1, result.list[i - 1]);
+	myModal.modal.showModal = false;
+}
+
 function edit(id) {
-	alert(id);
+	
 }
 
 //  number date text action select sql
@@ -105,6 +156,10 @@ function getTdType(key) {
 	return "text";
 }
 
+
+
+
+
 </script>
 
 <style type="text/css">
@@ -115,7 +170,6 @@ function getTdType(key) {
 </head>
 <body>
 
-<input type="number">
 
 <form id="myForm">
 表:
@@ -134,16 +188,18 @@ function getTdType(key) {
 <table id="result">
 <tr>
 	<th v-for="item in title">{{item}}</th>
+	<th>操作</th>
 </tr>
 <tr v-for="item in list">
-	<td v-for="(v, k) in item">
-		<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{v}}</span>
+	<td v-for="(v, k, i) in item">
+		<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getSqlName(v)}}
+			<input type="text" :name="k" :value="getSqlVal(v)">
+			<a href="#this" @click="selectSql(k, i)">选择</a>
+		</span>
 	
 		<span v-if="getTdType(k) == 'timestamp'" class="timestampSpan">{{v}}</span>
 	
 		<input v-if="getTdType(k) == 'number'" type="number" :name="k" :value="v" class="numberInput">
-		
-		
 		
 		
 		<input v-if="getTdType(k) == 'text'" type="text" :name="k" :value="v">
@@ -159,6 +215,29 @@ function getTdType(key) {
 	</td>
 </tr>
 </table>
+
+
+<div id="modal">
+<modal v-if="modal.showModal" :modal="modal" :pojo="pojo" :validate="v" @ok="ok" @close="modal.showModal = false">
+
+<div slot="body">
+<div>
+	<input type="text" v-model="pojo.queryItem" maxlength="32">
+	<button @click="sqlQuery()">搜索</button>
+</div>
+<table>
+	<tr>
+		<th v-for="v in title">{{v}}</th>
+		<th>选择1</th>
+	</tr>
+	<tr v-for="item in list">
+		<td v-for="v in item">{{v}}</td>
+		<td><a href="#this" @click="sqlOk(item)">OK</a></td>
+	</tr>
+</table>
+</div>
+</modal>
+</div>
 
 
 </body>

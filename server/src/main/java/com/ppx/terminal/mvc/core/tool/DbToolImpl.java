@@ -71,21 +71,88 @@ public class DbToolImpl extends MyDaoSupport {
 		}
 		
 		
-		String tempSql = "select " + colVal + " from " + tableName + leftTable;
-		System.out.println("xxxxxxxxx:" + tempSql);
-		
+		String tempSql = "select " + colVal + " from " + tableName + leftTable;		
 		List<Map<String, Object>> list = getJdbcTemplate().queryForList(tempSql);
 		
 		for (Map<String, Object> map : list) {
 			map.keySet().forEach(k -> {
 				if (map.get(k) == null) {
-					//map.put(k, "<NULL>");
 					map.put(k, "");
 				}
 			});
 		}
 		return list;
 	}
+	
+	
+	
+	
+	
+	
+	
+	// 
+	public Map<String, Object> listSqlData(String tableName, String columnName) {
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT"
+				+ " from information_schema.COLUMNS where TABLE_NAME = ? and COLUMN_NAME = ?";
+		Map<String, Object> commentMap = getJdbcTemplate().queryForMap(commentSql, tableName, columnName);
+		String sql = ((String)commentMap.get("COLUMN_COMMENT")).split(";")[1];
+		
+		List<Map<String, Object>> list = getJdbcTemplate().queryForList(sql);
+		for (Map<String, Object> map : list) {
+			map.keySet().forEach(k -> {
+				if (map.get(k) == null) {
+					map.put(k, "");
+				}
+			});
+		}
+		returnMap.put("list", list);
+		
+		Map<String, String> sqlMsgMap = getSqlMsg(sql);
+		String sqlTableName = sqlMsgMap.get("tableName");
+		String idColumn = sqlMsgMap.get("idColumn");
+		String nameColumn= sqlMsgMap.get("nameColumn");
+		String sqlCommentSql = "select trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT"
+				+ " from information_schema.COLUMNS where TABLE_NAME = ? and (COLUMN_NAME = ? or COLUMN_NAME = ?) order by ORDINAL_POSITION";
+		List<String> commList = getJdbcTemplate().queryForList(sqlCommentSql, String.class, sqlTableName, idColumn, nameColumn);
+		
+		returnMap.put("title", commList);
+		
+		return returnMap;
+		
+	}
+	
+	
+	private Map<String, String> getSqlMsg(String sql) {
+		Map<String, String> returnMap = new HashMap<String, String>(3);
+		sql = sql.replaceAll("\\s{1,}", " ").toLowerCase();
+		String[] itemArray = sql.split(" ");
+		if (itemArray.length < 5) {
+			return returnMap;
+		}
+		String tableName = "";
+		String idColumn = itemArray[1].replace(",", "");
+		String nameColumn= itemArray[2].replace(",", "");
+		for (String item : itemArray) {
+			if ("from".equals(tableName)) {
+				tableName = item;
+			}
+			if (item.equals("from")) {
+				tableName = "from";
+			}
+		}
+		returnMap.put("tableName", tableName);
+		returnMap.put("idColumn", idColumn);
+		returnMap.put("nameColumn", nameColumn);
+		return returnMap;
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }

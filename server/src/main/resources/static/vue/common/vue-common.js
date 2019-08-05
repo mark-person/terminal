@@ -99,7 +99,7 @@ function modal(id, validateFun, okFun) {
 		},
 		computed: {
 			v:function() {
-				return validateFun(this.pojo);
+				if (typeof validateFun == "function") return validateFun(this.pojo);
 			},
 			isValid:function () {
 				for (o in this.v) {
