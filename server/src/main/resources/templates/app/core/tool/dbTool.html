@@ -54,6 +54,7 @@ function exec() {
 	// alert(Qs.stringify({a:'abc', b:'efg'}));
     axios.post(contextPath + "dbTool/listValue", param).then(function(res) {
     	result.title = myForm.colVal;
+    	result.title.push("操作");
     	res.data.list.forEach(function(o, i) {
     		var id = "";
     		for (item in o) {
@@ -71,9 +72,17 @@ function edit(id) {
 	alert(id);
 }
 
-// date text action select 
+//  number date text action select 
 function getTdType(key) {
+	// timestamp
+	if (result.type[key] == "timestamp") {
+		return "timestamp";
+	}
+	
 	// decimal int
+	if (result.type[key] == "decimal" || result.type[key] == "int") {
+		return "number";
+	}
 	
 	if (result.type[key] == "date") {
 		return "date";
@@ -89,6 +98,11 @@ function getTdType(key) {
 
 </script>
 
+<style type="text/css">
+.numberInput {min-width:80px;width:80px;}
+.dateInput {min-width:120px;width:120px;}
+.timestampSpan {min-width:100px;width:100px;}
+</style>
 </head>
 <body>
 
@@ -114,8 +128,14 @@ function getTdType(key) {
 </tr>
 <tr v-for="item in list">
 	<td v-for="(v, k) in item">
+		<span v-if="getTdType(k) == 'timestamp'" class="timestampSpan">{{v}}</span>
+	
+		<input v-if="getTdType(k) == 'number'" type="number" :name="k" :value="v" class="numberInput">
+		
 		<input v-if="getTdType(k) == 'text'" type="text" :name="k" :value="v">
-		<input v-if="getTdType(k) == 'date'" type="date" :name="k" :value="v">
+		<input v-if="getTdType(k) == 'date'" type="date" :name="k" :value="v" class="dateInput">
+		
+		
 		<select v-if="getTdType(k) == 'select'" :name="k" :value="v">
 			<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
 		</select>
