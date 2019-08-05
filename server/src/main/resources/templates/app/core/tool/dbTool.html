@@ -95,9 +95,9 @@ function exec() {
 
 
 
-function selectSql(k, i) {
+function selectSql(k, row) {
 	myModal.key = k;
-	myModal.index = i;
+	myModal.row = row;
 	
 	// result.list[i - 1][k] = "10:go";
 	// Vue.set(result.list, i - 1, result.list[i - 1]);
@@ -118,9 +118,9 @@ function sqlOk(item) {
 		id = id === "" ? item[i] : id;
 	}
 	
-	var i = myModal.index;
-	result.list[i - 1][myModal.key] = id + ":" + name;
-	Vue.set(result.list, i - 1, result.list[i - 1]);
+	var i = myModal.row;
+	result.list[i][myModal.key] = id + ":" + name;
+	Vue.set(result.list, i, result.list[i]);
 	myModal.modal.showModal = false;
 }
 
@@ -158,7 +158,9 @@ function getTdType(key) {
 
 
 
-
+function sqlQuery() {
+	
+}
 
 </script>
 
@@ -190,11 +192,11 @@ function getTdType(key) {
 	<th v-for="item in title">{{item}}</th>
 	<th>操作</th>
 </tr>
-<tr v-for="item in list">
-	<td v-for="(v, k, i) in item">
+<tr v-for="(item, row) in list">
+	<td v-for="(v, k) in item">
 		<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getSqlName(v)}}
 			<input type="text" :name="k" :value="getSqlVal(v)">
-			<a href="#this" @click="selectSql(k, i)">选择</a>
+			<a href="#this" @click="selectSql(k, row)">选择</a>
 		</span>
 	
 		<span v-if="getTdType(k) == 'timestamp'" class="timestampSpan">{{v}}</span>
@@ -222,13 +224,13 @@ function getTdType(key) {
 
 <div slot="body">
 <div>
-	<input type="text" v-model="pojo.queryItem" maxlength="32">
+	<input type="text" v-model="pojo.queryVal" maxlength="32">
 	<button @click="sqlQuery()">搜索</button>
 </div>
 <table>
 	<tr>
 		<th v-for="v in title">{{v}}</th>
-		<th>选择1</th>
+		<th>操作</th>
 	</tr>
 	<tr v-for="item in list">
 		<td v-for="v in item">{{v}}</td>

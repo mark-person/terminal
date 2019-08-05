@@ -108,12 +108,15 @@ public class DbToolImpl extends MyDaoSupport {
 		List<String> commList = getJdbcTemplate().queryForList(sqlCommentSql, String.class, sqlTableName, idColumn, nameColumn);
 		returnMap.put("title", commList);
 		
-		if (sql.contains("where") && !Strings.isEmpty(queryVal)) {
-			sql = " and " + nameColumn + " like ?";
+		if (!Strings.isEmpty(queryVal)) {
+			if (sql.contains("where")) {
+				sql = " and " + nameColumn + " like ?";
+			}
+			else {
+				sql = " where " + nameColumn + " like ?";
+			}
 		}
-		else {
-			sql = " where " + nameColumn + " like ?";
-		}
+		
 		
 		List<Map<String, Object>> list = null;
 		if (Strings.isEmpty(queryVal)) {
