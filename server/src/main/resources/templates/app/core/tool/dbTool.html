@@ -20,16 +20,13 @@ window.onload = function() {
 	result = new Vue({
 	    el:'#result',
 	    data:{
-	    	title:['t1', 't2'],
-	        list:[
-	        	{a:'a1', b:'b1'},
-	        	{a:'a2', b:'b2'}
-	        ]
+	    	title:[],
+	        list:[],
+		    dict:{},
+		    type:{}
 	    }
 	});
-	
 }
-
 
 
 function tableChange(obj) {
@@ -37,7 +34,17 @@ function tableChange(obj) {
 	param.append('tableName', obj.value);
     axios.post(contextPath + "dbTool/listColumn", param).then(function(res) {
     	myForm.colList = res.data.list;
+    	result.dict = res.data.dict;
+    	result.type = res.data.type;
     });
+}
+
+function getDictText(name, val) {
+	if (!dict[name]) return val;
+	for (i in dict[name]) {
+		var item = dict[name][i];
+		if (item["v"] == val) return item["t"];
+	}
 }
 
 function exec() {
@@ -47,9 +54,38 @@ function exec() {
 	// alert(Qs.stringify({a:'abc', b:'efg'}));
     axios.post(contextPath + "dbTool/listValue", param).then(function(res) {
     	result.title = myForm.colVal;
+    	res.data.list.forEach(function(o, i) {
+    		var id = "";
+    		for (item in o) {
+    			id = (id == "") ? o[item] : id;
+    		}
+    		o["action"] = id;
+    	})
+    	
     	result.list = res.data.list;
     });
 }
+
+
+function edit(id) {
+	alert(id);
+}
+
+// date text action select 
+function getTdType(key) {
+	
+	if (result.type[key] == "date") {
+		return "date";
+	}
+	if (result.dict[key]) {
+		return "select";
+	}
+	if (key == "action") {
+		return "action";
+	}
+	return "text";
+}
+
 </script>
 
 </head>
@@ -76,7 +112,16 @@ function exec() {
 	<th v-for="item in title">{{item}}</th>
 </tr>
 <tr v-for="item in list">
-	<td v-for="v in item">{{v}}</td>
+	<td v-for="(v, k) in item">
+		<input v-if="getTdType(k) == 'text'" type="text" :name="k" :value="v">
+		<input v-if="getTdType(k) == 'date'" type="date" :name="k" :value="v">
+		<select v-if="getTdType(k) == 'select'" :name="k" :value="v">
+			<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
+		</select>
+		<span v-if="getTdType(k) == 'action'">
+			<a href="#this" @click="edit(v)">修改</a>
+		</span>
+	</td>
 </tr>
 </table>
 

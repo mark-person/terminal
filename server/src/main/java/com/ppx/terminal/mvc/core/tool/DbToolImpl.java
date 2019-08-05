@@ -17,9 +17,10 @@ public class DbToolImpl extends MyDaoSupport {
 	}
 	
 	public List<Map<String, Object>> listColumn(String tableName) {
+		// DATA_TYPE = 'date'
 		// ID -- 其它说明
-		String sql = "select COLUMN_NAME value, trim(substring_index(COLUMN_COMMENT, '--', 1)) comment "
-				+ "from information_schema.COLUMNS where TABLE_NAME = ? order by ORDINAL_POSITION";
+		String sql = "select COLUMN_NAME value, trim(substring_index(COLUMN_COMMENT, '--', 1)) comment, DATA_TYPE"
+				+ " from information_schema.COLUMNS where TABLE_NAME = ? order by ORDINAL_POSITION";
 		List<Map<String, Object>> list = getJdbcTemplate().queryForList(sql, tableName);
 		
 		for (Map<String, Object> map : list) {

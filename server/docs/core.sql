@@ -15,7 +15,7 @@ create table core_demo (
   demo_id 		int not null auto_increment comment 'ID;其它说明',
   demo_name 	varchar(32) not null comment '标题',
   demo_date 	date comment '日期',
-  demo_type		varchar(5) comment '类型:NEW>新的,OLD>旧的',
+  demo_type		varchar(5) comment '类型;NEW:新的,OLD:旧的',
   demo_int		int comment '数量',
   demo_num	 	decimal(7,2) comment '金额',
   created		timestamp not null default current_timestamp,

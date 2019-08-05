@@ -4,6 +4,7 @@
 package com.ppx.terminal.mvc.core.tool;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +46,10 @@ public class DbToolContoller {
 		
 		List<Map<String, Object>> list = impl.listColumn(tableName);
 		
-		// 类型;NEW:新的,OLD:旧的
+		
+		Map<String, Object> typeMap = new HashMap<String, Object>();
+		Map<String, Object> dictMap = new HashMap<String, Object>();
+		
 		for (Map<String, Object> map : list) {
 			String comment = (String)map.get("comment");
 			String value = (String)map.get("value");
@@ -54,17 +58,21 @@ public class DbToolContoller {
 				String[] itemArray = dict.split(",");
 				List<Map<String, String>> dictList = new ArrayList<Map<String, String>>();
 				for (String item : itemArray) {
-					String n = item.split(":")[0];
-					String v = item.split(":")[1];
-					
+					Map<String, String> itemMap = new HashMap<String, String>();
+					String v = item.split(":")[0];
+					String t = item.split(":")[1];
+					itemMap.put("v", v);
+					itemMap.put("t", t);
+					dictList.add(itemMap);
 				}
+				dictMap.put(value, dictList);
 			}
-			
+			typeMap.put(value, (String)map.get("DATA_TYPE"));
 		}
 		
 		
 		
-		return ControllerReturn.of("list", list);
+		return ControllerReturn.of("list", list, "dict", dictMap, "type", typeMap);
 	}
 	
 	@RequestMapping("/listValue") @ResponseBody
