@@ -48,6 +48,7 @@ window.onload = function() {
 	    	}
 	    }
 	});
+	document.querySelectorAll(".blockTemplate").forEach(function(o, i) {o.style.display = "block";})
 }
 
 function tableChange(obj) {
@@ -69,18 +70,33 @@ function getDictText(name, val) {
 	}
 }
 
+function getColName(colVal) {
+	for (var i = 0; i < myForm.colList.length; i++) {
+		var o = myForm.colList[i];
+		if (o.value == colVal) {
+			return o.text;
+		}
+	}
+	
+	myForm.colList.forEach(function(o, i) {
+		if (o.value == colVal) {
+			alert(o.text)
+			return o.text;
+		} 
+	})
+}
+
 function exec() {
 	let param = new FormData();
 	param.append('tableName', myForm.tableName);
-	
-	// if (myForm.colVal[myForm.colVal.length - 1] == '操作') {
-	//	myForm.colVal.splice(myForm.colVal.length - 1, myForm.colVal.length - 1);
-	//}
 	param.append('colVal', myForm.colVal);
-	// alert(Qs.stringify({a:'abc', b:'efg'}));
     axios.post(contextPath + "dbTool/listValue", param).then(function(res) {
-    	result.title = myForm.colVal;
-     	// result.title.push("操作");
+    	result.title = [];
+    	myForm.colVal.forEach(function(o, i) {
+    		result.title.push(getColName(o));
+    	})
+    	
+    	
     	res.data.list.forEach(function(o, i) {
     		var id = "";
     		for (item in o) {
@@ -99,8 +115,6 @@ function selectSql(k, row) {
 	myModal.key = k;
 	myModal.row = row;
 	
-	// result.list[i - 1][k] = "10:go";
-	// Vue.set(result.list, i - 1, result.list[i - 1]);
 	
 	var param = Qs.stringify({tableName:myForm.tableName, columnName:k});
     axios.post(contextPath + "dbTool/listSqlData", param).then(function(res) {
@@ -163,7 +177,7 @@ function sqlQuery() {
 	myModal.pojo.columnName = myModal.key;
 	var param = Qs.stringify(myModal.pojo);
 	axios.post(contextPath + "dbTool/listSqlData", param).then(function(res) {
-    	// myModal.title = res.data.title;
+    	
     	myModal.list = res.data.list;
     	myModal.$forceUpdate();
     });
@@ -177,7 +191,7 @@ function sqlQuery() {
 .timestampSpan {min-width:100px;width:100px;}
 </style>
 </head>
-<body>
+<body class="blockTemplate">
 
 
 <form id="myForm">
