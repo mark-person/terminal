@@ -49,7 +49,7 @@ public class DbToolContoller {
 		
 		Map<String, Object> typeMap = new HashMap<String, Object>();
 		Map<String, Object> dictMap = new HashMap<String, Object>();
-		
+		Map<String, Object> sqlMap = new HashMap<String, Object>();
 		for (Map<String, Object> map : list) {
 			String comment = (String)map.get("comment");
 			String value = (String)map.get("value");
@@ -68,11 +68,15 @@ public class DbToolContoller {
 				dictMap.put(value, dictList);
 			}
 			typeMap.put(value, (String)map.get("DATA_TYPE"));
+			
+			if (comment.contains("select")) {
+				sqlMap.put(value, true);
+			}
 		}
 		
 		
 		
-		return ControllerReturn.of("list", list, "dict", dictMap, "type", typeMap);
+		return ControllerReturn.of("list", list, "dict", dictMap, "type", typeMap, "sql", sqlMap);
 	}
 	
 	@RequestMapping("/listValue") @ResponseBody

@@ -23,11 +23,11 @@ window.onload = function() {
 	    	title:[],
 	        list:[],
 		    dict:{},
-		    type:{}
+		    type:{},
+		    sql:{}
 	    }
 	});
 }
-
 
 function tableChange(obj) {
 	let param = new FormData();
@@ -36,6 +36,7 @@ function tableChange(obj) {
     	myForm.colList = res.data.list;
     	result.dict = res.data.dict;
     	result.type = res.data.type;
+    	result.sql = res.data.sql;
     });
 }
 
@@ -50,6 +51,10 @@ function getDictText(name, val) {
 function exec() {
 	let param = new FormData();
 	param.append('tableName', myForm.tableName);
+	
+	if (myForm.colVal[myForm.colVal.length - 1] == '操作') {
+		myForm.colVal.splice(myForm.colVal.length - 1, myForm.colVal.length - 1);
+	}
 	param.append('colVal', myForm.colVal);
 	// alert(Qs.stringify({a:'abc', b:'efg'}));
     axios.post(contextPath + "dbTool/listValue", param).then(function(res) {
@@ -72,11 +77,15 @@ function edit(id) {
 	alert(id);
 }
 
-//  number date text action select 
+//  number date text action select sql
 function getTdType(key) {
 	// timestamp
 	if (result.type[key] == "timestamp") {
 		return "timestamp";
+	}
+	
+	if (result.sql[key]) {
+		return "sql";
 	}
 	
 	// decimal int
@@ -128,9 +137,14 @@ function getTdType(key) {
 </tr>
 <tr v-for="item in list">
 	<td v-for="(v, k) in item">
+		<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{v}}</span>
+	
 		<span v-if="getTdType(k) == 'timestamp'" class="timestampSpan">{{v}}</span>
 	
 		<input v-if="getTdType(k) == 'number'" type="number" :name="k" :value="v" class="numberInput">
+		
+		
+		
 		
 		<input v-if="getTdType(k) == 'text'" type="text" :name="k" :value="v">
 		<input v-if="getTdType(k) == 'date'" type="date" :name="k" :value="v" class="dateInput">

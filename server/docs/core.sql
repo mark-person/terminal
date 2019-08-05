@@ -11,13 +11,13 @@
  * 
  * */
 
-create core_demo_main (
+create table core_demo_main (
 	main_id 	int not null auto_increment comment '主ID',
 	main_name 	varchar(32) not null comment '主名',
+	primary key (main_id)
 ) comment '主表';
 
-
-create core_demo_sub (
+create table core_demo_sub (
 	 sub_id 		int not null auto_increment comment '规则ID',
 	 main_id		int not null comment '主名;select main_id, main_name from core_demo_main',
 	 sub_name		varchar(32) not null comment '规则名称',
@@ -29,7 +29,7 @@ create core_demo_sub (
 
 create table core_demo (
   demo_id 		int not null auto_increment comment 'ID;其它说明',
-  sub_id		int comment '规则名字;select one_id, one_name from core_demo_one where main_id = ?',
+  sub_id		int comment '规则名字;select sub_id, one_name from core_demo_sub where main_id = ?',
   demo_name 	varchar(32) not null comment '标题',
   demo_date 	date comment '日期',
   demo_type		varchar(5) comment '类型;NEW:新的,OLD:旧的',
