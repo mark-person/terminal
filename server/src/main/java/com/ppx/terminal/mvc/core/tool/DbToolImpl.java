@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import com.ppx.terminal.common.jdbc.MyDaoSupport;
@@ -91,22 +92,12 @@ public class DbToolImpl extends MyDaoSupport {
 	
 	
 	// 
-	public Map<String, Object> listSqlData(String tableName, String columnName) {
+	public Map<String, Object> listSqlData(String tableName, String columnName, String queryVal) {
 		Map<String, Object> returnMap = new HashMap<String, Object>();
 		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT"
 				+ " from information_schema.COLUMNS where TABLE_NAME = ? and COLUMN_NAME = ?";
 		Map<String, Object> commentMap = getJdbcTemplate().queryForMap(commentSql, tableName, columnName);
 		String sql = ((String)commentMap.get("COLUMN_COMMENT")).split(";")[1];
-		
-		List<Map<String, Object>> list = getJdbcTemplate().queryForList(sql);
-		for (Map<String, Object> map : list) {
-			map.keySet().forEach(k -> {
-				if (map.get(k) == null) {
-					map.put(k, "");
-				}
-			});
-		}
-		returnMap.put("list", list);
 		
 		Map<String, String> sqlMsgMap = getSqlMsg(sql);
 		String sqlTableName = sqlMsgMap.get("tableName");
@@ -115,8 +106,32 @@ public class DbToolImpl extends MyDaoSupport {
 		String sqlCommentSql = "select trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT"
 				+ " from information_schema.COLUMNS where TABLE_NAME = ? and (COLUMN_NAME = ? or COLUMN_NAME = ?) order by ORDINAL_POSITION";
 		List<String> commList = getJdbcTemplate().queryForList(sqlCommentSql, String.class, sqlTableName, idColumn, nameColumn);
-		
 		returnMap.put("title", commList);
+		
+		if (sql.contains("where") && !Strings.isEmpty(queryVal)) {
+			sql = " and " + nameColumn + " like ?";
+		}
+		else {
+			sql = " where " + nameColumn + " like ?";
+		}
+		
+		List<Map<String, Object>> list = null;
+		if (Strings.isEmpty(queryVal)) {
+			list = getJdbcTemplate().queryForList(sql);
+		}
+		else {
+			list = getJdbcTemplate().queryForList(sql, "%" + queryVal + "%");
+		}
+		
+		
+		for (Map<String, Object> map : list) {
+			map.keySet().forEach(k -> {
+				if (map.get(k) == null) {
+					map.put(k, "");
+				}
+			});
+		}
+		returnMap.put("list", list);
 		
 		return returnMap;
 		
