@@ -28,7 +28,7 @@ create table core_demo_sub (
 
 
 create table core_demo (
-  demo_id 		int not null auto_increment comment 'ID;其它说明',
+  demo_id 		int not null auto_increment comment 'ID--其它说明',
   sub_id		int comment '规则名字;select sub_id, one_name from core_demo_sub where main_id = ?',
   demo_name 	varchar(32) not null comment '标题',
   demo_date 	date comment '日期',
