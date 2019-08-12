@@ -49,8 +49,8 @@ window.onload = function() {
 	    }, 
 	    watch: {
 	    	list: {
-	    		handler(newValue, oldValue) {
-	    		　　// alert(1)
+	    		handler(newValue) {
+	    		　　// alert("newValue:" + JSON.stringify(newValue))
 	    		},
 	    		deep: true
 	    	}
@@ -193,6 +193,12 @@ function sqlQuery() {
     });
 }
 
+
+function inputKeyUp(row) {
+	result.list[row]["action"].disabled = false;
+	
+}
+
 </script>
 
 <style type="text/css">
@@ -234,15 +240,14 @@ function sqlQuery() {
 	
 		<input v-if="getTdType(k) == 'number'" type="number" :name="k" :value="v" class="numberInput">
 		
-		
-		<input v-if="getTdType(k) == 'text'" type="text" v-model="item[k]">
+		<input v-if="getTdType(k) == 'text'" type="text" v-model="item[k]" @keyup="inputKeyUp(row)">
 		
 		<input v-if="getTdType(k) == 'date'" type="date" :name="k" :value="v" class="dateInput">
-		
 		
 		<select v-if="getTdType(k) == 'select'" :name="k" :value="v">
 			<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
 		</select>
+		
 		<span v-if="getTdType(k) == 'action'">
 			<button @click="edit(v.id)" :disabled="v.disabled">修改</button>
 		</span>
