@@ -1,12 +1,15 @@
 package com.ppx.terminal.mvc.core.tool;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
+import com.ppx.terminal.common.controller.ControllerReturn;
 import com.ppx.terminal.common.jdbc.MyDaoSupport;
 
 @Service
@@ -165,6 +168,37 @@ public class DbToolImpl extends MyDaoSupport {
 		return returnMap;
 	}
 	
+	public Map<String, Object> update(Map<String, String[]> map) {
+		Set<String> keySet = map.keySet();
+		
+		List<Object> para = new ArrayList<Object>();
+		
+		String tableName = map.get("tableName")[0];
+		String pkSql = "";
+		Object pkObj = null;
+		StringBuilder sqlSb = new StringBuilder();
+		for (String key : keySet) {
+			if ("".equals(pkSql)) {
+				pkSql = key + " = ?";
+				pkObj = map.get(key)[0];
+				continue;
+			}
+			
+			if (key.equals("tableName")) {
+				continue;
+			}
+			if (map.get(key) != null) {
+				sqlSb.append(key + " = " + "?,");
+				para.add(map.get(key)[0]);
+			}
+		}
+		para.add(pkObj);
+		String updateSql = "update " + tableName + " set " + sqlSb.substring(0, sqlSb.length() - 1) + " where " + pkSql;
+		getJdbcTemplate().update(updateSql, para.toArray());
+		System.out.println(".....updateSql:" + updateSql);
+		
+		return ControllerReturn.of();
+	}
 	
 	
 	

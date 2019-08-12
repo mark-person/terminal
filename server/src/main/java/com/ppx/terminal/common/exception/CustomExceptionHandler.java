@@ -18,6 +18,8 @@ public class CustomExceptionHandler implements HandlerExceptionResolver {
     @ExceptionHandler(value = Throwable.class)
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object object,
             Exception exception) {
+    	
+    	exception.printStackTrace();
         
         System.err.println("CustomExceptionHandler error:" + exception.getMessage());
     	

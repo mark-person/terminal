@@ -8,8 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -87,14 +90,23 @@ public class DbToolContoller {
 		return ControllerReturn.of("list", list);
 	}
 	
-	
-	
 	// >>>>>>>>>>>>>>>>>>
 	@RequestMapping("/listSqlData") @ResponseBody
 	public Map<String, Object> listSqlData(String tableName, String columnName, String queryVal) {
 		Map<String, Object> map = impl.listSqlData(tableName, columnName, queryVal);
 		return ControllerReturn.of(map);
 	}
+	
+	// >>>>>>>>>>>>>>>>>>
+	@PostMapping("/edit") @ResponseBody
+	public Map<String, Object> edit(HttpServletRequest request) {
+		
+		 Map<String, Object> r = impl.update(request.getParameterMap());
+		
+		return r;
+	}
+	
+	
 	
 
 }

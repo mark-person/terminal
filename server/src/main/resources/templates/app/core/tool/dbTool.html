@@ -31,6 +31,9 @@ window.onload = function() {
 		    type:{},
 		    sql:{}
 	    },
+	    computed: {
+	    	
+	    },
 	    methods: {
 	    	getSqlVal:function(v) {
 	    		var item = v.split(":");
@@ -109,7 +112,7 @@ function exec() {
     	res.data.list.forEach(function(o, i) {
     		var id = "";
     		for (item in o) {
-    			id = (id == "") ? o[item] : id;
+    			id = (id == "") ? item : id;
     		}
     		o["action"] = {id:id, disabled:true};
     	})
@@ -120,12 +123,11 @@ function exec() {
 
 
 
-function selectSql(k, row) {
-	myModal.key = k;
+function selectSql(row, key) {
 	myModal.row = row;
+	myModal.key = key;
 	
-	
-	var param = Qs.stringify({tableName:myForm.tableName, columnName:k});
+	var param = Qs.stringify({tableName:myForm.tableName, columnName:key});
     axios.post(contextPath + "dbTool/listSqlData", param).then(function(res) {
     	myModal.title = res.data.title;
     	myModal.list = res.data.list;
@@ -145,16 +147,13 @@ function sqlOk(item) {
 	result.list[i][myModal.key] = id + ":" + name;
 	Vue.set(result.list, i, result.list[i]);
 	myModal.modal.showModal = false;
+	dataChange(myModal.row, myModal.key);
 }
 
-function edit(id) {
-	alert(id);
-	//alert(JSON.stringify(result.list));
-}
 
 //  number date text action select sql
 function getTdType(key) {
-	// timestamp
+	
 	if (result.type[key] == "timestamp") {
 		return "timestamp";
 	}
@@ -163,7 +162,6 @@ function getTdType(key) {
 		return "sql";
 	}
 	
-	// decimal int
 	if (result.type[key] == "decimal" || result.type[key] == "int") {
 		return "number";
 	}
@@ -187,17 +185,39 @@ function sqlQuery() {
 	myModal.pojo.columnName = myModal.key;
 	var param = Qs.stringify(myModal.pojo);
 	axios.post(contextPath + "dbTool/listSqlData", param).then(function(res) {
-    	
     	myModal.list = res.data.list;
     	myModal.$forceUpdate();
     });
 }
 
 
-function inputKeyUp(row) {
-	result.list[row]["action"].disabled = false;
+var needUpdate = {};
+function dataChange(row, key) {
+	if (!needUpdate[row]) {
+		needUpdate[row] = [];
+	}
+	needUpdate[row].push(key);
 	
+	result.list[row]["action"].disabled = false;
 }
+
+
+function edit(id, row) {
+	var rowObj = result.list[row];
+	
+	var pojo = {};
+	pojo[id] = rowObj[id];
+	pojo["tableName"] = myForm.tableName;
+	needUpdate[row].forEach(function(o, i) {
+		pojo[o] = rowObj[o];
+	});
+	
+	var param = Qs.stringify(pojo);
+	axios.post(contextPath + "dbTool/edit", param).then(function(res) {
+    	alert(res.data.code);
+    });
+}
+
 
 </script>
 
@@ -232,24 +252,24 @@ function inputKeyUp(row) {
 <tr v-for="(item, row) in list">
 	<td v-for="(v, k) in item">
 		<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getSqlName(v)}}
-			<input type="text" :name="k" :value="getSqlVal(v)">
-			<a href="#this" @click="selectSql(k, row)">选择</a>
+			<input type="text" v-model="item[k]">
+			<a href="#this" @click="selectSql(row, k)">选择</a>
 		</span>
 	
 		<span v-if="getTdType(k) == 'timestamp'" class="timestampSpan">{{v}}</span>
 	
-		<input v-if="getTdType(k) == 'number'" type="number" :name="k" :value="v" class="numberInput">
+		<input v-if="getTdType(k) == 'number'" type="number" class="numberInput" v-model="item[k]"  @keyup="dataChange(row, k)">
 		
-		<input v-if="getTdType(k) == 'text'" type="text" v-model="item[k]" @keyup="inputKeyUp(row)">
+		<input v-if="getTdType(k) == 'text'" type="text" v-model="item[k]" @keyup="dataChange(row, k)">
 		
-		<input v-if="getTdType(k) == 'date'" type="date" :name="k" :value="v" class="dateInput">
+		<input v-if="getTdType(k) == 'date'" type="date" class="dateInput" v-model="item[k]" @change="dataChange(row, k)">
 		
-		<select v-if="getTdType(k) == 'select'" :name="k" :value="v">
+		<select v-if="getTdType(k) == 'select'" v-model="item[k]" @change="dataChange(row, k)">
 			<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
 		</select>
 		
 		<span v-if="getTdType(k) == 'action'">
-			<button @click="edit(v.id)" :disabled="v.disabled">修改</button>
+			<button @click="edit(v.id, row)" :disabled="v.disabled">修改</button>
 		</span>
 	</td>
 </tr>
