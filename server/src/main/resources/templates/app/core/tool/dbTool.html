@@ -223,7 +223,9 @@ function edit(id, row) {
     });
 }
 
-
+function get(v) {
+	return v.indexOf('__desc') == -1
+}
 </script>
 
 <style type="text/css">
@@ -255,7 +257,7 @@ function edit(id, row) {
 	<th>操作</th>
 </tr>
 <tr v-for="(item, row) in list">
-	<td v-for="(v, k) in item">
+	<td v-for="(v, k) in item" v-if="get(k)">
 		<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getSqlName2(item, k)}}
 			<input type="text" v-model="item[k]">
 			<a href="#this" @click="selectSql(row, k)">选择</a>
