@@ -50,7 +50,7 @@ window.onload = function() {
 	    watch: {
 	    	list: {
 	    		handler(newValue, oldValue) {
-	    		　　alert(1)
+	    		　　// alert(1)
 	    		},
 	    		deep: true
 	    	}
@@ -111,7 +111,7 @@ function exec() {
     		for (item in o) {
     			id = (id == "") ? o[item] : id;
     		}
-    		o["action"] = id;
+    		o["action"] = {id:id, disabled:true};
     	})
     	
     	result.list = res.data.list;
@@ -148,7 +148,8 @@ function sqlOk(item) {
 }
 
 function edit(id) {
-	alert(JSON.stringify(result.list));
+	alert(id);
+	//alert(JSON.stringify(result.list));
 }
 
 //  number date text action select sql
@@ -223,7 +224,7 @@ function sqlQuery() {
 	<th>操作</th>
 </tr>
 <tr v-for="(item, row) in list">
-	<td v-for="(v, k, i) in item">
+	<td v-for="(v, k) in item">
 		<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getSqlName(v)}}
 			<input type="text" :name="k" :value="getSqlVal(v)">
 			<a href="#this" @click="selectSql(k, row)">选择</a>
@@ -243,7 +244,7 @@ function sqlQuery() {
 			<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
 		</select>
 		<span v-if="getTdType(k) == 'action'">
-			<a href="#this" @click="edit(v)">修改</a>
+			<button @click="edit(v.id)" :disabled="v.disabled">修改</button>
 		</span>
 	</td>
 </tr>
