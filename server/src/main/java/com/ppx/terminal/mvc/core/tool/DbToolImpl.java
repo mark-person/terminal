@@ -64,7 +64,8 @@ public class DbToolImpl extends MyDaoSupport {
 				String leftId = itemArray[1].replace(",", "");
 				String leftName = itemArray[2].replace(",", "");
 				
-				leftColMap.put(name, "concat(" + tableName + "." + name + ",':'," + leftTableName + "." + leftName + ") " + name);
+				//leftColMap.put(name, "concat(" + tableName + "." + name + ",':'," + leftTableName + "." + leftName + ") " + name);
+				leftColMap.put(name, leftTableName + "." + name + " " + name + "," +  leftTableName + "." + leftName + " " + name + "__desc");
 				leftTable += " left join " + leftTableName + " on " + tableName + "." + name + " = " + leftTableName + "." + leftId;
 			}
 		}

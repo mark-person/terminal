@@ -42,12 +42,15 @@ window.onload = function() {
 	    		}
 	    		return "";
 	    	},
-	    	getSqlName:function(v) {
+	    	getSqlName2:function(item, key) {
+	    		return item[key + "__desc"];
+	    		
+	    		/*
 	    		var item = v.split(":");
 	    		if (item.length >= 2) {
 	    			return item[1];
 	    		}
-	    		return "";
+	    		return "";*/
 	    	}
 	    }, 
 	    watch: {
@@ -144,7 +147,9 @@ function sqlOk(item) {
 	}
 	
 	var i = myModal.row;
-	result.list[i][myModal.key] = id + ":" + name;
+	result.list[i][myModal.key] = id;
+	result.list[i][myModal.key + "__desc"] = name;
+	
 	Vue.set(result.list, i, result.list[i]);
 	myModal.modal.showModal = false;
 	dataChange(myModal.row, myModal.key);
@@ -251,7 +256,7 @@ function edit(id, row) {
 </tr>
 <tr v-for="(item, row) in list">
 	<td v-for="(v, k) in item">
-		<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getSqlName(v)}}
+		<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getSqlName2(item, k)}}
 			<input type="text" v-model="item[k]">
 			<a href="#this" @click="selectSql(row, k)">选择</a>
 		</span>
