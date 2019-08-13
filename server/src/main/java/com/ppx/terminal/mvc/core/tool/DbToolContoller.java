@@ -52,7 +52,9 @@ public class DbToolContoller {
 		
 		Map<String, Object> typeMap = new HashMap<String, Object>();
 		Map<String, Object> dictMap = new HashMap<String, Object>();
-		Map<String, Object> sqlMap = new HashMap<String, Object>();
+		List<String> sqlList = new ArrayList<String>();
+		List<String> chainList = new ArrayList<String>();
+		
 		for (Map<String, Object> map : list) {
 			String comment = (String)map.get("comment");
 			String value = (String)map.get("value");
@@ -72,14 +74,17 @@ public class DbToolContoller {
 			}
 			typeMap.put(value, (String)map.get("DATA_TYPE"));
 			
-			if (comment.contains("select")) {
-				sqlMap.put(value, true);
+			if (comment.split("select").length == 3) {
+				chainList.add(value);
+			}
+			else if (comment.contains("select")) {
+				sqlList.add(value);
 			}
 		}
 		
 		
 		
-		return ControllerReturn.of("list", list, "dict", dictMap, "type", typeMap, "sql", sqlMap);
+		return ControllerReturn.of("list", list, "dict", dictMap, "type", typeMap, "sql", sqlList, "chain", chainList);
 	}
 	
 	@RequestMapping("/listValue") @ResponseBody
@@ -100,12 +105,24 @@ public class DbToolContoller {
 	// >>>>>>>>>>>>>>>>>>
 	@PostMapping("/edit") @ResponseBody
 	public Map<String, Object> edit(HttpServletRequest request) {
-		
-		 Map<String, Object> r = impl.update(request.getParameterMap());
-		
+		Map<String, Object> r = impl.update(request.getParameterMap());
 		return r;
 	}
 	
+	
+	// >>>>>>>>>...chain
+	// >>>>>>>>>>>>>>>>>>
+	@RequestMapping("/listChainData") @ResponseBody
+	public Map<String, Object> listChainData(String tableName, String columnName) {
+		Map<String, Object> map = impl.listChainData(tableName, columnName);
+		return ControllerReturn.of(map);
+	}
+	
+	@RequestMapping("/listChainSecondData") @ResponseBody
+	public Map<String, Object> listChainSecondData(String tableName, String columnName, Integer parentId) {
+		Map<String, Object> map = impl.listChainSecondData(tableName, columnName, parentId);
+		return ControllerReturn.of(map);
+	}
 	
 	
 

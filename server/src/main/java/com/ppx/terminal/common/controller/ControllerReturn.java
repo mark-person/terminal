@@ -143,6 +143,17 @@ public class ControllerReturn {
 		return returnMap;
 	}
 	
+	public static Map<String, Object> of(String k1, Object v1, String k2, Object v2, String k3, Object v3, 
+			String k4, Object v4, String k5, Object v5) {
+		Map<String, Object> returnMap = new LinkedHashMap<String, Object>(8);
+		returnMap.putAll(SUCCESS);
+		returnMap.put(k1, v1);
+		returnMap.put(k2, v2);
+		returnMap.put(k3, v3);
+		returnMap.put(k4, v4);
+		returnMap.put(k5, v5);
+		return returnMap;
+	}
 	
 	
 	

@@ -228,7 +228,51 @@ public class DbToolImpl extends MyDaoSupport {
 	}
 	
 	
+	public Map<String, Object> listChainData(String tableName, String columnName) {
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT"
+				+ " from information_schema.COLUMNS where TABLE_NAME = ? and COLUMN_NAME = ?";
+		Map<String, Object> commentMap = getJdbcTemplate().queryForMap(commentSql, tableName, columnName);
+		String sql = ((String)commentMap.get("COLUMN_COMMENT")).split(";")[2];
+		
+		List<Map<String, Object>> dataList = getJdbcTemplate().queryForList(sql);
+		
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		for (Map<String, Object> map : dataList) {
+			Map<String, Object> m = new HashMap<String, Object>();
+			String vName = (String)map.keySet().toArray()[0];
+			String tName = (String)map.keySet().toArray()[1];
+			m.put("v", map.get(vName));
+			m.put("t", map.get(tName));
+			returnList.add(m);
+		}
+		returnMap.put("list", returnList);
+		
+		return returnMap;
+	}
 	
+	public Map<String, Object> listChainSecondData(String tableName, String columnName, Integer parentId) {
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT"
+				+ " from information_schema.COLUMNS where TABLE_NAME = ? and COLUMN_NAME = ?";
+		Map<String, Object> commentMap = getJdbcTemplate().queryForMap(commentSql, tableName, columnName);
+		String sql = ((String)commentMap.get("COLUMN_COMMENT")).split(";")[1];
+		
+		List<Map<String, Object>> dataList = getJdbcTemplate().queryForList(sql, parentId);
+		
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		for (Map<String, Object> map : dataList) {
+			Map<String, Object> m = new HashMap<String, Object>();
+			String vName = (String)map.keySet().toArray()[0];
+			String tName = (String)map.keySet().toArray()[1];
+			m.put("v", map.get(vName));
+			m.put("t", map.get(tName));
+			returnList.add(m);
+		}
+		returnMap.put("list", returnList);
+		
+		return returnMap;
+	}
 	
 	
 	

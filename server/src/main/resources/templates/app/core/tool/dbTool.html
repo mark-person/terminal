@@ -12,6 +12,29 @@ window.onload = function() {
 	myModal = modal("modal", null, function(pojo) {
 		
 	});
+	
+	
+	chainModal = modal("chainModal", null, function(pojo) {
+		if (pojo.value == undefined || pojo.value == "") {
+			alert("请选择");
+			return;
+		}
+		
+		
+		var id = pojo.value;
+		var name = "";
+		chainModal.secondList.forEach(function(o, i) {
+			if (o.v == id) name = o.t;
+		});
+		
+		var i = chainModal.row;
+		result.list[i][chainModal.key] = id;
+		result.list[i][chainModal.key + "__desc"] = name;
+		
+		Vue.set(result.list, i, result.list[i]);
+		chainModal.modal.showModal = false;
+		dataChange(chainModal.row, chainModal.key);
+	});
 
 	
 	myForm = new Vue({
@@ -29,7 +52,8 @@ window.onload = function() {
 	        list:[],
 		    dict:{},
 		    type:{},
-		    sql:{}
+		    sql:[],
+		    chain:[]
 	    },
 	    computed: {
 	    	
@@ -74,6 +98,7 @@ function tableChange(obj) {
     	result.dict = res.data.dict;
     	result.type = res.data.type;
     	result.sql = res.data.sql;
+    	result.chain = res.data.chain;
     });
 }
 
@@ -162,6 +187,20 @@ function sqlOk(item) {
 	dataChange(myModal.row, myModal.key);
 }
 
+// chain ...............
+function selectChain(row, key) {
+	chainModal.row = row;
+	chainModal.key = key;
+	var param = Qs.stringify({tableName:myForm.tableName, columnName:key});
+    axios.post(contextPath + "dbTool/listChainData", param).then(function(res) {
+    	chainModal.firstList = res.data.list;
+    	chainModal.secondList = [];
+    	showModal('测试',  chainModal);
+    });
+}
+
+
+
 
 //  number date text action select sql
 function getTdType(key) {
@@ -170,8 +209,12 @@ function getTdType(key) {
 		return "timestamp";
 	}
 	
-	if (result.sql[key]) {
+	if (result.sql.indexOf(key) > -1) {
 		return "sql";
+	}
+	
+	if (result.chain.indexOf(key) > -1) {
+		return "chain";
 	}
 	
 	if (result.type[key] == "decimal" || result.type[key] == "int") {
@@ -236,6 +279,17 @@ function get(v) {
 	return v.indexOf('__desc') == -1
 }
 
+function firstChange(obj) {
+	var parentId = obj.value;
+	
+	var param = Qs.stringify({tableName:myForm.tableName, columnName:chainModal.key, parentId:parentId});
+    axios.post(contextPath + "dbTool/listChainSecondData", param).then(function(res) {
+    	chainModal.secondList = res.data.list;
+    	chainModal.$forceUpdate();
+    	
+    });
+}
+
 </script>
 
 <style type="text/css">
@@ -271,6 +325,11 @@ function get(v) {
 		<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getSqlName2(item, k)}}
 			<input type="text" v-model="item[k]">
 			<a href="#this" @click="selectSql(row, k)">选择</a>
+		</span>
+		
+		<span v-if="getTdType(k) == 'chain'" class="sqlSpan">{{getSqlName2(item, k)}}
+			<input type="text" v-model="item[k]">
+			<a href="#this" @click="selectChain(row, k)">选择</a>
 		</span>
 	
 		<span v-if="getTdType(k) == 'timestamp'" class="timestampSpan">{{v}}</span>
@@ -312,6 +371,28 @@ function get(v) {
 	</tr>
 </table>
 </div>
+</modal>
+</div>
+
+
+<div id="chainModal">
+<modal v-if="modal.showModal" :modal="modal" :pojo="pojo"  @ok="ok" @close="modal.showModal = false">
+<table slot="body">
+	<tr>
+		<td>
+			<select onChange="firstChange(this)">
+				<option value="">请选择</option>
+				<option v-for="item in firstList" :value="item.v">{{item.t}}</option>
+			</select>
+		</td>
+		<td>
+			<select v-model="pojo.value">
+				<option value="">请选择</option>
+				<option v-for="item in secondList" :value="item.v">{{item.t}}</option>
+			</select>
+		</td>
+	</tr>
+</table>
 </modal>
 </div>
 

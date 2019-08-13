@@ -29,7 +29,7 @@ create table core_demo_sub (
 
 create table core_demo (
   demo_id 		int not null auto_increment comment 'ID--其它说明',
-  sub_id		int comment '规则名字;select sub_id, one_name from core_demo_sub where main_id = ?',
+  sub_id		int comment '规则名字;select sub_id, sub_name from core_demo_sub where main_id = ?;select main_id, main_name from core_demo_main',
   demo_name 	varchar(32) not null comment '标题',
   demo_date 	date comment '日期',
   demo_type		varchar(5) comment '类型;NEW:新的,OLD:旧的',
