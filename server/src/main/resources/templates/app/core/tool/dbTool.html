@@ -2,13 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<link th:replace="common/fragment::base"/>
+<link th:replace="common/fragment::base" />
+<script type="text/javascript" th:src="@{/static/cdn/jquery.min-3.3.1.js}"></script>
+<script type="text/javascript" th:src="@{/static/vue/select2/select2.full.min.js}"></script>
+<link rel="stylesheet" th:href="@{/static/vue/select2/select2.min.css}">
+
+
 </head>
 <script type="text/javascript" th:inline="javascript">
 var vm;
 var form;
 var result;
 window.onload = function() {
+	
+	
 	myModal = modal("modal", null, function(pojo) {
 		
 	});
@@ -88,6 +95,8 @@ window.onload = function() {
 	    
 	});
 	document.querySelectorAll(".blockTemplate").forEach(function(o, i) {o.style.display = "block";})
+	
+	 $('#table').select2();
 }
 
 function tableChange(obj) {
@@ -166,6 +175,7 @@ function selectSql(row, key) {
     axios.post(contextPath + "dbTool/listSqlData", param).then(function(res) {
     	myModal.title = res.data.title;
     	myModal.list = res.data.list;
+    	myModal.count = res.data.count;
     	showModal('测试',  myModal);
     });
 }
@@ -241,6 +251,7 @@ function sqlQuery() {
 	var param = Qs.stringify(myModal.pojo);
 	axios.post(contextPath + "dbTool/listSqlData", param).then(function(res) {
     	myModal.list = res.data.list;
+    	myModal.count = res.data.count;
     	myModal.$forceUpdate();
     });
 }
@@ -293,108 +304,100 @@ function firstChange(obj) {
 </script>
 
 <style type="text/css">
-.numberInput {min-width:80px;width:80px;}
-.dateInput {min-width:120px;width:120px;}
-.timestampSpan {min-width:100px;width:100px;}
+.numberInput {
+	min-width: 80px;
+	width: 80px;
+}
+
+.dateInput {
+	min-width: 120px;
+	width: 120px;
+}
+
+.timestampSpan {
+	min-width: 100px;
+	width: 100px;
+}
 </style>
 </head>
 <body class="blockTemplate">
 
 
-<form id="myForm">
-表:
-<select id="table" v-model="tableName" onchange="tableChange(this)" >
-	<option value="">请选择</option>
-	<option th:each="item: ${tableList}" th:value="${item.value}" th:text="${item.text}"></option>
-</select>
-字段:
-<select id="column" multiple="multiple" v-model="colVal" style="height:100px">
-	<option v-for="item in colList" :value="item.value">{{item.text}}</option>
-</select>
-<button type="button" onclick="exec()">执行</button>
-</form>
-
-
-<table id="result">
-<tr>
-	<th v-for="item in title">{{item}}</th>
-	<th>操作</th>
-</tr>
-<tr v-for="(item, row) in list">
-	<td v-for="(v, k) in item" v-if="get(k)">
-		<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getSqlName2(item, k)}}
-			<input type="text" v-model="item[k]">
-			<a href="#this" @click="selectSql(row, k)">选择</a>
-		</span>
-		
-		<span v-if="getTdType(k) == 'chain'" class="sqlSpan">{{getSqlName2(item, k)}}
-			<input type="text" v-model="item[k]">
-			<a href="#this" @click="selectChain(row, k)">选择</a>
-		</span>
-	
-		<span v-if="getTdType(k) == 'timestamp'" class="timestampSpan">{{v}}</span>
-	
-		<input v-if="getTdType(k) == 'number'" type="number" class="numberInput" v-model="item[k]"  @keyup="dataChange(row, k)">
-		
-		<input v-if="getTdType(k) == 'text'" type="text" v-model="item[k]" @keyup="dataChange(row, k)">
-		
-		<input v-if="getTdType(k) == 'date'" type="date" class="dateInput" v-model="item[k]" @change="dataChange(row, k)">
-		
-		<select v-if="getTdType(k) == 'select'" v-model="item[k]" @change="dataChange(row, k)">
-			<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
+	<form id="myForm">
+		表: <select id="table" class="form-input" v-model="tableName" onchange="tableChange(this)">
+			<option value="">请选择</option>
+			<option th:each="item: ${tableList}" th:value="${item.value}" th:text="${item.text}"></option>
+		</select> 字段: <select id="column" multiple="multiple" v-model="colVal" style="height: 100px">
+			<option v-for="item in colList" :value="item.value">{{item.text}}</option>
 		</select>
-		
-		<span v-if="getTdType(k) == 'action'">
-			<button @click="editOrAdd(v.id, row)" :disabled="v.disabled"><span v-if="item[v.id] == ''">新增</span><span v-if="item[v.id] != ''">修改</span></button>
-		</span>
-	</td>
-</tr>
-</table>
+		<button type="button" onclick="exec()">执行</button>
+	</form>
 
 
-<div id="modal">
-<modal v-if="modal.showModal" :modal="modal"  @ok="ok" @close="modal.showModal = false">
+	<table id="result">
+		<tr>
+			<th v-for="item in title">{{item}}</th>
+			<th>操作</th>
+		</tr>
+		<tr v-for="(item, row) in list">
+			<td v-for="(v, k) in item" v-if="get(k)"><span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getSqlName2(item, k)}} <input type="text"
+					v-model="item[k]"> <a href="#this" @click="selectSql(row, k)">选择</a>
+			</span> <span v-if="getTdType(k) == 'chain'" class="sqlSpan">{{getSqlName2(item, k)}} <input type="text" v-model="item[k]"> <a href="#this"
+					@click="selectChain(row, k)">选择</a>
+			</span> <span v-if="getTdType(k) == 'timestamp'" class="timestampSpan">{{v}}</span> <input v-if="getTdType(k) == 'number'" type="number"
+				class="numberInput" v-model="item[k]" @keyup="dataChange(row, k)"> <input v-if="getTdType(k) == 'text'" type="text" v-model="item[k]"
+				@keyup="dataChange(row, k)"> <input v-if="getTdType(k) == 'date'" type="date" class="dateInput" v-model="item[k]"
+				@change="dataChange(row, k)"> <select v-if="getTdType(k) == 'select'" v-model="item[k]" @change="dataChange(row, k)">
+					<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
+			</select> <span v-if="getTdType(k) == 'action'">
+					<button @click="editOrAdd(v.id, row)" :disabled="v.disabled">
+						<span v-if="item[v.id] == ''">新增</span><span v-if="item[v.id] != ''">修改</span>
+					</button>
+			</span></td>
+		</tr>
+	</table>
 
-<div slot="body">
-<div>
-	<input type="text" v-model="pojo.queryVal" maxlength="32">
-	<button @click="sqlQuery()">搜索</button>
-</div>
-<table>
-	<tr>
-		<th v-for="v in title">{{v}}</th>
-		<th>操作</th>
-	</tr>
-	<tr v-for="item in list">
-		<td v-for="v in item">{{v}}</td>
-		<td><a href="#this" @click="sqlOk(item)">OK</a></td>
-	</tr>
-</table>
-</div>
-</modal>
-</div>
+
+	<div id="modal">
+		<modal v-if="modal.showModal" :modal="modal" @ok="ok" @close="modal.showModal = false">
+
+		<div slot="body">
+			<div>
+				<input type="text" v-model="pojo.queryVal" maxlength="32">
+				<button @click="sqlQuery()">搜索</button>
+				<span>总量:</span><span>{{count}}</span>
+			</div>
+			<table>
+				<tr>
+					<th v-for="v in title">{{v}}</th>
+					<th>操作</th>
+				</tr>
+				<tr v-for="item in list">
+					<td v-for="v in item">{{v}}</td>
+					<td><a href="#this" @click="sqlOk(item)">OK</a></td>
+				</tr>
+			</table>
+		</div>
+		</modal>
+	</div>
 
 
-<div id="chainModal">
-<modal v-if="modal.showModal" :modal="modal" :pojo="pojo"  @ok="ok" @close="modal.showModal = false">
-<table slot="body">
-	<tr>
-		<td>
-			<select onChange="firstChange(this)">
-				<option value="">请选择</option>
-				<option v-for="item in firstList" :value="item.v">{{item.t}}</option>
-			</select>
-		</td>
-		<td>
-			<select v-model="pojo.value">
-				<option value="">请选择</option>
-				<option v-for="item in secondList" :value="item.v">{{item.t}}</option>
-			</select>
-		</td>
-	</tr>
-</table>
-</modal>
-</div>
+	<div id="chainModal">
+		<modal v-if="modal.showModal" :modal="modal" :pojo="pojo" @ok="ok" @close="modal.showModal = false">
+		<table slot="body">
+			<tr>
+				<td><select onChange="firstChange(this)">
+						<option value="">请选择</option>
+						<option v-for="item in firstList" :value="item.v">{{item.t}}</option>
+				</select></td>
+				<td><select v-model="pojo.value">
+						<option value="">请选择</option>
+						<option v-for="item in secondList" :value="item.v">{{item.t}}</option>
+				</select></td>
+			</tr>
+		</table>
+		</modal>
+	</div>
 
 
 

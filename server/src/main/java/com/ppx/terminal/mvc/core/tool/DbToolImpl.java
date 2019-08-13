@@ -122,14 +122,27 @@ public class DbToolImpl extends MyDaoSupport {
 		}
 		
 		
+		
+		
+		// 总数
+		String countSql = "select count(*) from (" + sql +") t";
+		int count = -1;
+		if (Strings.isEmpty(queryVal)) {
+			count = getJdbcTemplate().queryForObject(countSql, Integer.class);
+		}
+		else {
+			count = getJdbcTemplate().queryForObject(countSql, Integer.class, "%" + queryVal + "%");
+		}
+		
+		// 列表
 		List<Map<String, Object>> list = null;
+		sql = sql + " limit 10";
 		if (Strings.isEmpty(queryVal)) {
 			list = getJdbcTemplate().queryForList(sql);
 		}
 		else {
 			list = getJdbcTemplate().queryForList(sql, "%" + queryVal + "%");
 		}
-		
 		
 		for (Map<String, Object> map : list) {
 			map.keySet().forEach(k -> {
@@ -138,6 +151,9 @@ public class DbToolImpl extends MyDaoSupport {
 				}
 			});
 		}
+		
+		returnMap.put("count", count);
+		
 		returnMap.put("list", list);
 		
 		return returnMap;
