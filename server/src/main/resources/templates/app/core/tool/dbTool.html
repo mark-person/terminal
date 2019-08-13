@@ -111,6 +111,13 @@ function exec() {
     		result.title.push(getColName(o));
     	})
     	
+    	// 添加一行用来新增
+    	var newObj = {};
+    	for (i in myForm.colVal) {
+    		newObj[myForm.colVal[i]] = "";
+    	}
+    	alert(JSON.stringify(newObj));
+    	res.data.list.push(newObj);
     	
     	res.data.list.forEach(function(o, i) {
     		var id = "";
@@ -119,6 +126,8 @@ function exec() {
     		}
     		o["action"] = {id:id, disabled:true};
     	})
+    	
+    	
     	
     	result.list = res.data.list;
     });
