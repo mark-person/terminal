@@ -116,7 +116,6 @@ function exec() {
     	for (i in myForm.colVal) {
     		newObj[myForm.colVal[i]] = "";
     	}
-    	alert(JSON.stringify(newObj));
     	res.data.list.push(newObj);
     	
     	res.data.list.forEach(function(o, i) {
