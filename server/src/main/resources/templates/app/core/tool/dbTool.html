@@ -294,7 +294,7 @@ function get(v) {
 
 
 <div id="modal">
-<modal v-if="modal.showModal" :modal="modal" :pojo="pojo" :validate="v" @ok="ok" @close="modal.showModal = false">
+<modal v-if="modal.showModal" :modal="modal"  @ok="ok" @close="modal.showModal = false">
 
 <div slot="body">
 <div>
@@ -314,6 +314,9 @@ function get(v) {
 </div>
 </modal>
 </div>
+
+
+
 
 
 </body>
