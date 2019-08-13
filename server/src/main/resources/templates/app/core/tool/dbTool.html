@@ -96,10 +96,13 @@ window.onload = function() {
 	});
 	document.querySelectorAll(".blockTemplate").forEach(function(o, i) {o.style.display = "block";})
 	
-	 $('#table').select2();
+	$('#table').select2();
 }
 
 function tableChange(obj) {
+	myForm.tableName = obj.value;
+	
+	
 	let param = new FormData();
 	param.append('tableName', obj.value);
     axios.post(contextPath + "dbTool/listColumn", param).then(function(res) {
@@ -205,7 +208,17 @@ function selectChain(row, key) {
     axios.post(contextPath + "dbTool/listChainData", param).then(function(res) {
     	chainModal.firstList = res.data.list;
     	chainModal.secondList = [];
+    	
     	showModal('测试',  chainModal);
+    	
+    	var interval = setInterval(function() {
+    		if ($("#chainModal .simple-select2").length != 0) {
+    			$("#chainModal .simple-select2").select2();
+    			window.clearInterval(interval);
+    		}
+    	}, 10);
+    	
+    	
     });
 }
 
@@ -301,6 +314,10 @@ function firstChange(obj) {
     });
 }
 
+function secondChange(obj) {
+	chainModal.pojo.value = obj.value;
+}
+
 </script>
 
 <style type="text/css">
@@ -386,14 +403,18 @@ function firstChange(obj) {
 		<modal v-if="modal.showModal" :modal="modal" :pojo="pojo" @ok="ok" @close="modal.showModal = false">
 		<table slot="body">
 			<tr>
-				<td><select onChange="firstChange(this)">
+				<td>
+					<select class="simple-select2 form-input" onchange="firstChange(this)">
 						<option value="">请选择</option>
 						<option v-for="item in firstList" :value="item.v">{{item.t}}</option>
-				</select></td>
-				<td><select v-model="pojo.value">
+					</select>
+				</td>
+				<td>
+					<select class="simple-select2 form-input" v-model="pojo.value" onchange="secondChange(this)">
 						<option value="">请选择</option>
 						<option v-for="item in secondList" :value="item.v">{{item.t}}</option>
-				</select></td>
+					</select>
+				</td>
 			</tr>
 		</table>
 		</modal>
