@@ -170,35 +170,61 @@ public class DbToolImpl extends MyDaoSupport {
 	}
 	
 	public Map<String, Object> update(Map<String, String[]> map) {
+		String tableName = map.get("tableName")[0];
+		
 		Set<String> keySet = map.keySet();
 		
-		List<Object> para = new ArrayList<Object>();
+		String pkKey = (String)(keySet.toArray()[0]);
+		String pkVal = map.get(pkKey)[0];
 		
-		String tableName = map.get("tableName")[0];
-		String pkSql = "";
-		Object pkObj = null;
-		StringBuilder sqlSb = new StringBuilder();
-		for (String key : keySet) {
-			if ("".equals(pkSql)) {
-				pkSql = key + " = ?";
-				pkObj = map.get(key)[0];
-				continue;
+		
+		if (Strings.isEmpty(pkVal)) {
+			// 新增 >>>>>>>>>>>>>>
+			List<String> colList = new ArrayList<String>();
+			List<String> questionList = new ArrayList<String>();
+			List<Object> valList = new ArrayList<Object>();
+			for (String key : keySet) {
+				if (key.equals("tableName") || key.equals(pkKey)) {
+					continue;
+				}
+				colList.add(key);
+				questionList.add("?");
+				valList.add(map.get(key)[0]);
 			}
-			
-			if (key.equals("tableName")) {
-				continue;
-			}
-			if (map.get(key) != null) {
-				sqlSb.append(key + " = " + "?,");
-				para.add(map.get(key)[0]);
-			}
+			String insertSql = "insert into " + tableName + "(" + Strings.join(colList, ',') + ") values(" + Strings.join(questionList, ',') + ")";
+			getJdbcTemplate().update(insertSql, valList.toArray());
+			return ControllerReturn.of(40000, "新增成功");
 		}
-		para.add(pkObj);
-		String updateSql = "update " + tableName + " set " + sqlSb.substring(0, sqlSb.length() - 1) + " where " + pkSql;
-		getJdbcTemplate().update(updateSql, para.toArray());
-		System.out.println(".....updateSql:" + updateSql);
+		else {
+			// 修改 >>>>>>>>>>>>>>
+			List<Object> para = new ArrayList<Object>();
+			String pkSql = "";
+			Object pkObj = null;
+			StringBuilder sqlSb = new StringBuilder();
+			for (String key : keySet) {
+				if ("".equals(pkSql)) {
+					pkSql = key + " = ?";
+					pkObj = map.get(key)[0];
+					continue;
+				}
+				
+				if (key.equals("tableName")) {
+					continue;
+				}
+				if (map.get(key) != null) {
+					sqlSb.append(key + " = " + "?,");
+					para.add(map.get(key)[0]);
+				}
+			}
+			para.add(pkObj);
+			String updateSql = "update " + tableName + " set " + sqlSb.substring(0, sqlSb.length() - 1) + " where " + pkSql;
+			getJdbcTemplate().update(updateSql, para.toArray());
+			return ControllerReturn.of(40001, "修改成功");
+		}
 		
-		return ControllerReturn.of();
+		
+		
+		
 	}
 	
 	

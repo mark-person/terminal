@@ -95,7 +95,6 @@ function getColName(colVal) {
 	
 	myForm.colList.forEach(function(o, i) {
 		if (o.value == colVal) {
-			alert(o.text)
 			return o.text;
 		} 
 	})
@@ -215,7 +214,7 @@ function dataChange(row, key) {
 }
 
 
-function edit(id, row) {
+function editOrAdd(id, row) {
 	var rowObj = result.list[row];
 	
 	var pojo = {};
@@ -224,16 +223,19 @@ function edit(id, row) {
 	needUpdate[row].forEach(function(o, i) {
 		pojo[o] = rowObj[o];
 	});
-	
 	var param = Qs.stringify(pojo);
+	
 	axios.post(contextPath + "dbTool/edit", param).then(function(res) {
-    	alert(res.data.code);
+    	if (res.data.code == 40000) {
+    		exec();
+    	}
     });
 }
 
 function get(v) {
 	return v.indexOf('__desc') == -1
 }
+
 </script>
 
 <style type="text/css">
@@ -284,7 +286,7 @@ function get(v) {
 		</select>
 		
 		<span v-if="getTdType(k) == 'action'">
-			<button @click="edit(v.id, row)" :disabled="v.disabled">修改</button>
+			<button @click="editOrAdd(v.id, row)" :disabled="v.disabled"><span v-if="item[v.id] == ''">新增</span><span v-if="item[v.id] != ''">修改</span></button>
 		</span>
 	</td>
 </tr>
