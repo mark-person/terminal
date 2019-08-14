@@ -59,6 +59,7 @@ window.onload = function() {
 
 function tableChange(obj) {
 	myForm.tableName = obj.value;
+	myForm.colVal = [];
 	
 	let param = new FormData();
 	param.append('tableName', obj.value);
@@ -245,13 +246,34 @@ function secondChange(obj) {
 	chainModal.pojo.value = obj.value;
 }
 
+function columnClick(value, i) {
+	var obj = myForm.colList[i];
+	if (obj.spanClass == "columnSelected") {
+		obj.spanClass = "";
+		for (var j = 0; j < myForm.colVal.length; j++) {
+			myForm.colVal[j] == value;
+			myForm.colVal.splice(j, j);
+		}
+	}
+	else {
+		obj.spanClass = "columnSelected";
+		myForm.colVal.push(value);
+	}
+	
+	Vue.set(myForm.colList, i, obj);
+	
+	alert(myForm.colVal)
+}
+
 </script>
 
 <style type="text/css">
+.columnSelected {background-color: gray; color:white;}
+
 .column-div {
-	margin:15px 5px;
+	/* margin:15px 5px;*/
 }
-.column-span {
+.column-div>span {
 	border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;padding:5px;margin:0px 5px;cursor: pointer;
 	line-height: 36px;
 }
@@ -259,7 +281,7 @@ function secondChange(obj) {
 </head>
 <body class="blockTemplate">
 	<form id="myForm">
-		<div>
+	
 		表: <select id="table" class="form-input" v-model="tableName" onchange="tableChange(this)">
 			<option value="">请选择</option>
 			<option th:each="item: ${tableList}" th:value="${item.value}" th:text="${item.text}"></option>
@@ -269,9 +291,8 @@ function secondChange(obj) {
 			<option v-for="item in colList" :value="item.value">{{item.text}}</option>
 		</select>
 		-->
-		
-		
-			<span class="column-span" v-for="item in colList">{{item.text}}</span>
+		<div class="column-div">
+			<span v-for="(item, i) in colList" @click="columnClick(item.value, i)" :class="item.spanClass">{{item.text}}</span>
 		</div>
 		
 		<button type="button" onclick="exec()">执行</button>
