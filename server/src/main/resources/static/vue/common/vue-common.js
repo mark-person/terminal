@@ -97,9 +97,6 @@ function modal(id, validateFun, okFun) {
 	      	modal:{showModal:false,title:'',width:'500px'},
 	      	pojo:{}
 		},
-		mounted : function() {
-    		
-    	},
 		computed: {
 			v:function() {
 				if (typeof validateFun == "function") return validateFun(this.pojo);

@@ -90,11 +90,6 @@ public class DbToolImpl extends MyDaoSupport {
 	}
 	
 	
-	
-	
-	
-	
-	
 	// 
 	public Map<String, Object> listSqlData(String tableName, String columnName, String queryVal) {
 		Map<String, Object> returnMap = new HashMap<String, Object>();

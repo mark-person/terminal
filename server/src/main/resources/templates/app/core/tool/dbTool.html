@@ -15,18 +15,13 @@ var form;
 var result;
 window.onload = function() {
 	
-	
-	myModal = modal("modal", null, function(pojo) {
-		
-	});
-	
+	myModal = modal("modal", null, function(pojo) {});
 	
 	chainModal = modal("chainModal", null, function(pojo) {
 		if (pojo.value == undefined || pojo.value == "") {
 			alert("请选择");
 			return;
 		}
-		
 		
 		var id = pojo.value;
 		var name = "";
@@ -42,29 +37,14 @@ window.onload = function() {
 		chainModal.modal.showModal = false;
 		dataChange(chainModal.row, chainModal.key);
 	});
-
 	
 	myForm = new Vue({
 	    el:'#myForm',
-	    data:{
-	    	tableName:'',
-	    	colVal:[],
-	    	colList:[]
-	    }
+	    data:{tableName:'',colVal:[],colList:[]}
 	});
 	result = new Vue({
 	    el:'#result',
-	    data:{
-	    	title:[],
-	        list:[],
-		    dict:{},
-		    type:{},
-		    sql:[],
-		    chain:[]
-	    },
-	    computed: {
-	    	
-	    },
+	    data:{title:[], list:[], dict:{},type:{},sql:[],chain:[]},
 	    methods: {
 	    	getSqlVal:function(v) {
 	    		var item = v.split(":");
@@ -73,26 +53,10 @@ window.onload = function() {
 	    		}
 	    		return "";
 	    	},
-	    	getSqlName2:function(item, key) {
+	    	getDesc:function(item, key) {
 	    		return item[key + "__desc"];
-	    		
-	    		/*
-	    		var item = v.split(":");
-	    		if (item.length >= 2) {
-	    			return item[1];
-	    		}
-	    		return "";*/
-	    	}
-	    }, 
-	    watch: {
-	    	list: {
-	    		handler(newValue) {
-	    		　　// alert("newValue:" + JSON.stringify(newValue))
-	    		},
-	    		deep: true
 	    	}
 	    }
-	    
 	});
 	document.querySelectorAll(".blockTemplate").forEach(function(o, i) {o.style.display = "block";})
 	
@@ -101,7 +65,6 @@ window.onload = function() {
 
 function tableChange(obj) {
 	myForm.tableName = obj.value;
-	
 	
 	let param = new FormData();
 	param.append('tableName', obj.value);
@@ -161,14 +124,9 @@ function exec() {
     		}
     		o["action"] = {id:id, disabled:true};
     	})
-    	
-    	
-    	
     	result.list = res.data.list;
     });
 }
-
-
 
 function selectSql(row, key) {
 	myModal.row = row;
@@ -216,47 +174,23 @@ function selectChain(row, key) {
     			$("#chainModal .simple-select2").select2();
     			window.clearInterval(interval);
     		}
-    	}, 10);
-    	
-    	
+    	}, 50);
     });
 }
 
-
-
-
-//  number date text action select sql
 function getTdType(key) {
+	var keyType = result.type[key];
 	
-	if (result.type[key] == "timestamp") {
-		return "timestamp";
-	}
+	if (result.sql.indexOf(key) > -1) return "sql";
+	if (result.chain.indexOf(key) > -1) return "chain";
+	if (result.dict[key]) return "select";
+	if (key == "action") return "action";
 	
-	if (result.sql.indexOf(key) > -1) {
-		return "sql";
-	}
+	if (keyType == "decimal" || keyType == "int") return "number";
+	if (keyType == "varchar" || keyType == "timestamp" || keyType == "date") return keyType;
 	
-	if (result.chain.indexOf(key) > -1) {
-		return "chain";
-	}
-	
-	if (result.type[key] == "decimal" || result.type[key] == "int") {
-		return "number";
-	}
-	
-	if (result.type[key] == "date") {
-		return "date";
-	}
-	if (result.dict[key]) {
-		return "select";
-	}
-	if (key == "action") {
-		return "action";
-	}
-	return "text";
+	return "span";
 }
-
-
 
 function sqlQuery() {
 	myModal.pojo.tableName = myForm.tableName;
@@ -269,7 +203,6 @@ function sqlQuery() {
     });
 }
 
-
 var needUpdate = {};
 function dataChange(row, key) {
 	if (!needUpdate[row]) {
@@ -280,8 +213,8 @@ function dataChange(row, key) {
 	result.list[row]["action"].disabled = false;
 }
 
-
 function editOrAdd(id, row) {
+	myModal.row = row;
 	var rowObj = result.list[row];
 	
 	var pojo = {};
@@ -296,6 +229,9 @@ function editOrAdd(id, row) {
     	if (res.data.code == 40000) {
     		exec();
     	}
+    	else if (res.data.code == 40001) {
+    		result.list[myModal.row]["action"].disabled = true;
+    	}
     });
 }
 
@@ -305,12 +241,10 @@ function get(v) {
 
 function firstChange(obj) {
 	var parentId = obj.value;
-	
 	var param = Qs.stringify({tableName:myForm.tableName, columnName:chainModal.key, parentId:parentId});
     axios.post(contextPath + "dbTool/listChainSecondData", param).then(function(res) {
     	chainModal.secondList = res.data.list;
     	chainModal.$forceUpdate();
-    	
     });
 }
 
@@ -338,8 +272,6 @@ function secondChange(obj) {
 </style>
 </head>
 <body class="blockTemplate">
-
-
 	<form id="myForm">
 		表: <select id="table" class="form-input" v-model="tableName" onchange="tableChange(this)">
 			<option value="">请选择</option>
@@ -350,37 +282,39 @@ function secondChange(obj) {
 		<button type="button" onclick="exec()">执行</button>
 	</form>
 
-
 	<table id="result">
 		<tr>
 			<th v-for="item in title">{{item}}</th>
 			<th>操作</th>
 		</tr>
 		<tr v-for="(item, row) in list">
-			<td v-for="(v, k) in item" v-if="get(k)"><span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getSqlName2(item, k)}} <input type="text"
-					v-model="item[k]"> <a href="#this" @click="selectSql(row, k)">选择</a>
-			</span> <span v-if="getTdType(k) == 'chain'" class="sqlSpan">{{getSqlName2(item, k)}} <input type="text" v-model="item[k]"> <a href="#this"
-					@click="selectChain(row, k)">选择</a>
-			</span> <span v-if="getTdType(k) == 'timestamp'" class="timestampSpan">{{v}}</span> <input v-if="getTdType(k) == 'number'" type="number"
-				class="numberInput" v-model="item[k]" @keyup="dataChange(row, k)"> <input v-if="getTdType(k) == 'text'" type="text" v-model="item[k]"
-				@keyup="dataChange(row, k)"> <input v-if="getTdType(k) == 'date'" type="date" class="dateInput" v-model="item[k]"
-				@change="dataChange(row, k)"> <select v-if="getTdType(k) == 'select'" v-model="item[k]" @change="dataChange(row, k)">
-					<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
-			</select> <span v-if="getTdType(k) == 'action'">
-					<button @click="editOrAdd(v.id, row)" :disabled="v.disabled">
-						<span v-if="item[v.id] == ''">新增</span><span v-if="item[v.id] != ''">修改</span>
-					</button>
-			</span></td>
+		<td v-for="(v, k) in item" v-if="get(k)">
+			<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getDesc(item, k)}}
+				<input type="hidden" v-model="item[k]"> <a href="#this" @click="selectSql(row, k)">选择</a>
+			</span>
+			<span v-if="getTdType(k) == 'chain'" class="sqlSpan">{{getDesc(item, k)}}
+				<input type="hidden" v-model="item[k]"><a href="#this" @click="selectChain(row, k)">选择</a>
+			</span>
+			<select v-if="getTdType(k) == 'select'" class="form-input" v-model="item[k]" @change="dataChange(row, k)">
+				<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
+			</select>
+			<input v-if="getTdType(k) == 'number'" class="form-input numberInput" type="number" v-model="item[k]" @keyup="dataChange(row, k)"> 
+			<input v-if="getTdType(k) == 'varchar'" class="form-input" type="text" v-model="item[k]" @keyup="dataChange(row, k)">
+			<input v-if="getTdType(k) == 'date'" class="form-input dateInput" type="date" v-model="item[k]" @change="dataChange(row, k)"> 
+			<span v-if="getTdType(k) == 'timestamp'" class="timestampSpan">{{v}}</span>
+			<span v-if="getTdType(k) == 'span'">{{v}}</span>
+			<span v-if="getTdType(k) == 'action'">
+				<button @click="editOrAdd(v.id, row)" :disabled="v.disabled"><span v-if="item[v.id] == ''">新增</span><span v-if="item[v.id] != ''">修改</span></button>
+			</span>
+		</td>
 		</tr>
 	</table>
 
-
 	<div id="modal">
 		<modal v-if="modal.showModal" :modal="modal" @ok="ok" @close="modal.showModal = false">
-
 		<div slot="body">
 			<div>
-				<input type="text" v-model="pojo.queryVal" maxlength="32">
+				<input type="text" class="form-input" v-model="pojo.queryVal" maxlength="32">
 				<button @click="sqlQuery()">搜索</button>
 				<span>总量:</span><span>{{count}}</span>
 			</div>
@@ -397,8 +331,7 @@ function secondChange(obj) {
 		</div>
 		</modal>
 	</div>
-
-
+	
 	<div id="chainModal">
 		<modal v-if="modal.showModal" :modal="modal" :pojo="pojo" @ok="ok" @close="modal.showModal = false">
 		<table slot="body">
@@ -420,9 +353,6 @@ function secondChange(obj) {
 		</modal>
 	</div>
 
-
-
-
-
 </body>
 </html>
+
