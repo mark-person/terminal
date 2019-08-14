@@ -52,7 +52,7 @@ public class DbToolContoller {
 		
 		Map<String, Object> typeMap = new HashMap<String, Object>();
 		Map<String, Object> dictMap = new HashMap<String, Object>();
-		List<String> sqlList = new ArrayList<String>();
+		List<String> singleList = new ArrayList<String>();
 		List<String> chainList = new ArrayList<String>();
 		
 		for (Map<String, Object> map : list) {
@@ -78,13 +78,13 @@ public class DbToolContoller {
 				chainList.add(value);
 			}
 			else if (comment.contains("select")) {
-				sqlList.add(value);
+				singleList.add(value);
 			}
 		}
 		
 		
 		
-		return ControllerReturn.of("list", list, "dict", dictMap, "type", typeMap, "sql", sqlList, "chain", chainList);
+		return ControllerReturn.of("list", list, "dict", dictMap, "type", typeMap, "single", singleList, "chain", chainList);
 	}
 	
 	@RequestMapping("/listValue") @ResponseBody
@@ -96,9 +96,9 @@ public class DbToolContoller {
 	}
 	
 	// >>>>>>>>>>>>>>>>>>
-	@RequestMapping("/listSqlData") @ResponseBody
-	public Map<String, Object> listSqlData(String tableName, String columnName, String queryVal) {
-		Map<String, Object> map = impl.listSqlData(tableName, columnName, queryVal);
+	@RequestMapping("/listSingleData") @ResponseBody
+	public Map<String, Object> listSingleData(String tableName, String columnName, String queryVal) {
+		Map<String, Object> map = impl.listSingleData(tableName, columnName, queryVal);
 		return ControllerReturn.of(map);
 	}
 	

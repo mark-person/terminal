@@ -91,7 +91,7 @@ public class DbToolImpl extends MyDaoSupport {
 	
 	
 	// 
-	public Map<String, Object> listSqlData(String tableName, String columnName, String queryVal) {
+	public Map<String, Object> listSingleData(String tableName, String columnName, String queryVal) {
 		Map<String, Object> returnMap = new HashMap<String, Object>();
 		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT"
 				+ " from information_schema.COLUMNS where TABLE_NAME = ? and COLUMN_NAME = ?";

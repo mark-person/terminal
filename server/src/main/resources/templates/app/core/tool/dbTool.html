@@ -10,12 +10,13 @@
 
 </head>
 <script type="text/javascript" th:inline="javascript">
-var vm;
-var form;
+var singleModal;
+var chainModal;
+var myForm;
 var result;
 window.onload = function() {
 	
-	myModal = modal("modal", null, function(pojo) {});
+	singleModal = modal("modal", null, function(pojo) {});
 	
 	chainModal = modal("chainModal", null, function(pojo) {
 		if (pojo.value == undefined || pojo.value == "") {
@@ -44,15 +45,8 @@ window.onload = function() {
 	});
 	result = new Vue({
 	    el:'#result',
-	    data:{title:[], list:[], dict:{},type:{},sql:[],chain:[]},
+	    data:{title:[], list:[], dict:{},type:{},single:[],chain:[]},
 	    methods: {
-	    	getSqlVal:function(v) {
-	    		var item = v.split(":");
-	    		if (item.length >= 2) {
-	    			return item[0];
-	    		}
-	    		return "";
-	    	},
 	    	getDesc:function(item, key) {
 	    		return item[key + "__desc"];
 	    	}
@@ -72,7 +66,7 @@ function tableChange(obj) {
     	myForm.colList = res.data.list;
     	result.dict = res.data.dict;
     	result.type = res.data.type;
-    	result.sql = res.data.sql;
+    	result.single = res.data.single;
     	result.chain = res.data.chain;
     });
 }
@@ -128,20 +122,20 @@ function exec() {
     });
 }
 
-function selectSql(row, key) {
-	myModal.row = row;
-	myModal.key = key;
+function selectSingle(row, key) {
+	singleModal.row = row;
+	singleModal.key = key;
 	
 	var param = Qs.stringify({tableName:myForm.tableName, columnName:key});
-    axios.post(contextPath + "dbTool/listSqlData", param).then(function(res) {
-    	myModal.title = res.data.title;
-    	myModal.list = res.data.list;
-    	myModal.count = res.data.count;
-    	showModal('测试',  myModal);
+    axios.post(contextPath + "dbTool/listSingleData", param).then(function(res) {
+    	singleModal.title = res.data.title;
+    	singleModal.list = res.data.list;
+    	singleModal.count = res.data.count;
+    	showModal('测试',  singleModal);
     });
 }
 
-function sqlOk(item) {
+function singleOk(item) {
 	var id = "";
 	var name = "";
 	for (i in item) {
@@ -149,16 +143,15 @@ function sqlOk(item) {
 		id = id === "" ? item[i] : id;
 	}
 	
-	var i = myModal.row;
-	result.list[i][myModal.key] = id;
-	result.list[i][myModal.key + "__desc"] = name;
+	var i = singleModal.row;
+	result.list[i][singleModal.key] = id;
+	result.list[i][singleModal.key + "__desc"] = name;
 	
 	Vue.set(result.list, i, result.list[i]);
-	myModal.modal.showModal = false;
-	dataChange(myModal.row, myModal.key);
+	singleModal.modal.showModal = false;
+	dataChange(singleModal.row, singleModal.key);
 }
 
-// chain ...............
 function selectChain(row, key) {
 	chainModal.row = row;
 	chainModal.key = key;
@@ -181,7 +174,7 @@ function selectChain(row, key) {
 function getTdType(key) {
 	var keyType = result.type[key];
 	
-	if (result.sql.indexOf(key) > -1) return "sql";
+	if (result.single.indexOf(key) > -1) return "single";
 	if (result.chain.indexOf(key) > -1) return "chain";
 	if (result.dict[key]) return "select";
 	if (key == "action") return "action";
@@ -192,14 +185,14 @@ function getTdType(key) {
 	return "span";
 }
 
-function sqlQuery() {
-	myModal.pojo.tableName = myForm.tableName;
-	myModal.pojo.columnName = myModal.key;
-	var param = Qs.stringify(myModal.pojo);
-	axios.post(contextPath + "dbTool/listSqlData", param).then(function(res) {
-    	myModal.list = res.data.list;
-    	myModal.count = res.data.count;
-    	myModal.$forceUpdate();
+function singleQuery() {
+	singleModal.pojo.tableName = myForm.tableName;
+	singleModal.pojo.columnName = singleModal.key;
+	var param = Qs.stringify(singleModal.pojo);
+	axios.post(contextPath + "dbTool/listSingleData", param).then(function(res) {
+    	singleModal.list = res.data.list;
+    	singleModal.count = res.data.count;
+    	singleModal.$forceUpdate();
     });
 }
 
@@ -214,7 +207,7 @@ function dataChange(row, key) {
 }
 
 function editOrAdd(id, row) {
-	myModal.row = row;
+	singleModal.row = row;
 	var rowObj = result.list[row];
 	
 	var pojo = {};
@@ -230,7 +223,7 @@ function editOrAdd(id, row) {
     		exec();
     	}
     	else if (res.data.code == 40001) {
-    		result.list[myModal.row]["action"].disabled = true;
+    		result.list[singleModal.row]["action"].disabled = true;
     	}
     });
 }
@@ -255,17 +248,7 @@ function secondChange(obj) {
 </script>
 
 <style type="text/css">
-.number-input {
-	min-width: 80px;
-}
 
-.date-input {
-	min-width: 120px;
-}
-
-.timestamp-span {
-	min-width: 100px;
-}
 </style>
 </head>
 <body class="blockTemplate">
@@ -286,10 +269,10 @@ function secondChange(obj) {
 		</tr>
 		<tr v-for="(item, row) in list">
 		<td v-for="(v, k) in item" v-if="get(k)">
-			<span v-if="getTdType(k) == 'sql'" class="sqlSpan">{{getDesc(item, k)}}
-				<input type="hidden" v-model="item[k]"> <a href="#this" @click="selectSql(row, k)">选择</a>
+			<span v-if="getTdType(k) == 'single'">{{getDesc(item, k)}}
+				<input type="hidden" v-model="item[k]"> <a href="#this" @click="selectSingle(row, k)">选择</a>
 			</span>
-			<span v-if="getTdType(k) == 'chain'" class="sqlSpan">{{getDesc(item, k)}}
+			<span v-if="getTdType(k) == 'chain'">{{getDesc(item, k)}}
 				<input type="hidden" v-model="item[k]"><a href="#this" @click="selectChain(row, k)">选择</a>
 			</span>
 			<select v-if="getTdType(k) == 'select'" class="form-input" v-model="item[k]" @change="dataChange(row, k)">
@@ -312,17 +295,14 @@ function secondChange(obj) {
 		<div slot="body">
 			<div>
 				<input type="text" class="form-input" v-model="pojo.queryVal" maxlength="32">
-				<button @click="sqlQuery()">搜索</button>
-				<span>总量:</span><span>{{count}}</span>
+				<button @click="singleQuery()">搜索</button><span>总量:</span><span>{{count}}</span>
 			</div>
 			<table>
 				<tr>
-					<th v-for="v in title">{{v}}</th>
-					<th>操作</th>
+					<th v-for="v in title">{{v}}</th><th>操作</th>
 				</tr>
 				<tr v-for="item in list">
-					<td v-for="v in item">{{v}}</td>
-					<td><a href="#this" @click="sqlOk(item)">OK</a></td>
+					<td v-for="v in item">{{v}}</td><td><a href="#this" @click="singleOk(item)">OK</a></td>
 				</tr>
 			</table>
 		</div>
