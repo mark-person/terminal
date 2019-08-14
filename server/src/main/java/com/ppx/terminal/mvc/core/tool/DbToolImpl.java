@@ -21,20 +21,41 @@ public class DbToolImpl extends MyDaoSupport {
 		return getJdbcTemplate().queryForList(sql);
 	}
 	
-	public List<Map<String, Object>> listColumn(String tableName) {
+	public List<Map<String, Object>> listColumnMsg(String tableName) {
 		// DATA_TYPE = 'date'
 		// ID -- 其它说明
-		String sql = "select COLUMN_NAME value, trim(substring_index(COLUMN_COMMENT, '--', 1)) comment, DATA_TYPE"
+		// IS_NULLABLE:YES|NO COLUMN_KEY:PRI
+		String sql = "select COLUMN_NAME value, trim(substring_index(COLUMN_COMMENT, '--', 1)) comment, DATA_TYPE, IS_NULLABLE, COLUMN_KEY"
 				+ " from information_schema.COLUMNS where TABLE_NAME = ? order by ORDINAL_POSITION";
 		List<Map<String, Object>> list = getJdbcTemplate().queryForList(sql, tableName);
 		
+		
 		for (Map<String, Object> map : list) {
+			
 			String comment = (String)map.get("comment");
 			String value = (String)map.get("value");
-			String text = comment.split(";")[0] + "(" + value + ")";
+			String isNull = (String)map.get("IS_NULLABLE");
+			String key = (String)map.get("COLUMN_KEY");
+			
+			if ("NO".equals(isNull)) {
+				isNull = "*";
+			}
+			else {
+				isNull = "";
+			}
+			
+			if ("PRI".equals(key)) {
+				key = "PK";
+			}
+			else {
+				key = "";
+			}
+			
+			
+			String text = comment.split(";")[0] + "(" + value + ")" + isNull + key;
 			map.put("text", text);
+			
 		}
-		
 		
 		return list;
 	}

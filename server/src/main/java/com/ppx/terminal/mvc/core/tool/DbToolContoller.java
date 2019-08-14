@@ -47,9 +47,9 @@ public class DbToolContoller {
 	@RequestMapping("/listColumn") @ResponseBody
 	public Map<String, Object> listColumn(String tableName) {
 		
-		List<Map<String, Object>> list = impl.listColumn(tableName);
+		List<Map<String, Object>> list = impl.listColumnMsg(tableName);
 		
-		
+		List<Map<String, Object>> columnlist = new ArrayList<Map<String, Object>>();
 		Map<String, Object> typeMap = new HashMap<String, Object>();
 		Map<String, Object> dictMap = new HashMap<String, Object>();
 		List<String> singleList = new ArrayList<String>();
@@ -80,11 +80,17 @@ public class DbToolContoller {
 			else if (comment.contains("select")) {
 				singleList.add(value);
 			}
+			
+			// 栏位信息
+			Map<String, Object> newMap = new HashMap<String, Object>();
+			newMap.put("value", value);
+			newMap.put("text", (String)map.get("text"));
+			columnlist.add(newMap);
 		}
 		
 		
 		
-		return ControllerReturn.of("list", list, "dict", dictMap, "type", typeMap, "single", singleList, "chain", chainList);
+		return ControllerReturn.of("list", columnlist, "dict", dictMap, "type", typeMap, "single", singleList, "chain", chainList);
 	}
 	
 	@RequestMapping("/listValue") @ResponseBody
