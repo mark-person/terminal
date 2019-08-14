@@ -173,6 +173,9 @@ function selectChain(row, key) {
 }
 
 function getTdType(key) {
+	
+	
+	
 	var keyType = result.type[key];
 	
 	if (result.single.indexOf(key) > -1) return "single";
@@ -180,8 +183,17 @@ function getTdType(key) {
 	if (result.dict[key]) return "select";
 	if (key == "action") return "action";
 	
+	for (var i = 0; i < myForm.colList.length; i++) {
+		if (myForm.colList[i].value == key && myForm.colList[i].key == "PRI") {
+			return "PRI";
+		}
+	}
+	
+	
 	if (keyType == "decimal" || keyType == "int") return "number";
 	if (keyType == "varchar" || keyType == "timestamp" || keyType == "date") return keyType;
+	
+	
 	
 	return "span";
 }
@@ -251,8 +263,10 @@ function columnClick(value, i) {
 	if (obj.spanClass == "columnSelected") {
 		obj.spanClass = "";
 		for (var j = 0; j < myForm.colVal.length; j++) {
-			myForm.colVal[j] == value;
-			myForm.colVal.splice(j, j);
+			if (myForm.colVal[j] == value) {
+				myForm.colVal.splice(j, 1);
+				break;
+			}
 		}
 	}
 	else {
@@ -262,7 +276,17 @@ function columnClick(value, i) {
 	
 	Vue.set(myForm.colList, i, obj);
 	
-	// TODO,发送时对myForm.colList排序
+	// 对myForm.colList排序
+	var newColVal = [];
+	for (var ii = 0; ii < myForm.colList.length; ii++) {
+		for (var jj = 0; jj < myForm.colVal.length; jj++) {
+			if (myForm.colList[ii].value == myForm.colVal[jj]) {
+				newColVal.push(myForm.colVal[jj]);
+				continue;
+			}
+		}
+	}
+	myForm.colVal = newColVal;
 }
 
 </script>
@@ -274,7 +298,7 @@ function columnClick(value, i) {
 	/* margin:15px 5px;*/
 }
 .column-div>span {
-	border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;padding:5px;margin:0px 5px;cursor: pointer;
+	border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;padding:5px;margin:0px 3px;cursor: pointer;
 	line-height: 36px;
 }
 </style>
@@ -305,6 +329,7 @@ function columnClick(value, i) {
 		</tr>
 		<tr v-for="(item, row) in list">
 		<td v-for="(v, k) in item" v-if="get(k)">
+			<span v-if="getTdType(k) == 'PRI'">{{v}}</span>
 			<span v-if="getTdType(k) == 'single'">{{getDesc(item, k)}}
 				<input type="hidden" v-model="item[k]"> <a href="#this" @click="selectSingle(row, k)">选择</a>
 			</span>
@@ -314,10 +339,10 @@ function columnClick(value, i) {
 			<select v-if="getTdType(k) == 'select'" class="form-input" v-model="item[k]" @change="dataChange(row, k)">
 				<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
 			</select>
-			<input v-if="getTdType(k) == 'number'" class="form-input number-input" type="number" v-model="item[k]" @keyup="dataChange(row, k)"> 
+			<input v-if="getTdType(k) == 'number'" class="form-number" type="number" v-model="item[k]" @keyup="dataChange(row, k)"> 
 			<input v-if="getTdType(k) == 'varchar'" class="form-input" type="text" v-model="item[k]" @keyup="dataChange(row, k)">
 			<input v-if="getTdType(k) == 'date'" class="form-input date-input" type="date" v-model="item[k]" @change="dataChange(row, k)"> 
-			<span v-if="getTdType(k) == 'timestamp'" class="timestamp-span">{{v}}</span>
+			<span v-if="getTdType(k) == 'timestamp'" style="white-space: nowrap;">{{v}}</span>
 			<span v-if="getTdType(k) == 'span'">{{v}}</span>
 			<span v-if="getTdType(k) == 'action'">
 				<button @click="editOrAdd(v.id, row)" :disabled="v.disabled"><span v-if="item[v.id] == ''">新增</span><span v-if="item[v.id] != ''">修改</span></button>

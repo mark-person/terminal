@@ -85,6 +85,8 @@ public class DbToolContoller {
 			Map<String, Object> newMap = new HashMap<String, Object>();
 			newMap.put("value", value);
 			newMap.put("text", (String)map.get("text"));
+			newMap.put("key", (String)map.get("COLUMN_KEY"));
+			newMap.put("null", (String)map.get("IS_NULLABLE"));
 			columnlist.add(newMap);
 		}
 		
