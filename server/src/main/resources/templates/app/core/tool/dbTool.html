@@ -248,17 +248,32 @@ function secondChange(obj) {
 </script>
 
 <style type="text/css">
-
+.column-div {
+	margin:15px 5px;
+}
+.column-span {
+	border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;padding:5px;margin:0px 5px;cursor: pointer;
+	line-height: 36px;
+}
 </style>
 </head>
 <body class="blockTemplate">
 	<form id="myForm">
+		<div>
 		表: <select id="table" class="form-input" v-model="tableName" onchange="tableChange(this)">
 			<option value="">请选择</option>
 			<option th:each="item: ${tableList}" th:value="${item.value}" th:text="${item.text}"></option>
-		</select> 字段: <select id="column" multiple="multiple" v-model="colVal" style="height: 100px">
+			</select>
+		<!--  
+		 字段: <select id="column" multiple="multiple" v-model="colVal" style="height: 100px">
 			<option v-for="item in colList" :value="item.value">{{item.text}}</option>
 		</select>
+		-->
+		
+		
+			<span class="column-span" v-for="item in colList">{{item.text}}</span>
+		</div>
+		
 		<button type="button" onclick="exec()">执行</button>
 	</form>
 
