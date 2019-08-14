@@ -42,7 +42,7 @@ create table core_demo (
 ALTER TABLE core_demo ADD INDEX idx_demo_name (demo_name ASC) VISIBLE;
 
 create table core_db_test (
-  test_id 		int not null auto_increment comment 'ID;其它说明',
+  test_id 		int not null auto_increment comment 'ID--其它说明',
   test_name 	varchar(32) not null comment '名称',
   test_date 	date comment '日期',
   primary key (test_id)
