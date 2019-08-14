@@ -45,7 +45,7 @@ window.onload = function() {
 	});
 	result = new Vue({
 	    el:'#result',
-	    data:{title:[], list:[], dict:{},type:{},single:[],chain:[]},
+	    data:{title:[], list:[], dict:{},type:{},single:[],chain:[], primaryKey:[]},
 	    methods: {
 	    	getDesc:function(item, key) {
 	    		return item[key + "__desc"];
@@ -64,9 +64,22 @@ function tableChange(obj) {
 	result.title = [];
 	result.list = [];
 	
+	result.primaryKey = [];
+	
 	let param = new FormData();
 	param.append('tableName', obj.value);
     axios.post(contextPath + "dbTool/listColumn", param).then(function(res) {
+    	// 栏位全部选中
+    	for (i in res.data.list) {
+    		res.data.list[i].spanClass = "columnSelected";
+    		myForm.colVal.push(res.data.list[i].value);
+    		
+    		if (res.data.list[i].key == "PRI") {
+    			result.primaryKey.push(res.data.list[i].value);
+    		}
+    	}
+    	
+    	
     	myForm.colList = res.data.list;
     	result.dict = res.data.dict;
     	result.type = res.data.type;
@@ -98,7 +111,21 @@ function getColName(colVal) {
 	})
 }
 
-function exec() {
+function query() {
+	var existsPrimaryKey = false;
+	for (var i = 0; i < myForm.colVal.length; i++) {
+		var key = myForm.colVal[i];
+		if (result.primaryKey.indexOf(key) >-1) {
+			existsPrimaryKey = true;
+		}
+	}
+	if (existsPrimaryKey == false) {
+		alert("必须包含主键");
+		return false;
+	}
+	
+	
+	
 	let param = new FormData();
 	param.append('tableName', myForm.tableName);
 	param.append('colVal', myForm.colVal);
@@ -186,12 +213,9 @@ function getTdType(key) {
 	if (result.dict[key]) return "select";
 	if (key == "action") return "action";
 	
-	for (var i = 0; i < myForm.colList.length; i++) {
-		if (myForm.colList[i].value == key && myForm.colList[i].key == "PRI") {
-			return "PRI";
-		}
-	}
 	
+	
+	if (result.primaryKey.indexOf(key) >-1) return "PRI";
 	
 	if (keyType == "decimal" || keyType == "int") return "number";
 	if (keyType == "varchar" || keyType == "timestamp" || keyType == "date") return keyType;
@@ -236,7 +260,7 @@ function editOrAdd(id, row) {
 	
 	axios.post(contextPath + "dbTool/edit", param).then(function(res) {
     	if (res.data.code == 40000) {
-    		exec();
+    		query();
     	}
     	else if (res.data.code == 40001) {
     		result.list[singleModal.row]["action"].disabled = true;
@@ -317,7 +341,7 @@ function columnClick(value, i) {
 			<span v-for="(item, i) in colList" @click="columnClick(item.value, i)" :class="item.spanClass">{{item.text}}</span>
 		</div>
 		
-		<button type="button" onclick="exec()">执行</button>
+		<button type="button" onclick="query()">查询</button>
 	</form>
 
 	<table id="result">
