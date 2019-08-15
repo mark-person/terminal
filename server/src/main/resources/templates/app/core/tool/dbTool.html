@@ -41,7 +41,7 @@ window.onload = function() {
 	
 	myForm = new Vue({
 	    el:'#myForm',
-	    data:{tableName:'',colVal:[],colList:[],qKey:'',qOperator:'=',qValue:'',limit:3}
+	    data:{tableName:'',colVal:[],colList:[],qKey:'',qOperator:'=',qValue:'',limit:3, orderName:'', orderType:''}
 	});
 	result = new Vue({
 	    el:'#result',
@@ -110,7 +110,39 @@ function getColName(colVal) {
 	})
 }
 
-function query() {
+
+function sortTable(colCode, orderType) {
+	
+	if (orderType == "desc") {
+		orderType = "asc";
+	}
+	else {
+		orderType = "desc";
+	}
+	
+	for (i in result.title) {
+		if (result.title[i].v == colCode) {
+			result.title[i].orderType = orderType;
+		}
+	}
+	
+	myForm.orderName = colCode;
+	myForm.orderType = orderType;
+	
+	
+	query(true);
+}
+
+var globalIsOrder = false;
+
+function query(isOrder) {
+	
+	globalIsOrder = isOrder;
+	if (!isOrder) {
+		myForm.orderName = "";
+		myForm.orderType = "";
+	}
+	
 	var existsPrimaryKey = false;
 	for (var i = 0; i < myForm.colVal.length; i++) {
 		var key = myForm.colVal[i];
@@ -130,12 +162,17 @@ function query() {
 	param.append('qOperator', myForm.qOperator);
 	param.append('qValue', myForm.qValue);
 	param.append('limit', myForm.limit);
+	param.append('orderName', myForm.orderName);
+	param.append('orderType', myForm.orderType);
     axios.post(contextPath + "dbTool/queryData", param).then(function(res) {
-    	result.title = [];
     	result.count = res.data.page.count;
-    	myForm.colVal.forEach(function(o, i) {
-    		result.title.push(getColName(o));
-    	})
+    	if (!globalIsOrder) {
+    		result.title = [];
+        	myForm.colVal.forEach(function(o, i) {
+        		result.title.push({v:o,t:getColName(o),orderType:''});
+        	})
+    	}
+    	
     	
     	// 添加一行用来新增
     	var newObj = {};
@@ -206,7 +243,6 @@ function selectChain(row, key) {
 
 function getTdType(key) {
 	
-	// TODO 改成栏位出来的时候，数据字典就返回
 	if (!result) return "span";
 	
 	var keyType = result.type[key];
@@ -370,7 +406,7 @@ function columnClick(value, i) {
 
 	<table id="result">
 		<tr>
-			<th v-for="item in title">{{item}}</th>
+			<th v-for="item in title" @click="sortTable(item.v, item.orderType)">{{item.t}}<span :class="item.orderType"></span></th>
 			<th>操作</th>
 		</tr>
 		<tr v-for="(item, row) in list">

@@ -125,9 +125,12 @@ public class DbToolImpl extends MyDaoSupport {
 			limit = " limit " + page.getLimit();
 		}
 		
+		String orderBy = "";
+		if (Strings.isNotEmpty(page.getOrderName()) && Strings.isNotEmpty(page.getOrderType())) {
+			orderBy = " order by " + tableName + "." + page.getOrderName() + " " + page.getOrderType();
+		}
 		
-		
-		tempSql += where + limit;
+		tempSql += where + orderBy + limit;
 		List<Map<String, Object>> list = getJdbcTemplate().queryForList(tempSql, paraList.toArray());
 		
 		
