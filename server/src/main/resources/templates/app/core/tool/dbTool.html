@@ -41,7 +41,7 @@ window.onload = function() {
 	
 	myForm = new Vue({
 	    el:'#myForm',
-	    data:{tableName:'',colVal:[],colList:[],qKey:'',qOperator:'=',qValue:'',limit:3, orderName:'', orderType:''}
+	    data:{tableName:'',colVal:[],colList:[],qKey:'',qOperator:'=',qValue:'',limit:3, orderName:'', orderType:'', qDesc:''}
 	});
 	result = new Vue({
 	    el:'#result',
@@ -194,6 +194,7 @@ function query(isOrder) {
 }
 
 function selectSingle(row, key) {
+	
 	singleModal.row = row;
 	singleModal.key = key;
 	
@@ -214,13 +215,19 @@ function singleOk(item) {
 		id = id === "" ? item[i] : id;
 	}
 	
-	var i = singleModal.row;
-	result.list[i][singleModal.key] = id;
-	result.list[i][singleModal.key + "__desc"] = name;
-	
-	Vue.set(result.list, i, result.list[i]);
-	singleModal.modal.showModal = false;
-	dataChange(singleModal.row, singleModal.key);
+	if (singleModal.row == -1) {
+		myForm.qVal = id;
+		myForm.qDesc = name;
+	}
+	else {
+		var i = singleModal.row;
+		result.list[i][singleModal.key] = id;
+		result.list[i][singleModal.key + "__desc"] = name;
+		
+		Vue.set(result.list, i, result.list[i]);
+		singleModal.modal.showModal = false;
+		dataChange(singleModal.row, singleModal.key);
+	}
 }
 
 function selectChain(row, key) {
@@ -396,8 +403,8 @@ function columnClick(value, i) {
 		<input v-if="getTdType(qKey) == 'varchar' || getTdType(qKey) == 'span'" class="form-input" type="text" v-model="qValue">
 		<input v-if="getTdType(qKey) == 'number' || getTdType(qKey) == 'PRI'" class="form-number" type="number" v-model="qValue">
 		<input v-if="getTdType(qKey) == 'date' || getTdType(qKey) == 'timestamp'" class="form-input date-input" type="date" v-model="qValue">
-		<span v-if="getTdType(qKey) == 'single'">{{getDesc(item, k)}}
-				<input type="hidden" v-model="qValue"> <a href="#this" @click="selectSingle(row, k)">选择</a>
+		<span v-if="getTdType(qKey) == 'single'">{{qDesc}}
+				<input type="hidden" v-model="qValue"> <a href="#this" @click="selectSingle(-1, qKey)">选择</a>
 		</span>
 		
 		<button type="button" onclick="query()">查询</button>
