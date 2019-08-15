@@ -41,7 +41,7 @@ window.onload = function() {
 	
 	myForm = new Vue({
 	    el:'#myForm',
-	    data:{tableName:'',colVal:[],colList:[]}
+	    data:{tableName:'',colVal:[],colList:[],qKey:'',qOperator:'',qValue:''}
 	});
 	result = new Vue({
 	    el:'#result',
@@ -60,6 +60,7 @@ window.onload = function() {
 function tableChange(obj) {
 	myForm.tableName = obj.value;
 	myForm.colVal = [];
+	myForm.qKey = '';
 	
 	result.title = [];
 	result.list = [];
@@ -73,12 +74,10 @@ function tableChange(obj) {
     	for (i in res.data.list) {
     		res.data.list[i].spanClass = "columnSelected";
     		myForm.colVal.push(res.data.list[i].value);
-    		
     		if (res.data.list[i].key == "PRI") {
     			result.primaryKey.push(res.data.list[i].value);
     		}
     	}
-    	
     	
     	myForm.colList = res.data.list;
     	result.dict = res.data.dict;
@@ -124,12 +123,13 @@ function query() {
 		return false;
 	}
 	
-	
-	
 	let param = new FormData();
 	param.append('tableName', myForm.tableName);
 	param.append('colVal', myForm.colVal);
-    axios.post(contextPath + "dbTool/listValue", param).then(function(res) {
+	param.append('qKey', myForm.qKey);
+	param.append('qOperator', myForm.qOperator);
+	param.append('qValue', myForm.qValue);
+    axios.post(contextPath + "dbTool/queryData", param).then(function(res) {
     	result.title = [];
     	myForm.colVal.forEach(function(o, i) {
     		result.title.push(getColName(o));
@@ -204,7 +204,8 @@ function selectChain(row, key) {
 
 function getTdType(key) {
 	
-	
+	// TODO 改成栏位出来的时候，数据字典就返回
+	if (!result) return "span";
 	
 	var keyType = result.type[key];
 	
@@ -337,17 +338,21 @@ function columnClick(value, i) {
 			<option th:each="item: ${tableList}" th:value="${item.value}" th:text="${item.text}"></option>
 			</select>
 			
-		<select class="form-select">
+		<select class="form-select" v-model="qKey">
 			<option value="">全部</option>
-			<option v-for="(item, i) in colList">{{item.text}}</option>
+			<option v-for="(item, i) in colList" :value="item.value">{{item.text}}</option>
 		</select>
 		
-		<select class="form-select" style="width:60px">
+		<select class="form-select" style="width:60px" v-model="qOperator">
 			<option value="=">=</option>
 			<option value="like">like</option>
 		</select>
 		
-		<input type="text" class="form-input">
+		<input type="text" class="form-input" v-model="qValue">
+		
+		<select v-if="getTdType(qKey) == 'select'" class="form-input" v-model="qValue">
+				<option v-for="item in result.dict[qKey]" :value="item.v">{{item.t}}</option>
+		</select>
 		
 		<button type="button" onclick="query()">查询</button>
 		

@@ -60,7 +60,7 @@ public class DbToolImpl extends MyDaoSupport {
 		return list;
 	}
 	
-	public List<Map<String, Object>> listValue(String tableName, String colVal) {
+	public List<Map<String, Object>> queryData(String tableName, String colVal, String qKey, String qOperator, String qValue) {
 		
 		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT from information_schema.COLUMNS where TABLE_NAME = ?" +
 				" and COLUMN_NAME in ('" + colVal.replaceAll(",", "','") + "')";
@@ -85,7 +85,7 @@ public class DbToolImpl extends MyDaoSupport {
 				String leftId = itemArray[1].replace(",", "");
 				String leftName = itemArray[2].replace(",", "");
 				
-				//leftColMap.put(name, "concat(" + tableName + "." + name + ",':'," + leftTableName + "." + leftName + ") " + name);
+				// 关联表字段
 				leftColMap.put(name, leftTableName + "." + name + " " + name + "," +  leftTableName + "." + leftName + " " + name + "__desc");
 				leftTable += " left join " + leftTableName + " on " + tableName + "." + name + " = " + leftTableName + "." + leftId;
 			}
@@ -97,8 +97,24 @@ public class DbToolImpl extends MyDaoSupport {
 		}
 		
 		
+		
 		String tempSql = "select " + colVal + " from " + tableName + leftTable;		
-		List<Map<String, Object>> list = getJdbcTemplate().queryForList(tempSql);
+		
+		String where = "";
+		List<Object> paraList = new ArrayList<Object>();
+		if (Strings.isNotEmpty(qKey) && Strings.isNotEmpty(qValue)) {
+			where = " where " + tableName + "." + qKey + " " + qOperator + " ? ";
+			if ("like".equals(qOperator)) {
+				qValue = "%" + qValue + "%";
+			}
+			paraList.add(qValue);
+		}
+		tempSql += where;
+		
+		List<Map<String, Object>> list = getJdbcTemplate().queryForList(tempSql, paraList.toArray());
+		
+		
+		
 		
 		for (Map<String, Object> map : list) {
 			map.keySet().forEach(k -> {

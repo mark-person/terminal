@@ -90,15 +90,13 @@ public class DbToolContoller {
 			columnlist.add(newMap);
 		}
 		
-		
-		
 		return ControllerReturn.of("list", columnlist, "dict", dictMap, "type", typeMap, "single", singleList, "chain", chainList);
 	}
 	
-	@RequestMapping("/listValue") @ResponseBody
-	public Map<String, Object> listValue(String tableName, String colVal) {
+	@RequestMapping("/queryData") @ResponseBody
+	public Map<String, Object> queryData(String tableName, String colVal, String qKey, String qOperator, String qValue) {
 		
-		List<Map<String, Object>> list = impl.listValue(tableName, colVal);
+		List<Map<String, Object>> list = impl.queryData(tableName, colVal, qKey, qOperator, qValue);
 		
 		return ControllerReturn.of("list", list);
 	}
