@@ -30,13 +30,20 @@ window.onload = function() {
 			if (o.v == id) name = o.t;
 		});
 		
-		var i = chainModal.row;
-		result.list[i][chainModal.key] = id;
-		result.list[i][chainModal.key + "__desc"] = name;
-		
-		Vue.set(result.list, i, result.list[i]);
-		chainModal.modal.showModal = false;
-		dataChange(chainModal.row, chainModal.key);
+		if (chainModal.row == -1) {
+			myForm.qValue = id;
+			myForm.qDesc = name;
+			chainModal.modal.showModal = false;
+		}
+		else {
+			var i = chainModal.row;
+			result.list[i][chainModal.key] = id;
+			result.list[i][chainModal.key + "__desc"] = name;
+			
+			Vue.set(result.list, i, result.list[i]);
+			chainModal.modal.showModal = false;
+			dataChange(chainModal.row, chainModal.key);
+		}
 	});
 	
 	myForm = new Vue({
@@ -216,8 +223,9 @@ function singleOk(item) {
 	}
 	
 	if (singleModal.row == -1) {
-		myForm.qVal = id;
+		myForm.qValue = id;
 		myForm.qDesc = name;
+		singleModal.modal.showModal = false;
 	}
 	else {
 		var i = singleModal.row;
@@ -405,6 +413,9 @@ function columnClick(value, i) {
 		<input v-if="getTdType(qKey) == 'date' || getTdType(qKey) == 'timestamp'" class="form-input date-input" type="date" v-model="qValue">
 		<span v-if="getTdType(qKey) == 'single'">{{qDesc}}
 				<input type="hidden" v-model="qValue"> <a href="#this" @click="selectSingle(-1, qKey)">选择</a>
+		</span>
+		<span v-if="getTdType(qKey) == 'chain'">{{qDesc}}
+				<input type="hidden" v-model="qValue"><a href="#this" @click="selectChain(-1, qKey)">选择</a>
 		</span>
 		
 		<button type="button" onclick="query()">查询</button>
