@@ -60,7 +60,9 @@ public class DbToolImpl extends MyDaoSupport {
 		return list;
 	}
 	
-	public List<Map<String, Object>> queryData(String tableName, String colVal, String qKey, String qOperator, String qValue) {
+	public List<Map<String, Object>> queryData(String tableName, String colVal, String qKey, String qOperator, String qValue, DbPage page) {
+		
+		
 		
 		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT from information_schema.COLUMNS where TABLE_NAME = ?" +
 				" and COLUMN_NAME in ('" + colVal.replaceAll(",", "','") + "')";
@@ -98,6 +100,7 @@ public class DbToolImpl extends MyDaoSupport {
 		
 		
 		
+		
 		String tempSql = "select " + colVal + " from " + tableName + leftTable;		
 		
 		String where = "";
@@ -109,8 +112,22 @@ public class DbToolImpl extends MyDaoSupport {
 			}
 			paraList.add(qValue);
 		}
-		tempSql += where;
 		
+		// 总数
+		String countSql = "select count(*) from " + tableName + where;
+		int count = getJdbcTemplate().queryForObject(countSql, Integer.class);
+		page.setCount(count);
+		if (count == 0) {
+			return new ArrayList<Map<String, Object>>();
+		}
+		String limit = "";
+		if (count > page.getLimit()) {
+			limit = " limit " + page.getLimit();
+		}
+		
+		
+		
+		tempSql += where + limit;
 		List<Map<String, Object>> list = getJdbcTemplate().queryForList(tempSql, paraList.toArray());
 		
 		

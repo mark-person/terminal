@@ -41,11 +41,11 @@ window.onload = function() {
 	
 	myForm = new Vue({
 	    el:'#myForm',
-	    data:{tableName:'',colVal:[],colList:[],qKey:'',qOperator:'',qValue:''}
+	    data:{tableName:'',colVal:[],colList:[],qKey:'',qOperator:'=',qValue:'',limit:3}
 	});
 	result = new Vue({
 	    el:'#result',
-	    data:{title:[], list:[], dict:{},type:{},single:[],chain:[], primaryKey:[]},
+	    data:{title:[], list:[], dict:{},type:{},single:[],chain:[], primaryKey:[], count:0},
 	    methods: {
 	    	getDesc:function(item, key) {
 	    		return item[key + "__desc"];
@@ -129,8 +129,10 @@ function query() {
 	param.append('qKey', myForm.qKey);
 	param.append('qOperator', myForm.qOperator);
 	param.append('qValue', myForm.qValue);
+	param.append('limit', myForm.limit);
     axios.post(contextPath + "dbTool/queryData", param).then(function(res) {
     	result.title = [];
+    	result.count = res.data.page.count;
     	myForm.colVal.forEach(function(o, i) {
     		result.title.push(getColName(o));
     	})
@@ -356,9 +358,9 @@ function columnClick(value, i) {
 		
 		<button type="button" onclick="query()">查询</button>
 		
-		<select class="form-select" style="width:100px">
-			<option value="100">limit 50</option>
-			<option value="500">limit 500</option>
+		<select class="form-select" style="width:100px" v-model="limit">
+			<option value="3">3</option>
+			<option value="200">200</option>
 		</select>
 		
 		<div class="column-div">
@@ -393,6 +395,7 @@ function columnClick(value, i) {
 			</span>
 		</td>
 		</tr>
+		<tr><td :colspan="title.length + 1"><span v-if="count > list.length">还有{{count - list.length + 1}}未显示</span> count:{{count}}</td></tr>
 	</table>
 
 	<div id="modal">
