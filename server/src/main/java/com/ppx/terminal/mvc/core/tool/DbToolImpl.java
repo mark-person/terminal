@@ -107,6 +107,7 @@ public class DbToolImpl extends MyDaoSupport {
 		List<Object> paraList = new ArrayList<Object>();
 		if (Strings.isNotEmpty(qKey) && Strings.isNotEmpty(qValue)) {
 			where = " where " + tableName + "." + qKey + " " + qOperator + " ? ";
+		
 			if ("like".equals(qOperator)) {
 				qValue = "%" + qValue + "%";
 			}
@@ -115,7 +116,7 @@ public class DbToolImpl extends MyDaoSupport {
 		
 		// 总数
 		String countSql = "select count(*) from " + tableName + where;
-		int count = getJdbcTemplate().queryForObject(countSql, Integer.class);
+		int count = getJdbcTemplate().queryForObject(countSql, Integer.class, paraList.toArray());
 		page.setCount(count);
 		if (count == 0) {
 			return new ArrayList<Map<String, Object>>();

@@ -158,6 +158,7 @@ function query(isOrder) {
 	let param = new FormData();
 	param.append('tableName', myForm.tableName);
 	param.append('colVal', myForm.colVal);
+	
 	param.append('qKey', myForm.qKey);
 	param.append('qOperator', myForm.qOperator);
 	param.append('qValue', myForm.qValue);
@@ -355,6 +356,8 @@ function columnClick(value, i) {
 	myForm.colVal = newColVal;
 }
 
+
+
 </script>
 
 <style type="text/css">
@@ -386,11 +389,16 @@ function columnClick(value, i) {
 			<option value="like">like</option>
 		</select>
 		
-		<input type="text" class="form-input" v-model="qValue">
 		
 		<select v-if="getTdType(qKey) == 'select'" class="form-input" v-model="qValue">
 				<option v-for="item in result.dict[qKey]" :value="item.v">{{item.t}}</option>
 		</select>
+		<input v-if="getTdType(qKey) == 'varchar' || getTdType(qKey) == 'span'" class="form-input" type="text" v-model="qValue">
+		<input v-if="getTdType(qKey) == 'number' || getTdType(qKey) == 'PRI'" class="form-number" type="number" v-model="qValue">
+		<input v-if="getTdType(qKey) == 'date' || getTdType(qKey) == 'timestamp'" class="form-input date-input" type="date" v-model="qValue">
+		<span v-if="getTdType(qKey) == 'single'">{{getDesc(item, k)}}
+				<input type="hidden" v-model="qValue"> <a href="#this" @click="selectSingle(row, k)">选择</a>
+		</span>
 		
 		<button type="button" onclick="query()">查询</button>
 		
