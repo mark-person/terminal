@@ -2,12 +2,14 @@ package com.ppx.terminal.mvc.core.tool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.ppx.terminal.common.controller.ControllerReturn;
 import com.ppx.terminal.common.jdbc.MyDaoSupport;
@@ -238,22 +240,30 @@ public class DbToolImpl extends MyDaoSupport {
 		return returnMap;
 	}
 	
-	public Map<String, Object> update(Map<String, String[]> map) {
+	public Map<String, Object> updateOrInsert(Map<String, String[]> map) {
+		
+		Set<String> ignoreColSet = new HashSet<String>();
+		ignoreColSet.add("actionType");
+		ignoreColSet.add("idCode");
+		ignoreColSet.add("tableName");
+		
+		
+		String actionType = map.get("actionType")[0];
 		String tableName = map.get("tableName")[0];
+		String[] idCode = map.get("idCode")[0].split(",");
 		
 		Set<String> keySet = map.keySet();
 		
 		String pkKey = (String)(keySet.toArray()[0]);
-		String pkVal = map.get(pkKey)[0];
 		
 		
-		if (Strings.isEmpty(pkVal)) {
+		if ("insert".equals(actionType)) {
 			// 新增 >>>>>>>>>>>>>>
 			List<String> colList = new ArrayList<String>();
 			List<String> questionList = new ArrayList<String>();
 			List<Object> valList = new ArrayList<Object>();
 			for (String key : keySet) {
-				if (key.equals("tableName") || key.equals(pkKey)) {
+				if (ignoreColSet.contains(key)) {
 					continue;
 				}
 				colList.add(key);
@@ -264,20 +274,18 @@ public class DbToolImpl extends MyDaoSupport {
 			getJdbcTemplate().update(insertSql, valList.toArray());
 			return ControllerReturn.of(40000, "新增成功");
 		}
-		else {
-			// 修改 >>>>>>>>>>>>>>
+		else if ("update".equals(actionType)) {
+			List<Object> pkParam = new ArrayList<Object>();
+			List<String> pkSqlList = new ArrayList<String>();
+			for (int i = 0; i < idCode.length; i++) {
+				pkParam.add(map.get(idCode[i])[0]);
+				pkSqlList.add(idCode[i] + " = ?");
+				ignoreColSet.add(idCode[i]);
+			}
 			List<Object> para = new ArrayList<Object>();
-			String pkSql = "";
-			Object pkObj = null;
 			StringBuilder sqlSb = new StringBuilder();
 			for (String key : keySet) {
-				if ("".equals(pkSql)) {
-					pkSql = key + " = ?";
-					pkObj = map.get(key)[0];
-					continue;
-				}
-				
-				if (key.equals("tableName")) {
+				if (ignoreColSet.contains(key)) {
 					continue;
 				}
 				if (map.get(key) != null) {
@@ -285,12 +293,13 @@ public class DbToolImpl extends MyDaoSupport {
 					para.add(map.get(key)[0]);
 				}
 			}
-			para.add(pkObj);
-			String updateSql = "update " + tableName + " set " + sqlSb.substring(0, sqlSb.length() - 1) + " where " + pkSql;
+			para.addAll(pkParam);
+			String updateSql = "update " + tableName + " set " + sqlSb.substring(0, sqlSb.length() - 1) 
+				+ " where " + StringUtils.collectionToDelimitedString(pkSqlList, " and ");
 			getJdbcTemplate().update(updateSql, para.toArray());
 			return ControllerReturn.of(40001, "修改成功");
 		}
-		
+		return ControllerReturn.of(40002, "actionType参数错误");
 		
 		
 		

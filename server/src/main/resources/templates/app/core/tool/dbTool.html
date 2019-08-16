@@ -181,21 +181,26 @@ function query(isOrder) {
         	})
     	}
     	
+    	res.data.list.forEach(function(o, i) {
+    		o["action"] = {disabled:true, type:'update'};
+    	})
     	
     	// 添加一行用来新增
     	var newObj = {};
     	for (i in myForm.colVal) {
     		newObj[myForm.colVal[i]] = "";
     	}
+    	newObj["action"] = {disabled:true, type:'insert'};
     	res.data.list.push(newObj);
     	
+    	/*
     	res.data.list.forEach(function(o, i) {
     		var id = "";
     		for (item in o) {
     			id = (id == "") ? item : id;
     		}
-    		o["action"] = {id:id, disabled:true};
-    	})
+    		o["action"] = {id:id, disabled:true, type:'update'};
+    	})*/
     	result.list = res.data.list;
     });
 }
@@ -301,19 +306,28 @@ function dataChange(row, key) {
 	result.list[row]["action"].disabled = false;
 }
 
-function editOrAdd(id, row) {
+function editOrAdd(type, row) {
 	singleModal.row = row;
 	var rowObj = result.list[row];
-	
 	var pojo = {};
-	pojo[id] = rowObj[id];
+	pojo.actionType = type;
+	// PK
+	pojo.idCode = [];
+	for (var i = 0; i < result.primaryKey.length; i++) {
+		var pk = result.primaryKey[i];
+		if (rowObj[pk]) {
+			pojo[pk] = rowObj[pk];
+			pojo.idCode.push(pk);
+		}
+	}
+	pojo.idCode = pojo.idCode.join(",");
 	pojo["tableName"] = myForm.tableName;
 	needUpdate[row].forEach(function(o, i) {
 		pojo[o] = rowObj[o];
 	});
 	var param = Qs.stringify(pojo);
 	
-	axios.post(contextPath + "dbTool/edit", param).then(function(res) {
+	axios.post(contextPath + "dbTool/editOrAdd", param).then(function(res) {
     	if (res.data.code == 40000) {
     		query();
     	}
@@ -454,7 +468,7 @@ function columnClick(value, i) {
 			<span v-if="getTdType(k) == 'timestamp'" style="white-space: nowrap;">{{v}}</span>
 			<span v-if="getTdType(k) == 'span'">{{v}}</span>
 			<span v-if="getTdType(k) == 'action'">
-				<button @click="editOrAdd(v.id, row)" :disabled="v.disabled"><span v-if="item[v.id] == ''">新增</span><span v-if="item[v.id] != ''">修改</span></button>
+				<button @click="editOrAdd(v.type, row)" :disabled="v.disabled"><span v-if="v.type == 'insert'">新增</span><span v-if="v.type == 'update'">修改</span></button>
 			</span>
 		</td>
 		</tr>

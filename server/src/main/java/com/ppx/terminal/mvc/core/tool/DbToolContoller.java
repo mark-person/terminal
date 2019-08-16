@@ -109,9 +109,9 @@ public class DbToolContoller {
 	}
 	
 	// >>>>>>>>>>>>>>>>>>
-	@PostMapping("/edit") @ResponseBody
-	public Map<String, Object> edit(HttpServletRequest request) {
-		Map<String, Object> r = impl.update(request.getParameterMap());
+	@PostMapping("/editOrAdd") @ResponseBody
+	public Map<String, Object> editOrAdd(HttpServletRequest request) {
+		Map<String, Object> r = impl.updateOrInsert(request.getParameterMap());
 		return r;
 	}
 	
