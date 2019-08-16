@@ -100,9 +100,6 @@ public class DbToolImpl extends MyDaoSupport {
 			colVal = colVal.replace(key, leftColMap.get(key));
 		}
 		
-		
-		
-		
 		String tempSql = "select " + colVal + " from " + tableName + leftTable;		
 		
 		String where = "";
@@ -247,16 +244,11 @@ public class DbToolImpl extends MyDaoSupport {
 		ignoreColSet.add("idCode");
 		ignoreColSet.add("tableName");
 		
-		
 		String actionType = map.get("actionType")[0];
 		String tableName = map.get("tableName")[0];
 		String[] idCode = map.get("idCode")[0].split(",");
 		
 		Set<String> keySet = map.keySet();
-		
-		String pkKey = (String)(keySet.toArray()[0]);
-		
-		
 		if ("insert".equals(actionType)) {
 			// 新增 >>>>>>>>>>>>>>
 			List<String> colList = new ArrayList<String>();
@@ -300,9 +292,22 @@ public class DbToolImpl extends MyDaoSupport {
 			return ControllerReturn.of(40001, "修改成功");
 		}
 		return ControllerReturn.of(40002, "actionType参数错误");
+	}
+	
+	public Map<String, Object> delRow(Map<String, String[]> map) {
+		String tableName = map.get("tableName")[0];
+		String[] idCode = map.get("idCode")[0].split(",");
 		
+		List<Object> pkParam = new ArrayList<Object>();
+		List<String> pkSqlList = new ArrayList<String>();
+		for (int i = 0; i < idCode.length; i++) {
+			pkParam.add(map.get(idCode[i])[0]);
+			pkSqlList.add(idCode[i] + " = ?");
+		}
+		String updateSql = "delete from " + tableName + " where " + StringUtils.collectionToDelimitedString(pkSqlList, " and ");
 		
-		
+		getJdbcTemplate().update(updateSql, pkParam.toArray());
+		return ControllerReturn.of(40000, "删除成功");
 	}
 	
 	

@@ -115,6 +115,13 @@ public class DbToolContoller {
 		return r;
 	}
 	
+	// >>>>>>>>>>>>>>>>>>
+	@PostMapping("/delRow") @ResponseBody
+	public Map<String, Object> delRow(HttpServletRequest request) {
+		Map<String, Object> r = impl.delRow(request.getParameterMap());
+		return r;
+	}
+	
 	
 	// >>>>>>>>>...chain
 	// >>>>>>>>>>>>>>>>>>
