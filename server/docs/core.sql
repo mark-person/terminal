@@ -13,16 +13,45 @@
 
 create table core_demo_main (
 	main_id 	int not null auto_increment comment '主ID',
-	main_name 	varchar(32) not null comment '主名',
+	main_name 	varchar(32) not null comment '主名称',
 	primary key (main_id)
 ) comment '主表';
 
 create table core_demo_sub (
-	 sub_id 		int not null auto_increment comment '规则ID',
+	 sub_id 		int not null auto_increment comment 'SUB_ID',
 	 main_id		int not null comment '主名;select main_id, main_name from core_demo_main',
-	 sub_name		varchar(32) not null comment '规则名称',
+	 sub_name		varchar(32) not null comment 'SUB名称',
 	 primary key (sub_id)
 ) comment '从表';
+
+
+
+create table core_more (
+	main_id		int not null comment '主ID;select main_id, main_name from core_demo_main',
+	sub_id		int not null comment 'SUB_ID;select sub_id, sub_name from core_demo_sub',
+	more_type	tinyint not null comment '类型;MAIN:主,SUB:从',
+	primary key(main_id, sub_id)
+) comment '多对多';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -47,6 +76,11 @@ create table core_db_test (
   test_date 	date comment '日期',
   primary key (test_id)
 ) comment 'DB样例';
+
+
+
+
+
 
 
 
