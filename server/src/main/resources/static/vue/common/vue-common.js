@@ -150,27 +150,26 @@ function showModal(title, obj) {
 
 // >>>>>>>>>>>>>>>>>>...new...
 
-function newShowModal() {
-	obj.modal.title = title;
-	obj.pojo = {};
-	obj.modal.showModal = true;
-}
+
 
 function newModal(id, okFun) {
 	var m = new Vue({
 		el: '#' + id,
 		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {param:Object, modal:Object}},
 		data: {
-	      	modal:{showModal:false,title:'',width:'500px',showOk:true},
+	      	modal:{
+	      		showModal:false,title:'',width:'500px',showOk:typeof okFun == "function",
+	      		ok:function(param) {
+		      		if (typeof okFun == "function") okFun(param);
+		      	}
+	      	},
 	      	param:{}
 		},
 		computed: {},
 		methods: {
-	      	ok:function() {
-	      		if (typeof okFun == "function") okFun(this.pojo);
-	      	},
-	      	showModal:function() {
-	      		
+	      	showModal:function(title) {
+	      		this.modal.title = title;
+	      		this.modal.showModal = true;
 	      	}
 		}
 	})

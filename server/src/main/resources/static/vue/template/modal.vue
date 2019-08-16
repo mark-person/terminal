@@ -8,8 +8,8 @@
 		<div class="modal-body"><slot name="body"></slot></div>
 		<div class="modal-footer">&nbsp;
 			<div class="modal-default-button">
-				<button v-if="showOk" @click="$emit('ok')" style="border:1px solid blue">确定</button>
-				<button @click="$emit('close')">关闭</button>
+				<button v-if="showOk" @click="modal.ok(param)" style="border:1px solid blue">确定</button>
+				<button @click="modal.showModal = false">关闭</button>
 			</div>
 		</div>
 	</div>
@@ -20,7 +20,7 @@
 
 <script>
 module.exports = {
-	props: {modal},
+	props: {modal:Object,param:Object},
     data: function() {
         return {
             title:this.modal.title,

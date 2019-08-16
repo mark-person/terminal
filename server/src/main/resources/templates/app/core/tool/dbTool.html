@@ -15,15 +15,15 @@ var myForm;
 var result;
 window.onload = function() {
 	
-	singleModal = modal("modal", null, function(pojo) {});
+	singleModal = newModal("modal");
 	
-	chainModal = modal("chainModal", null, function(pojo) {
-		if (pojo.value == undefined || pojo.value == "") {
+	chainModal = newModal("chainModal", function(param) {
+		if (param.value == undefined || param.value == "") {
 			alert("请选择");
 			return;
 		}
 		
-		var id = pojo.value;
+		var id = param.value;
 		var name = "";
 		chainModal.secondList.forEach(function(o, i) {
 			if (o.v == id) name = o.t;
@@ -214,7 +214,8 @@ function selectSingle(row, key) {
     	singleModal.title = res.data.title;
     	singleModal.list = res.data.list;
     	singleModal.count = res.data.count;
-    	showModal('测试',  singleModal);
+    	// showModal('测试',  singleModal);
+    	singleModal.showModal('选择');
     });
 }
 
@@ -290,9 +291,9 @@ function isPrimaryKey(key) {
 }
 
 function singleQuery() {
-	singleModal.pojo.tableName = myForm.tableName;
-	singleModal.pojo.columnName = singleModal.key;
-	var param = Qs.stringify(singleModal.pojo);
+	singleModal.param.tableName = myForm.tableName;
+	singleModal.param.columnName = singleModal.key;
+	var param = Qs.stringify(singleModal.param);
 	axios.post(contextPath + "dbTool/listSingleData", param).then(function(res) {
     	singleModal.list = res.data.list;
     	singleModal.count = res.data.count;
@@ -313,25 +314,24 @@ function dataChange(row, key) {
 function editOrAdd(type, row) {
 	singleModal.row = row;
 	var rowObj = result.list[row];
-	var pojo = {};
-	pojo.actionType = type;
+	var param = {};
+	param.actionType = type;
 	// PK
-	pojo.idCode = [];
+	param.idCode = [];
 	for (var i = 0; i < result.primaryKey.length; i++) {
 		var pk = result.primaryKey[i];
 		if (rowObj[pk]) {
-			pojo[pk] = rowObj[pk];
-			pojo.idCode.push(pk);
+			param[pk] = rowObj[pk];
+			param.idCode.push(pk);
 		}
 	}
-	pojo.idCode = pojo.idCode.join(",");
-	pojo["tableName"] = myForm.tableName;
+	param.idCode = param.idCode.join(",");
+	param.tableName = myForm.tableName;
 	needUpdate[row].forEach(function(o, i) {
-		pojo[o] = rowObj[o];
+		param[o] = rowObj[o];
 	});
-	var param = Qs.stringify(pojo);
 	
-	axios.post(contextPath + "dbTool/editOrAdd", param).then(function(res) {
+	axios.post(contextPath + "dbTool/editOrAdd", Qs.stringify(param)).then(function(res) {
     	if (res.data.code == 40000) {
     		query();
     	}
@@ -348,21 +348,20 @@ function delRow(row) {
 	
 	singleModal.row = row;
 	var rowObj = result.list[row];
-	var pojo = {};
+	var param = {};
 	// PK
-	pojo.idCode = [];
+	param.idCode = [];
 	for (var i = 0; i < result.primaryKey.length; i++) {
 		var pk = result.primaryKey[i];
 		if (rowObj[pk]) {
-			pojo[pk] = rowObj[pk];
-			pojo.idCode.push(pk);
+			param[pk] = rowObj[pk];
+			param.idCode.push(pk);
 		}
 	}
-	pojo.idCode = pojo.idCode.join(",");
-	pojo.tableName = myForm.tableName;
+	param.idCode = param.idCode.join(",");
+	param.tableName = myForm.tableName;
 	
-	var param = Qs.stringify(pojo);
-	axios.post(contextPath + "dbTool/delRow", param).then(function(res) {
+	axios.post(contextPath + "dbTool/delRow", Qs.stringify(param)).then(function(res) {
     	if (res.data.code == 40000) {
     		query();
     	}
@@ -383,7 +382,7 @@ function firstChange(obj) {
 }
 
 function secondChange(obj) {
-	chainModal.pojo.value = obj.value;
+	chainModal.param.value = obj.value;
 }
 
 function columnClick(value, i) {
@@ -512,10 +511,10 @@ function columnClick(value, i) {
 </table>
 
 <div id="modal">
-	<modal v-if="modal.showModal" :modal="modal" @ok="ok" @close="modal.showModal = false">
+	<modal v-if="modal.showModal" :modal="modal" :param="param">
 	<div slot="body">
 		<div>
-			<input type="text" class="form-input" v-model="pojo.queryVal" maxlength="32">
+			<input type="text" class="form-input" v-model="param.queryVal" maxlength="32">
 			<button @click="singleQuery()">搜索</button><span>总量:</span><span>{{count}}</span>
 		</div>
 		<table>
@@ -531,7 +530,7 @@ function columnClick(value, i) {
 </div>
 
 <div id="chainModal">
-	<modal v-if="modal.showModal" :modal="modal" :pojo="pojo" @ok="ok" @close="modal.showModal = false">
+	<modal v-if="modal.showModal" :modal="modal" :param="param">
 	<table slot="body">
 		<tr>
 			<td>
@@ -541,7 +540,7 @@ function columnClick(value, i) {
 				</select>
 			</td>
 			<td>
-				<select class="simple-select2 form-input" v-model="pojo.value" onchange="secondChange(this)">
+				<select class="simple-select2 form-input" v-model="param.value" onchange="secondChange(this)">
 					<option value="">请选择</option>
 					<option v-for="item in secondList" :value="item.v">{{item.t}}</option>
 				</select>
