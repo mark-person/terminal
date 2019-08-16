@@ -391,22 +391,19 @@ function columnClick(value, i) {
 </head>
 <body class="blockTemplate">
 	<form id="myForm">
+		<div style="display: flex;align-items:center; margin-bottom: 2px;">
 		表: <select id="table" class="form-input" v-model="tableName" onchange="tableChange(this)">
 			<option value="">请选择</option>
 			<option th:each="item: ${tableList}" th:value="${item.value}" th:text="${item.text}"></option>
 			</select>
-			
 		<select class="form-select" v-model="qKey">
 			<option value="">全部</option>
 			<option v-for="(item, i) in colList" :value="item.value">{{item.text}}</option>
 		</select>
-		
 		<select class="form-select" style="width:60px" v-model="qOperator">
 			<option value="=">=</option>
 			<option value="like">like</option>
 		</select>
-		
-		
 		<select v-if="getTdType(qKey) == 'select'" class="form-input" v-model="qValue">
 				<option v-for="item in result.dict[qKey]" :value="item.v">{{item.t}}</option>
 		</select>
@@ -426,10 +423,12 @@ function columnClick(value, i) {
 			<option value="3">3</option>
 			<option value="200">200</option>
 		</select>
+		</div>
 		
 		<div class="column-div">
 			<span v-for="(item, i) in colList" @click="columnClick(item.value, i)" :class="item.spanClass">{{item.text}}</span>
 		</div>
+		
 	</form>
 
 	<table id="result">
