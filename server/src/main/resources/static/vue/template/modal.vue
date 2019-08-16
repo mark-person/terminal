@@ -8,7 +8,7 @@
 		<div class="modal-body"><slot name="body"></slot></div>
 		<div class="modal-footer">&nbsp;
 			<div class="modal-default-button">
-				<button @click="$emit('ok')" style="border:1px solid blue">确定</button>
+				<button v-if="showOk" @click="$emit('ok')" style="border:1px solid blue">确定</button>
 				<button @click="$emit('close')">关闭</button>
 			</div>
 		</div>
@@ -24,7 +24,8 @@ module.exports = {
     data: function() {
         return {
             title:this.modal.title,
-            width:this.modal.width
+            width:this.modal.width,
+            showOk:this.modal.showOk
         }
     }
 }

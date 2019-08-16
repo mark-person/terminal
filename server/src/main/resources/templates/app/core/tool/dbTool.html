@@ -7,7 +7,6 @@
 <script type="text/javascript" th:src="@{/static/vue/select2/select2.full.min.js}"></script>
 <link rel="stylesheet" th:href="@{/static/vue/select2/select2.min.css}">
 
-
 </head>
 <script type="text/javascript" th:inline="javascript">
 var singleModal;
@@ -437,120 +436,120 @@ function columnClick(value, i) {
 </style>
 </head>
 <body class="blockTemplate">
-	<form id="myForm">
-		<div style="display: flex;align-items:center; margin-bottom: 2px;">
-		表: <select id="table" class="form-input" v-model="tableName" onchange="tableChange(this)">
-			<option value="">请选择</option>
-			<option th:each="item: ${tableList}" th:value="${item.value}" th:text="${item.text}"></option>
-			</select>
-		<select class="form-select" v-model="qKey">
-			<option value="">全部</option>
-			<option v-for="(item, i) in colList" :value="item.value">{{item.text}}</option>
+<form id="myForm">
+	<div style="display: flex;align-items:center; margin-bottom: 2px;">
+	表: <select id="table" class="form-input" v-model="tableName" onchange="tableChange(this)">
+		<option value="">请选择</option>
+		<option th:each="item: ${tableList}" th:value="${item.value}" th:text="${item.text}"></option>
 		</select>
-		<select class="form-select" style="width:60px" v-model="qOperator">
-			<option value="=">=</option>
-			<option value="like">like</option>
-		</select>
-		<select v-if="getTdType(qKey) == 'select'" class="form-input" v-model="qValue">
-				<option v-for="item in result.dict[qKey]" :value="item.v">{{item.t}}</option>
-		</select>
-		<input v-if="getTdType(qKey) == 'varchar' || getTdType(qKey) == 'span'" class="form-input" type="text" v-model="qValue">
-		<input v-if="getTdType(qKey) == 'number' || getTdType(qKey) == 'PRI'" class="form-number" type="number" v-model="qValue">
-		<input v-if="getTdType(qKey) == 'date' || getTdType(qKey) == 'timestamp'" class="form-input date-input" type="date" v-model="qValue">
-		<span v-if="getTdType(qKey) == 'single'">{{qDesc}}
-				<input type="hidden" v-model="qValue"> <a href="#this" @click="selectSingle(-1, qKey)">选择</a>
-		</span>
-		<span v-if="getTdType(qKey) == 'chain'">{{qDesc}}
-				<input type="hidden" v-model="qValue"><a href="#this" @click="selectChain(-1, qKey)">选择</a>
-		</span>
-		
-		<button type="button" onclick="query()">查询</button>
-		
-		<select class="form-select" style="width:100px" v-model="limit">
-			<option value="3">3</option>
-			<option value="200">200</option>
-		</select>
-		</div>
-		
-		<div class="column-div">
-			<span v-for="(item, i) in colList" @click="columnClick(item.value, i)" :class="item.spanClass">{{item.text}}</span>
-		</div>
-		
-	</form>
-
-	<table id="result">
-		<tr>
-			<th v-for="item in title" @click="sortTable(item.v, item.orderType)">{{item.t}}<span :class="item.orderType"></span></th>
-			<th>操作</th>
-		</tr>
-		<tr v-for="(item, row) in list">
-		<td v-for="(v, k) in item" v-if="get(k)">
-			<span v-if="getTdType(k) == 'PRI'">{{v}}</span>
-			<span v-if="getTdType(k) == 'single'">{{getDesc(item, k)}}
-				<input type="hidden" v-model="item[k]"> <a v-if="!isPrimaryKey(k) || item[k] == ''" href="#this" @click="selectSingle(row, k)">选择</a>
-			</span>
-			<span v-if="getTdType(k) == 'chain'">{{getDesc(item, k)}}
-				<input type="hidden" v-model="item[k]"><a v-if="!isPrimaryKey(k) || item[k] == ''" href="#this" @click="selectChain(row, k)">选择</a>
-			</span>
-			<select v-if="getTdType(k) == 'select'" class="form-input" v-model="item[k]" @change="dataChange(row, k)">
-				<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
-			</select>
-			<input v-if="getTdType(k) == 'number'" class="form-number" type="number" v-model="item[k]" @keyup="dataChange(row, k)"> 
-			<input v-if="getTdType(k) == 'varchar'" class="form-input" type="text" v-model="item[k]" @keyup="dataChange(row, k)">
-			<input v-if="getTdType(k) == 'date'" class="form-input date-input" type="date" v-model="item[k]" @change="dataChange(row, k)"> 
-			<span v-if="getTdType(k) == 'timestamp'" style="white-space: nowrap;">{{v}}</span>
-			<span v-if="getTdType(k) == 'span'">{{v}}</span>
-			<span v-if="getTdType(k) == 'action'">
-				<button @click="editOrAdd(v.type, row)" :disabled="v.disabled">
-					<span v-if="v.type == 'insert'">新增</span>
-					<span v-if="v.type == 'update'">修改</span>
-				</button>
-				<button v-if="v.type == 'update'" @click="delRow(row)">删除</button>	
-			</span>
-		</td>
-		</tr>
-		<tr><td :colspan="title.length + 1"><span v-if="count > list.length">还有{{count - list.length + 1}}未显示</span> count:{{count}}</td></tr>
-	</table>
-
-	<div id="modal">
-		<modal v-if="modal.showModal" :modal="modal" @ok="ok" @close="modal.showModal = false">
-		<div slot="body">
-			<div>
-				<input type="text" class="form-input" v-model="pojo.queryVal" maxlength="32">
-				<button @click="singleQuery()">搜索</button><span>总量:</span><span>{{count}}</span>
-			</div>
-			<table>
-				<tr>
-					<th v-for="v in title">{{v}}</th><th>操作</th>
-				</tr>
-				<tr v-for="item in list">
-					<td v-for="v in item">{{v}}</td><td><a href="#this" @click="singleOk(item)">OK</a></td>
-				</tr>
-			</table>
-		</div>
-		</modal>
+	<select class="form-select" v-model="qKey">
+		<option value="">全部</option>
+		<option v-for="(item, i) in colList" :value="item.value">{{item.text}}</option>
+	</select>
+	<select class="form-select" style="width:60px" v-model="qOperator">
+		<option value="=">=</option>
+		<option value="like">like</option>
+	</select>
+	<select v-if="getTdType(qKey) == 'select'" class="form-input" v-model="qValue">
+			<option v-for="item in result.dict[qKey]" :value="item.v">{{item.t}}</option>
+	</select>
+	<input v-if="getTdType(qKey) == 'varchar' || getTdType(qKey) == 'span'" class="form-input" type="text" v-model="qValue">
+	<input v-if="getTdType(qKey) == 'number' || getTdType(qKey) == 'PRI'" class="form-number" type="number" v-model="qValue">
+	<input v-if="getTdType(qKey) == 'date' || getTdType(qKey) == 'timestamp'" class="form-input date-input" type="date" v-model="qValue">
+	<span v-if="getTdType(qKey) == 'single'">{{qDesc}}
+			<input type="hidden" v-model="qValue"> <a href="#this" @click="selectSingle(-1, qKey)">选择</a>
+	</span>
+	<span v-if="getTdType(qKey) == 'chain'">{{qDesc}}
+			<input type="hidden" v-model="qValue"><a href="#this" @click="selectChain(-1, qKey)">选择</a>
+	</span>
+	
+	<button type="button" onclick="query()">查询</button>
+	
+	<select class="form-select" style="width:100px" v-model="limit">
+		<option value="3">3</option>
+		<option value="200">200</option>
+	</select>
 	</div>
 	
-	<div id="chainModal">
-		<modal v-if="modal.showModal" :modal="modal" :pojo="pojo" @ok="ok" @close="modal.showModal = false">
-		<table slot="body">
+	<div class="column-div">
+		<span v-for="(item, i) in colList" @click="columnClick(item.value, i)" :class="item.spanClass">{{item.text}}</span>
+	</div>
+	
+</form>
+
+<table id="result">
+	<tr>
+		<th v-for="item in title" @click="sortTable(item.v, item.orderType)">{{item.t}}<span :class="item.orderType"></span></th>
+		<th>操作</th>
+	</tr>
+	<tr v-for="(item, row) in list">
+	<td v-for="(v, k) in item" v-if="get(k)">
+		<span v-if="getTdType(k) == 'PRI'">{{v}}</span>
+		<span v-if="getTdType(k) == 'single'">{{getDesc(item, k)}}
+			<input type="hidden" v-model="item[k]"> <a v-if="!isPrimaryKey(k) || item[k] == ''" href="#this" @click="selectSingle(row, k)">选择</a>
+		</span>
+		<span v-if="getTdType(k) == 'chain'">{{getDesc(item, k)}}
+			<input type="hidden" v-model="item[k]"><a v-if="!isPrimaryKey(k) || item[k] == ''" href="#this" @click="selectChain(row, k)">选择</a>
+		</span>
+		<select v-if="getTdType(k) == 'select'" class="form-input" v-model="item[k]" @change="dataChange(row, k)">
+			<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
+		</select>
+		<input v-if="getTdType(k) == 'number'" class="form-number" type="number" v-model="item[k]" @keyup="dataChange(row, k)"> 
+		<input v-if="getTdType(k) == 'varchar'" class="form-input" type="text" v-model="item[k]" @keyup="dataChange(row, k)">
+		<input v-if="getTdType(k) == 'date'" class="form-input date-input" type="date" v-model="item[k]" @change="dataChange(row, k)"> 
+		<span v-if="getTdType(k) == 'timestamp'" style="white-space: nowrap;">{{v}}</span>
+		<span v-if="getTdType(k) == 'span'">{{v}}</span>
+		<span v-if="getTdType(k) == 'action'">
+			<button @click="editOrAdd(v.type, row)" :disabled="v.disabled">
+				<span v-if="v.type == 'insert'">新增</span>
+				<span v-if="v.type == 'update'">修改</span>
+			</button>
+			<button v-if="v.type == 'update'" @click="delRow(row)">删除</button>	
+		</span>
+	</td>
+	</tr>
+	<tr><td :colspan="title.length + 1"><span v-if="count > list.length">还有{{count - list.length + 1}}未显示</span> count:{{count}}</td></tr>
+</table>
+
+<div id="modal">
+	<modal v-if="modal.showModal" :modal="modal" @ok="ok" @close="modal.showModal = false">
+	<div slot="body">
+		<div>
+			<input type="text" class="form-input" v-model="pojo.queryVal" maxlength="32">
+			<button @click="singleQuery()">搜索</button><span>总量:</span><span>{{count}}</span>
+		</div>
+		<table>
 			<tr>
-				<td>
-					<select class="simple-select2 form-input" onchange="firstChange(this)">
-						<option value="">请选择</option>
-						<option v-for="item in firstList" :value="item.v">{{item.t}}</option>
-					</select>
-				</td>
-				<td>
-					<select class="simple-select2 form-input" v-model="pojo.value" onchange="secondChange(this)">
-						<option value="">请选择</option>
-						<option v-for="item in secondList" :value="item.v">{{item.t}}</option>
-					</select>
-				</td>
+				<th v-for="v in title">{{v}}</th><th>操作</th>
+			</tr>
+			<tr v-for="item in list">
+				<td v-for="v in item">{{v}}</td><td><a href="#this" @click="singleOk(item)">OK</a></td>
 			</tr>
 		</table>
-		</modal>
 	</div>
+	</modal>
+</div>
+
+<div id="chainModal">
+	<modal v-if="modal.showModal" :modal="modal" :pojo="pojo" @ok="ok" @close="modal.showModal = false">
+	<table slot="body">
+		<tr>
+			<td>
+				<select class="simple-select2 form-input" onchange="firstChange(this)">
+					<option value="">请选择</option>
+					<option v-for="item in firstList" :value="item.v">{{item.t}}</option>
+				</select>
+			</td>
+			<td>
+				<select class="simple-select2 form-input" v-model="pojo.value" onchange="secondChange(this)">
+					<option value="">请选择</option>
+					<option v-for="item in secondList" :value="item.v">{{item.t}}</option>
+				</select>
+			</td>
+		</tr>
+	</table>
+	</modal>
+</div>
 
 </body>
 </html>
