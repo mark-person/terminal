@@ -1,52 +1,43 @@
 
 
 
-
-
-
+/* demo */
 .title {font-size: 16px;font-weight: bold;}
 .title:before {content:"🔖";}
 .error {color:red}
 .right {text-align: right;}
 
 
+
+
 body {font-family: Helvetica Neue, Arial, sans-serif;font-size: 14px; color: #444;}
-
-
 a, a:link, a:active{text-decoration:none;color:blue}
-
  .tableTemplate,.blockTemplate {display:none;}
 
+/* input */
 .v-text  {border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;height:24px;}
 .v-select {border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;height:28px; width:180px}
 .v-button {padding:0px 18px;height:26px;cursor: pointer;}
 .v-number {border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;height:24px;width: 80px;}
 .v-date {border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;height:24px;width: 120px;}
 
-
+/* table */
 .v-table {width:100%;border: 1px solid #ddd;border-radius: 3px;background-color: #fff;}
 .v-table th {background-color: #ddd;color: #727272;rgba(255,255,255,0.66);cursor: default;}
 .v-table th, .v-table td {min-width: 80px;padding: 4px 9px;}
 .v-table th.active {color: black;cursor: pointer;}
-
 .v-table tr:nth-child(odd) {background:#F4F4F4;}
 .v-table tr:hover {background-color: #dafdf3;}
-
-.asc {
+.v-table .asc {
   display:inline-block;vertical-align: middle;width:0;height:0;margin-left:5px;opacity:0.66;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-bottom: 4px solid #fff;
+  border-left: 4px solid transparent;border-right: 4px solid transparent;border-bottom: 4px solid #fff;
+}
+.v-table .desc {
+  display:inline-block;vertical-align: middle;width:0;height:0;margin-left:5px;opacity:0.66;
+  border-left: 4px solid transparent;border-right: 4px solid transparent;border-top: 4px solid #fff;
 }
 
-.desc {
-  display:inline-block;vertical-align: middle;width:0;height:0;margin-left:5px;opacity:0.66;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 4px solid #fff;
-}
-
-.pagination {height: 40px; border: 1px solid #ddd;padding-top: 6px;width: 100%;margin-top: 2px;}
+.pagination {height: 40px;border: 1px solid #ddd;padding-top: 6px;width: 100%;margin-top: 2px;}
 .pagination > ul {padding: 0;margin-top: 0;float: left;}
 .pagination > ul > li {display: inline;}
 .pagination > ul > li > span {
@@ -61,33 +52,14 @@ a, a:link, a:active{text-decoration:none;color:blue}
     background-color: #fff;
     border: 1px solid #ddd;
 }
-.pagination > select {height:34px;margin:0px 10px; border: 1px solid #ddd;float:left}
+.pagination > select {height:34px;margin:0px 10px;border:1px solid #ddd;float:left}
 .pagination > div {padding: 6px 12px;}
-.pagination .active span {color:white;background-color: #337ab7;border-color: #337ab7;cursor:auto;}
+.pagination .active span {color:white;background-color:#337ab7;border-color:#337ab7;cursor:auto;}
 
 
-.modal-mask {
-  position: fixed;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, .5);
-  display: table;
-  transition: opacity .3s ease;
-}
-.modal-wrapper {display: table-cell;vertical-align: middle;}
-.modal-container {
-  width: auto;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
-  font-family: Helvetica, Arial, sans-serif;
-}
+.modal-mask {position:fixed;z-index:1000;top:0;left:0;width:100%;height:100%;background-color:rgba(0, 0, 0, .5);display:table;transition:opacity .3s ease;}
+.modal-wrapper {display:table-cell;vertical-align: middle;}
+.modal-container {width:auto;margin:0px auto;padding:20px 30px;background-color:#fff;border-radius:2px;box-shadow:0 2px 8px rgba(0, 0, 0, .33);transition:all .3s ease;font-family:Helvetica, Arial, sans-serif;}
 .modal-header h3 {margin-top: 0;color: #42b983;}
 .modal-body {margin: 20px 0;}
 .modal-default-button {float: right;}
