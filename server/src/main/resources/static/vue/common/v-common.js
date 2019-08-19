@@ -152,6 +152,11 @@ function showModal(title, obj) {
 
 // >>>>>>>>>>>>>>>>>>...new...
 
+function xModal(id, okFun, validateFun) {
+	var m = newModal(id, okFun);
+	// 存对象
+}
+
 
 
 function newModal(id, okFun) {
