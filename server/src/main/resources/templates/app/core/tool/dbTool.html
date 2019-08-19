@@ -218,8 +218,8 @@ function selectChain(row, key) {
     	chainModal.secondList = [];
     	chainModal.showModal('选择');
     	var interval = setInterval(function() {
-    		if ($("#chainModal .simple-select2").length != 0) {
-    			$("#chainModal .simple-select2").select2();
+    		if ($("#chainModal .single-select2").length != 0) {
+    			$("#chainModal .single-select2").select2();
     			window.clearInterval(interval);
     		}
     	}, 50);
@@ -243,15 +243,13 @@ function getTdType(key) {
 }
 
 function isPrimaryKey(key) {
-	if (result.primaryKey.indexOf(key) >-1) return true;
-	return false;
+	return result.primaryKey.indexOf(key) >-1 ? true : false;
 }
 
 function singleQuery() {
 	singleModal.param.tableName = queryForm.tableName;
 	singleModal.param.columnName = singleModal.key;
-	var param = Qs.stringify(singleModal.param);
-	axios.post(contextPath + "dbTool/listSingleData", param).then(function(res) {
+	axios.post(contextPath + "dbTool/listSingleData", Qs.stringify(singleModal.param)).then(function(res) {
     	singleModal.list = res.data.list;
     	singleModal.count = res.data.count;
     	singleModal.$forceUpdate();
@@ -260,11 +258,8 @@ function singleQuery() {
 
 var needUpdate = {};
 function dataChange(row, key) {
-	if (!needUpdate[row]) {
-		needUpdate[row] = [];
-	}
+	needUpdate[row] = !needUpdate[row] ? [] : needUpdate[row];
 	needUpdate[row].push(key);
-	
 	result.list[row]["action"].disabled = false;
 }
 
@@ -330,8 +325,7 @@ function noExistDescProp(v) {
 }
 
 function firstChange(obj) {
-	var parentId = obj.value;
-	var param = Qs.stringify({tableName:queryForm.tableName, columnName:chainModal.key, parentId:parentId});
+	var param = Qs.stringify({tableName:queryForm.tableName, columnName:chainModal.key, parentId:obj.value});
     axios.post(contextPath + "dbTool/listChainSecondData", param).then(function(res) {
     	chainModal.secondList = res.data.list;
     	chainModal.$forceUpdate();
@@ -342,13 +336,13 @@ function secondChange(obj) {
 	chainModal.param.value = obj.value;
 }
 
-function columnClick(value, i) {
-	var obj = queryForm.colList[i];
+function columnClick(value, n) {
+	var obj = queryForm.colList[n];
 	if (obj.spanClass == "columnSelected") {
 		obj.spanClass = "";
-		for (var j = 0; j < queryForm.colVal.length; j++) {
-			if (queryForm.colVal[j] == value) {
-				queryForm.colVal.splice(j, 1);
+		for (var u = 0; i < queryForm.colVal.length; i++) {
+			if (queryForm.colVal[i] == value) {
+				queryForm.colVal.splice(i, 1);
 				break;
 			}
 		}
@@ -358,14 +352,14 @@ function columnClick(value, i) {
 		queryForm.colVal.push(value);
 	}
 	
-	Vue.set(queryForm.colList, i, obj);
+	Vue.set(queryForm.colList, n, obj);
 	
 	// 对queryForm.colList排序
 	var newColVal = [];
-	for (var ii = 0; ii < queryForm.colList.length; ii++) {
-		for (var jj = 0; jj < queryForm.colVal.length; jj++) {
-			if (queryForm.colList[ii].value == queryForm.colVal[jj]) {
-				newColVal.push(queryForm.colVal[jj]);
+	for (var i = 0; i < queryForm.colList.length; i++) {
+		for (var j = 0; j < queryForm.colVal.length; jj++) {
+			if (queryForm.colList[i].value == queryForm.colVal[j]) {
+				newColVal.push(queryForm.colVal[j]);
 				continue;
 			}
 		}
@@ -406,10 +400,10 @@ function columnClick(value, i) {
 	<input v-if="getTdType(qKey) == 'number' || getTdType(qKey) == 'PRI'" class="form-number" type="number" v-model="qValue">
 	<input v-if="getTdType(qKey) == 'date' || getTdType(qKey) == 'timestamp'" class="form-input date-input" type="date" v-model="qValue">
 	<span v-if="getTdType(qKey) == 'single'">{{qDesc}}
-			<input type="hidden" v-model="qValue"> <a href="#this" @click="selectSingle(-1, qKey)">选择</a>
+		<input type="hidden" v-model="qValue"> <a href="#this" @click="selectSingle(-1, qKey)">选择</a>
 	</span>
 	<span v-if="getTdType(qKey) == 'chain'">{{qDesc}}
-			<input type="hidden" v-model="qValue"><a href="#this" @click="selectChain(-1, qKey)">选择</a>
+		<input type="hidden" v-model="qValue"><a href="#this" @click="selectChain(-1, qKey)">选择</a>
 	</span>
 	
 	<button type="button" onclick="query()">查询</button>
@@ -423,9 +417,7 @@ function columnClick(value, i) {
 	<div class="column-div">
 		<span v-for="(item, i) in colList" @click="columnClick(item.value, i)" :class="item.spanClass">{{item.text}}</span>
 	</div>
-	
 </form>
-
 <table id="result">
 	<tr>
 		<th v-for="item in title" @click="sortTable(item.v, item.orderType)">{{item.t}}<span :class="item.orderType"></span></th>
@@ -461,43 +453,43 @@ function columnClick(value, i) {
 </table>
 
 <div id="modal">
-	<modal v-if="modal.showModal" :modal="modal" :param="param">
-	<div slot="body">
-		<div>
-			<input type="text" class="form-input" v-model="param.queryVal" maxlength="32">
-			<button @click="singleQuery()">搜索</button><span>总量:</span><span>{{count}}</span>
-		</div>
-		<table>
-			<tr>
-				<th v-for="v in title">{{v}}</th><th>操作</th>
-			</tr>
-			<tr v-for="item in list">
-				<td v-for="v in item">{{v}}</td><td><a href="#this" @click="singleOk(item)">OK</a></td>
-			</tr>
-		</table>
+<modal v-if="modal.showModal" :modal="modal" :param="param">
+<div slot="body">
+	<div>
+		<input type="text" class="form-input" v-model="param.queryVal" maxlength="32">
+		<button @click="singleQuery()">搜索</button><span>总记录数:</span><span>{{count}}</span>
 	</div>
-	</modal>
+	<table>
+		<tr>
+			<th v-for="v in title">{{v}}</th><th>操作</th>
+		</tr>
+		<tr v-for="item in list">
+			<td v-for="v in item">{{v}}</td><td><a href="#this" @click="singleOk(item)">OK</a></td>
+		</tr>
+	</table>
+</div>
+</modal>
 </div>
 
 <div id="chainModal">
-	<modal v-if="modal.showModal" :modal="modal" :param="param">
-	<table slot="body">
-		<tr>
-			<td>
-				<select class="simple-select2 form-input" onchange="firstChange(this)">
-					<option value="">请选择</option>
-					<option v-for="item in firstList" :value="item.v">{{item.t}}</option>
-				</select>
-			</td>
-			<td>
-				<select class="simple-select2 form-input" v-model="param.value" onchange="secondChange(this)">
-					<option value="">请选择</option>
-					<option v-for="item in secondList" :value="item.v">{{item.t}}</option>
-				</select>
-			</td>
-		</tr>
-	</table>
-	</modal>
+<modal v-if="modal.showModal" :modal="modal" :param="param">
+<table slot="body">
+<tr>
+	<td>
+		<select class="single-select2 form-input" onchange="firstChange(this)">
+			<option value="">请选择</option>
+			<option v-for="item in firstList" :value="item.v">{{item.t}}</option>
+		</select>
+	</td>
+	<td>
+		<select class="single-select2 form-input" v-model="param.value" onchange="secondChange(this)">
+			<option value="">请选择</option>
+			<option v-for="item in secondList" :value="item.v">{{item.t}}</option>
+		</select>
+	</td>
+</tr>
+</table>
+</modal>
 </div>
 
 </body>
