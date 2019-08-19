@@ -55,8 +55,8 @@ function initLoading() {
 		}
 	})
 
-	document.querySelectorAll(".tableTemplate").forEach(function(o, i) {o.style.display = "table";})
-	document.querySelectorAll(".blockTemplate").forEach(function(o, i) {o.style.display = "block";})
+	document.querySelectorAll(".table-template").forEach(function(o, i) {o.style.display = "table";})
+	document.querySelectorAll(".block-template").forEach(function(o, i) {o.style.display = "block";})
 }
  
 function page(list, url) {

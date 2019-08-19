@@ -56,7 +56,7 @@ window.onload = function() {
 	    }
 	});
 	
-	document.querySelectorAll(".blockTemplate").forEach(function(o, i) {o.style.display = "block";})
+	document.querySelectorAll(".block-template").forEach(function(o, i) {o.style.display = "block";})
 	
 	$('#table').select2();
 }
@@ -371,7 +371,7 @@ function columnClick(value, n) {
 }
 </style>
 </head>
-<body class="blockTemplate">
+<body class="block-template">
 <form id="queryForm">
 	<div style="display: flex;align-items:center; margin-bottom: 2px;">
 	表: <select id="table" class="v-select" v-model="q.tableName" onchange="tableChange(this)">
