@@ -141,19 +141,6 @@ function queryData(isOrder) {
 	})
 	if (primaryKeyN != result.primaryKey.length) {alert("必须包含主键");return false;}
 	
-	/*
-	let param = new FormData();
-	param.append('tableName', queryForm.tableName);
-	param.append('colVal', queryForm.colVal);
-	
-	param.append('qKey', queryForm.qKey);
-	param.append('qOperator', queryForm.qOperator);
-	param.append('qValue', queryForm.qValue);
-	param.append('limit', queryForm.limit);
-	param.append('orderName', queryForm.orderName);
-	param.append('orderType', queryForm.orderType);
-	*/
-	
     axios.post(contextPath + "dbTool/queryData", Qs.stringify(queryForm.q, {arrayFormat:'repeat'})).then(function(res) {
     	result.count = res.data.page.count;
     	if (!globalIsOrder) {
