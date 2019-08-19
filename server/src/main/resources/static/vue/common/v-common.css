@@ -1,3 +1,9 @@
+
+
+
+
+
+
 .title {font-size: 16px;font-weight: bold;}
 .title:before {content:"🔖";}
 .error {color:red}
@@ -52,7 +58,7 @@ table {
 }
 
 th {
-  background-color: #ddd;
+ background-color: #ddd;
   color: #727272;rgba(255,255,255,0.66);
   cursor: default;
   /*
@@ -63,7 +69,7 @@ th {
 }
 
 td {
-  background-color: #f9f9f9;
+  /* background-color: #f9f9f9;*/
 }
 
 th, td {
@@ -201,3 +207,10 @@ th.active {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
+
+table tr:nth-child(odd){background:#F4F4F4;}
+table tr:hover
+{
+	background-color: #dafdf3;
+}
+

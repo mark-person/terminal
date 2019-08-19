@@ -73,20 +73,21 @@ function tableChange(obj) {
 	let param = new FormData();
 	param.append('tableName', obj.value);
     axios.post(contextPath + "dbTool/listColumn", param).then(function(res) {
+    	var d = res.data;
     	// 栏位全部选中
-    	for (i in res.data.list) {
-    		res.data.list[i].spanClass = "columnSelected";
-    		queryForm.colVal.push(res.data.list[i].value);
-    		if (res.data.list[i].key == "PRI") {
-    			result.primaryKey.push(res.data.list[i].value);
+    	for (i in d.colList) {
+    		d.colList[i].spanClass = "columnSelected";
+    		queryForm.colVal.push(d.colList[i].value);
+    		if (d.colList[i].key == "PRI") {
+    			result.primaryKey.push(d.colList[i].value);
     		}
     	}
     	
-    	queryForm.colList = res.data.colList;
-    	result.dict = res.data.dict;
-    	result.type = res.data.type;
-    	result.single = res.data.single;
-    	result.chain = res.data.chain;
+    	queryForm.colList = d.colList;
+    	result.dict = d.dict;
+    	result.type = d.type;
+    	result.single = d.single;
+    	result.chain = d.chain;
     });
 }
 
@@ -99,11 +100,13 @@ function getDictText(name, val) {
 }
 
 function getColName(colVal) {
+	var r = "";
 	queryForm.colList.forEach(function(o, i) {
 		if (o.value == colVal) {
-			return o.text;
+			r = o.text;
 		} 
 	})
+	return r;
 }
 
 function sortTable(colCode, orderType) {
@@ -129,7 +132,7 @@ function query(isOrder) {
 	
 	var primaryKeyN = 0;
 	queryForm.colVal.forEach(function(o, i) {
-		if (result.primaryKey.indexOf(key) > -1) {
+		if (result.primaryKey.indexOf(o) > -1) {
 			primaryKeyN++;
 		}
 	})
@@ -149,7 +152,7 @@ function query(isOrder) {
     	result.count = res.data.page.count;
     	if (!globalIsOrder) {
     		result.title = [];
-        	queryForm.colVal.forEach(function(o, i) {
+    		queryForm.colVal.forEach(function(o, i) {
         		result.title.push({v:o, t:getColName(o), orderType:''});
         	})
     	}
