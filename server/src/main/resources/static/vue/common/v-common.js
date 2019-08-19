@@ -170,6 +170,9 @@ function newModal(id, okFun) {
 	      	showModal:function(title) {
 	      		this.modal.title = title;
 	      		this.modal.showModal = true;
+	      	},
+	      	hideModal:function() {
+	      		this.modal.showModal = false;
 	      	}
 		}
 	})

@@ -90,7 +90,7 @@ public class DbToolContoller {
 			columnlist.add(newMap);
 		}
 		
-		return ControllerReturn.of("list", columnlist, "dict", dictMap, "type", typeMap, "single", singleList, "chain", chainList);
+		return ControllerReturn.of("colList", columnlist, "dict", dictMap, "type", typeMap, "single", singleList, "chain", chainList);
 	}
 	
 	@RequestMapping("/queryData") @ResponseBody
