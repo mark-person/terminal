@@ -155,6 +155,17 @@ function showModal(title, obj) {
 function xModal(id, okFun, validateFun) {
 	var m = newModal(id, okFun);
 	// 存对象
+	var computed = {
+		v:function() {
+			if (typeof validateFun == "function") return validateFun(this.pojo);
+		},
+		isValid:function () {
+			for (o in this.v) {
+				if (this.v[o] != "") return false;
+			}
+			return true;
+		}
+	}
 }
 
 
@@ -162,13 +173,11 @@ function xModal(id, okFun, validateFun) {
 function newModal(id, okFun) {
 	var m = new Vue({
 		el: '#' + id,
-		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {param:Object, modal:Object}},
+		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {param:Object, validate:Object, modal:Object}},
 		data: {
 	      	modal:{
 	      		showModal:false,title:'',width:'500px',showOk:typeof okFun == "function",
-	      		ok:function(param) {
-		      		if (typeof okFun == "function") okFun(param);
-		      	}
+	      		ok:function(param) {okFun(param)}
 	      	},
 	      	param:{}
 		},
