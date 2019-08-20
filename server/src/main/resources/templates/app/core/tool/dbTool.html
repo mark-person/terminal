@@ -126,6 +126,9 @@ function sortTable(colCode, orderType) {
 		if (result.title[i].v == colCode) {
 			result.title[i].orderType = orderType;
 		}
+		else {
+			result.title[i].orderType = "";
+		}
 	}
 	queryForm.q.orderName = colCode;
 	queryForm.q.orderType = orderType;
@@ -483,8 +486,8 @@ function viewText(value, row, key) {
 <modal v-if="modal.showModal" :modal="modal">
 <div slot="body">
 	<div>
-		<input type="text" class="v-text" v-model="p.queryVal" maxlength="32">
-		<button @click="singleQuery()">搜索</button><span>总记录数:</span><span>{{count}}</span>
+		<input class="v-text" type="text" v-model="p.queryVal" maxlength="32">
+		<button class="v-button" @click="singleQuery()">搜索</button><span>共{{count}}条记录</span>
 	</div>
 	<table class="v-table">
 		<tr>
