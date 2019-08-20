@@ -24,7 +24,7 @@ window.onload = function() {
 		loading.show();
 		axios.post(contextPath + "demo/insertOrUpdate", Qs.stringify(param)).then(function(res) {
 			loading.hide();
-			myModal.hideModal();
+			myModal.hide();
 	     	page.gotoPage(1);
 		})
 	}, validate);
@@ -34,7 +34,7 @@ function edit(id) {
 	loading.show();
 	axios.post(contextPath + "demo/get", "id=" + id).then(function(res) {
 		loading.hide();
-		myModal.showModal("修改", res.data.pojo);
+		myModal.show("修改", res.data.pojo);
 	})
 }
 
@@ -52,7 +52,7 @@ function getDemoType(type) {
 <div id="page">
 	<div>
 		<label class="v-title">我是标题</label>
-		<button class="v-button" onclick="myModal.showModal('新增')">新增</button>
+		<button class="v-button" onclick="myModal.show('新增')">新增</button>
 		<input type="text" class="v-text"  v-model="param.demoName" maxlength="32">
 		<button class="v-button" @click="gotoPage(1)">搜索</button>
 	</div>

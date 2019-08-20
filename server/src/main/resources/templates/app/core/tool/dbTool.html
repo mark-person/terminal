@@ -14,6 +14,7 @@ var chainModal;
 var queryForm;
 var result;
 window.onload = function() {
+	initLoading();
 	
 	singleModal = modal("modal");
 	
@@ -70,9 +71,9 @@ function tableChange(obj) {
 	result.list = [];
 	result.primaryKey = [];
 	
-	let param = new FormData();
-	param.append('tableName', obj.value);
-    axios.post(contextPath + "dbTool/listColumn", param).then(function(res) {
+	loading.show();
+    axios.post(contextPath + "dbTool/listColumn", "tableName=" +  obj.value).then(function(res) {
+    	loading.hide();
     	var d = res.data;
     	// 栏位全部选中
     	for (i in d.colList) {
@@ -141,7 +142,9 @@ function queryData(isOrder) {
 	})
 	if (primaryKeyN != result.primaryKey.length) {alert("必须包含主键");return false;}
 	
+	loading.show();
     axios.post(contextPath + "dbTool/queryData", Qs.stringify(queryForm.q, {arrayFormat:'repeat'})).then(function(res) {
+    	loading.hide();
     	result.count = res.data.page.count;
     	if (!globalIsOrder) {
     		result.title = [];
@@ -169,12 +172,14 @@ function selectSingle(row, key) {
 	singleModal.row = row;
 	singleModal.key = key;
 	
+	loading.show();
 	var param = Qs.stringify({tableName:queryForm.q.tableName, columnName:key});
     axios.post(contextPath + "dbTool/listSingleData", param).then(function(res) {
+    	loading.hide();
     	singleModal.title = res.data.title;
     	singleModal.list = res.data.list;
     	singleModal.count = res.data.count;
-    	singleModal.showModal('选择');
+    	singleModal.show('选择');
     });
 }
 
@@ -189,7 +194,7 @@ function singleOk(item) {
 	if (singleModal.row == -1) {
 		queryForm.q.qValue = id;
 		queryForm.q.qDesc = name;
-		singleModal.modal.showModal = false;
+		singleModal.hide();
 	}
 	else {
 		var i = singleModal.row;
@@ -197,7 +202,7 @@ function singleOk(item) {
 		result.list[i][singleModal.key + "__desc"] = name;
 		
 		Vue.set(result.list, i, result.list[i]);
-		singleModal.modal.showModal = false;
+		singleModal.show();
 		dataChange(singleModal.row, singleModal.key);
 	}
 }
@@ -206,10 +211,12 @@ function selectChain(row, key) {
 	chainModal.row = row;
 	chainModal.key = key;
 	var param = Qs.stringify({tableName:queryForm.q.tableName, columnName:key});
+	loading.show();
     axios.post(contextPath + "dbTool/listChainData", param).then(function(res) {
+    	loading.hide();
     	chainModal.firstList = res.data.list;
     	chainModal.secondList = [];
-    	chainModal.showModal('选择');
+    	chainModal.show('选择');
     	var interval = setInterval(function() {
     		if ($("#chainModal .single-select2").length != 0) {
     			$("#chainModal .single-select2").select2();
@@ -242,7 +249,9 @@ function isPrimaryKey(key) {
 function singleQuery() {
 	singleModal.param.tableName = queryForm.q.tableName;
 	singleModal.param.columnName = singleModal.key;
+	loading.show();
 	axios.post(contextPath + "dbTool/listSingleData", Qs.stringify(singleModal.param)).then(function(res) {
+		loading.hide();
     	singleModal.list = res.data.list;
     	singleModal.count = res.data.count;
     	singleModal.$forceUpdate();
@@ -276,7 +285,9 @@ function editOrAdd(type, row) {
 		param[o] = rowObj[o];
 	});
 	
+	loading.show();
 	axios.post(contextPath + "dbTool/editOrAdd", Qs.stringify(param)).then(function(res) {
+		loading.hide();
     	if (res.data.code == 40000) {
     		queryData();
     	}
@@ -306,7 +317,9 @@ function delRow(row) {
 	param.idCode = param.idCode.join(",");
 	param.tableName = queryForm.q.tableName;
 	
+	loading.show();
 	axios.post(contextPath + "dbTool/delRow", Qs.stringify(param)).then(function(res) {
+		loading.hide();
     	if (res.data.code == 40000) {
     		queryData();
     	}

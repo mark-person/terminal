@@ -47,6 +47,7 @@ public class DemoController {
 	 
 	@PostMapping("/insertOrUpdate") @ResponseBody
     public Map<?, ?> insert(Demo pojo) {
+		
 		if (pojo.getDemoId() == null) {
 			return impl.insert(pojo);
 		}

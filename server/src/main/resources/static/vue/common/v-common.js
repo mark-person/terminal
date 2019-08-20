@@ -113,12 +113,12 @@ function modal(id, okFun, validateFun) {
 			}
 		},
 		methods: {
-			showModal:function(title, param) {
+			show:function(title, param) {
 	      		this.modal.title = title;
 	      		this.param = param ? param : {};
 	      		this.modal.showModal = true;
 	      	},
-	      	hideModal:function() {
+	      	hide:function() {
 	      		this.modal.showModal = false;
 	      	}
 		}
