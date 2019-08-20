@@ -91,17 +91,17 @@ function page(list, url) {
 	});
 }
 
-function modal(id, validateFun, okFun) {
+function modal(id, okFun, validateFun) {
 	var m = new Vue({
 		el: '#' + id,
-		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {pojo:Object, validate:Object, modal:Object}},
+		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {param:Object, validate:Object, modal:Object}},
 		data: {
-	      	modal:{showModal:false,title:'',width:'500px'},
-	      	pojo:{}
+	      	modal:{showModal:false,title:'',width:'500px',showOk:typeof okFun == "function"},
+	      	param:{}
 		},
 		computed: {
 			v:function() {
-				if (typeof validateFun == "function") return validateFun(this.pojo);
+				if (typeof validateFun == "function") return validateFun(this.param);
 			},
 			isValid:function () {
 				for (o in this.v) {
@@ -113,67 +113,37 @@ function modal(id, validateFun, okFun) {
 		methods: {
 	      	ok:function() {
 	      		if (!this.isValid) return;
-	      		if (typeof okFun == "function") okFun(this.pojo);
+	      		if (typeof okFun == "function") okFun(this.param);
 	      		else {
 	      			loading.show();
 	      			var self = this;
-	      			axios.post(contextPath + okFun, Qs.stringify(this.pojo)).then(function(res) {
+	      			axios.post(contextPath + okFun, Qs.stringify(this.param)).then(function(res) {
 	      				loading.hide();
-	      		     	if (res.data.code == 0) {
-	      		     		self.modal.showModal = false;
-	      		     		page.gotoPage(1);
-	      		     	}
+	      		     	self.modal.showModal = false;
+	      		     	page.gotoPage(1);
 	      			})
 	      		}
+	      	},
+	      	showModal:function(title, param) {
+	      		this.modal.title = title;
+	      		this.param = param;
+	      		this.modal.showModal = true;
 	      	}
 		}
 	})
 	return m;
 }
 
-function editModal(title, obj, url, id) {
-	loading.show();
-	axios.post(contextPath + "demo/get", "id=" + id).then(function(res) {
-		loading.hide();
-		if (res.data.code == 0) {
-			obj.pojo = res.data.pojo;
-			obj.modal.title = title;
-			obj.modal.showModal = true;
-		}
-	})
-}
 
-function showModal(title, obj) {
-	obj.modal.title = title;
-	obj.pojo = {};
-	obj.modal.showModal = true;
-}
+
 
 
 // >>>>>>>>>>>>>>>>>>...new...
 
-function xModal(id, okFun, validateFun) {
-	var m = newModal(id, okFun);
-	// 存对象
-	var computed = {
-		v:function() {
-			if (typeof validateFun == "function") return validateFun(this.pojo);
-		},
-		isValid:function () {
-			for (o in this.v) {
-				if (this.v[o] != "") return false;
-			}
-			return true;
-		}
-	}
-}
-
-
-
 function newModal(id, okFun) {
 	var m = new Vue({
 		el: '#' + id,
-		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {param:Object, validate:Object, modal:Object}},
+		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {param:Object, modal:Object}},
 		data: {
 	      	modal:{
 	      		showModal:false,title:'',width:'500px',showOk:typeof okFun == "function",

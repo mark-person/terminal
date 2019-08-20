@@ -8,6 +8,7 @@
 
 var list = [[${list}]];
 
+var myModal;
 window.onload = function() {
 	page(list, "demo/list");
 	var validate = function(pojo) {
@@ -18,11 +19,15 @@ window.onload = function() {
 			demoNum:V.isNum(pojo.demoNum)
 		}
 	}
-	myModal = modal("modal", validate, "demo/insertOrUpdate");
+	myModal = modal("modal", "demo/insertOrUpdate", validate);
 }
 
 function edit(id) {
-	editModal("修改", myModal, "demo/get", id);
+	loading.show();
+	axios.post(contextPath + "demo/get", "id=" + id).then(function(res) {
+		loading.hide();
+		myModal.showModal("修改", res.data.pojo);
+	})
 }
 
 function getDemoType(type) {
