@@ -8,7 +8,7 @@
 		<div class="modal-body"><slot name="body"></slot></div>
 		<div class="modal-footer">&nbsp;
 			<div class="modal-default-button">
-				<button class="v-button" v-if="modal.showOk" @click="modal.ok(param)" style="border:1px solid blue">确定</button>
+				<button class="v-button" v-if="modal.showOk" @click="modal.ok(p)" style="border:1px solid blue">确定</button>
 				<button class="v-button" @click="modal.showModal = false">关闭</button>
 			</div>
 		</div>
@@ -20,6 +20,6 @@
 
 <script>
 module.exports = {
-	props: {modal:Object,param:Object}
+	props: {modal:Object,p:Object}
 }
 </script>

@@ -61,27 +61,27 @@ function page(list, url) {
 	var page = new Vue({
 	    el:'#page',
 	    data:{
-	        param:{},
+	        p:{},
 	        list:list.list,
 	        sortType:[],
-	        p:list.page
+	        page:list.page
 	    },
 	    methods: {
 	    	sortPage:function(orderName, orderType) {
 	    		orderType = (orderType == 'asc' ? 'desc' : 'asc');
 	    		this.sortType[orderName] = orderType;
-	    		this.param.orderName = orderName;
-	    		this.param.orderType = orderType;
+	    		this.p.orderName = orderName;
+	    		this.p.orderType = orderType;
 	    		this.gotoPage();
 	    	},
 	    	gotoPage:function(n) {
-	    		this.param.pageNumber = n ? n : 1;
-	    		this.param.pageSize = this.p.pageSize;
+	    		this.p.pageNumber = n ? n : 1;
+	    		this.p.pageSize = this.p.pageSize;
 	    		loading.show();
-	            axios.post(contextPath + url, this.param).then(function(res) {
+	            axios.post(contextPath + url, this.p).then(function(res) {
 	            	loading.hide();
 	            	page.list = res.list;
-	            	page.p = res.page;
+	            	page.page = res.page;
 	            });
 	    	}
 	    }
@@ -92,17 +92,17 @@ function page(list, url) {
 function modal(id, okFun, validateFun) {
 	var m = new Vue({
 		el: '#' + id,
-		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {param:Object, modal:Object}},
+		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {p:Object, modal:Object}},
 		data: {
 	      	modal:{
 	      		showModal:false,title:'',width:'500px',showOk:typeof okFun == "function",
-	      		ok:function() {if (!m.isValid) return;okFun(m.param);}
+	      		ok:function() {if (!m.isValid) return;okFun(m.p);}
 	      	},
-	      	param:{}
+	      	p:{}
 		},
 		computed: {
 			v:function() {
-				if (typeof validateFun == "function") return validateFun(this.param);
+				if (typeof validateFun == "function") return validateFun(this.p);
 			},
 			isValid:function () {
 				for (o in this.v) {
@@ -112,9 +112,9 @@ function modal(id, okFun, validateFun) {
 			}
 		},
 		methods: {
-			show:function(title, param) {
+			show:function(title, p) {
 	      		this.modal.title = title;
-	      		this.param = param ? param : {};
+	      		this.p = p ? p : {};
 	      		this.modal.showModal = true;
 	      	},
 	      	hide:function() {

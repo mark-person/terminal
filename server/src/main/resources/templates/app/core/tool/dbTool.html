@@ -173,8 +173,7 @@ function selectSingle(row, key) {
 	singleModal.key = key;
 	
 	loading.show();
-	var param = Qs.stringify({tableName:queryForm.q.tableName, columnName:key});
-    axios.post(contextPath + "dbTool/listSingleData", param).then(function(res) {
+    axios.post(contextPath + "dbTool/listSingleData", {tableName:queryForm.q.tableName, columnName:key}).then(function(res) {
     	loading.hide();
     	singleModal.title = res.title;
     	singleModal.list = res.list;
@@ -210,9 +209,8 @@ function singleOk(item) {
 function selectChain(row, key) {
 	chainModal.row = row;
 	chainModal.key = key;
-	var param = Qs.stringify({tableName:queryForm.q.tableName, columnName:key});
 	loading.show();
-    axios.post(contextPath + "dbTool/listChainData", param).then(function(res) {
+    axios.post(contextPath + "dbTool/listChainData", {tableName:queryForm.q.tableName, columnName:key}).then(function(res) {
     	loading.hide();
     	chainModal.firstList = res.list;
     	chainModal.secondList = [];
@@ -247,10 +245,10 @@ function isPrimaryKey(key) {
 }
 
 function singleQuery() {
-	singleModal.param.tableName = queryForm.q.tableName;
-	singleModal.param.columnName = singleModal.key;
+	singleModal.p.tableName = queryForm.q.tableName;
+	singleModal.p.columnName = singleModal.key;
 	loading.show();
-	axios.post(contextPath + "dbTool/listSingleData", singleModal.param).then(function(res) {
+	axios.post(contextPath + "dbTool/listSingleData", singleModal.p).then(function(res) {
 		loading.hide();
     	singleModal.list = res.list;
     	singleModal.count = res.count;
@@ -337,7 +335,7 @@ function firstChange(obj) {
 }
 
 function secondChange(obj) {
-	chainModal.param.value = obj.value;
+	chainModal.p.value = obj.value;
 }
 
 function columnClick(value, n) {
@@ -468,7 +466,7 @@ function columnClick(value, n) {
 <modal v-if="modal.showModal" :modal="modal">
 <div slot="body">
 	<div>
-		<input type="text" class="v-text" v-model="param.queryVal" maxlength="32">
+		<input type="text" class="v-text" v-model="p.queryVal" maxlength="32">
 		<button @click="singleQuery()">搜索</button><span>总记录数:</span><span>{{count}}</span>
 	</div>
 	<table class="v-table">
@@ -494,7 +492,7 @@ function columnClick(value, n) {
 		</select>
 	</td>
 	<td>
-		<select class="single-select2 v-select" v-model="param.value" onchange="secondChange(this)">
+		<select class="single-select2 v-select" v-model="p.value" onchange="secondChange(this)">
 			<option value="">请选择</option>
 			<option v-for="item in secondList" :value="item.v">{{item.t}}</option>
 		</select>

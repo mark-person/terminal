@@ -17,18 +17,18 @@
 <!-- page -->
 <nav th:fragment="page" class="pagination blockTemplate">
 	<ul>
-		<li v-if="p.pageNumber != 1" @click="gotoPage(1)"><span>«</span></li>
-		<li v-if="p.pageNumber - 2 >= 1" @click="gotoPage(p.pageNumber - 2)"><span>{{p.pageNumber - 2}}</span></li>
-		<li v-if="p.pageNumber - 1 >= 1" @click="gotoPage(p.pageNumber - 1)"><span>{{p.pageNumber - 1}}</span></li>
-		<li class="active"><span>{{p.pageNumber}}</span></li>
-		<li v-if="p.pageNumber + 1 <= p.totalNum" @click="gotoPage(p.pageNumber + 1)"><span>{{p.pageNumber + 1}}</span></li>
-		<li v-if="p.pageNumber + 2 <= p.totalNum" @click="gotoPage(p.pageNumber + 2)"><span>{{p.pageNumber + 2}}</span></li>
-		<li v-if="p.pageNumber != p.totalNum" @click="gotoPage(p.totalNum)"><span>»</span></li>
+		<li v-if="page.pageNumber != 1" @click="gotoPage(1)"><span>«</span></li>
+		<li v-if="page.pageNumber - 2 >= 1" @click="gotoPage(page.pageNumber - 2)"><span>{{page.pageNumber - 2}}</span></li>
+		<li v-if="page.pageNumber - 1 >= 1" @click="gotoPage(page.pageNumber - 1)"><span>{{page.pageNumber - 1}}</span></li>
+		<li class="active"><span>{{page.pageNumber}}</span></li>
+		<li v-if="page.pageNumber + 1 <= page.totalNum" @click="gotoPage(page.pageNumber + 1)"><span>{{page.pageNumber + 1}}</span></li>
+		<li v-if="page.pageNumber + 2 <= page.totalNum" @click="gotoPage(page.pageNumber + 2)"><span>{{page.pageNumber + 2}}</span></li>
+		<li v-if="page.pageNumber != page.totalNum" @click="gotoPage(page.totalNum)"><span>»</span></li>
 	</ul>
-	<select @change="gotoPage(1)" v-model="p.pageSize">
+	<select @change="gotoPage(1)" v-model="page.pageSize">
 		<option value="3">3条</option><option value="10">10条</option><option value="50">50条</option>
 	</select>
-	<div>共<b>{{p.totalRows}}</b>条记录</div>
+	<div>共<b>{{page.totalRows}}</b>条记录</div>
 </nav>
 
 
