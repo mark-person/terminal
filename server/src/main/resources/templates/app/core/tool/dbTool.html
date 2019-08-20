@@ -211,17 +211,19 @@ function selectChain(row, key) {
 	chainModal.key = key;
 	loading.show();
     axios.post(contextPath + "dbTool/listChainData", {tableName:queryForm.q.tableName, columnName:key}).then(function(res) {
+    	chainModal.show('选择');
     	loading.hide();
     	chainModal.firstList = res.list;
     	chainModal.secondList = [];
-    	chainModal.show('选择');
     	
+    	
+    	/*
     	var interval = setInterval(function() {
     		if ($("#chainModal .single-select2").length != 0) {
     			$("#chainModal .single-select2").select2();
     			window.clearInterval(interval);
     		}
-    	}, 50);
+    	}, 50);*/
     });
 }
 

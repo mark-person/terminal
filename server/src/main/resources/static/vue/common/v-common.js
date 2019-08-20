@@ -92,13 +92,14 @@ function page(list, url) {
 function modal(id, okFun, validateFun) {
 	var m = new Vue({
 		el: '#' + id,
-		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {p:Object, modal:Object}},
+		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {p:Object, modal:Object, firstList:Array}},
 		data: {
 	      	modal:{
 	      		showModal:false,title:'',width:'500px',showOk:typeof okFun == "function",
 	      		ok:function() {if (!m.isValid) return;okFun(m.p);}
 	      	},
-	      	p:{}
+	      	p:{},
+	      	firstList:[]
 		},
 		computed: {
 			v:function() {
@@ -110,6 +111,13 @@ function modal(id, okFun, validateFun) {
 				}
 				return true;
 			}
+		},
+		watch: {
+			firstList: function () {
+				this.$nextTick(function() {
+					alert($("#chainModal .single-select2").length);//.select2();
+				})
+		     }
 		},
 		methods: {
 			show:function(title, p) {
