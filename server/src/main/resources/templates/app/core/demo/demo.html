@@ -19,7 +19,18 @@ window.onload = function() {
 			demoNum:V.isNum(pojo.demoNum)
 		}
 	}
-	myModal = modal("modal", "demo/insertOrUpdate", validate);
+	// myModal = modal("modal", "demo/insertOrUpdate", validate);
+	
+	myModal = modal("modal", function(param) {
+		loading.show();
+		axios.post(contextPath + "demo/insertOrUpdate", Qs.stringify(param)).then(function(res) {
+			loading.hide();
+			myModal.hideModal();
+	     	page.gotoPage(1);
+		})
+	}, validate);
+	
+	
 }
 
 function edit(id) {

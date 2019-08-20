@@ -113,21 +113,15 @@ function modal(id, okFun, validateFun) {
 		methods: {
 	      	ok:function() {
 	      		if (!this.isValid) return;
-	      		if (typeof okFun == "function") okFun(this.param);
-	      		else {
-	      			loading.show();
-	      			var self = this;
-	      			axios.post(contextPath + okFun, Qs.stringify(this.param)).then(function(res) {
-	      				loading.hide();
-	      		     	self.modal.showModal = false;
-	      		     	page.gotoPage(1);
-	      			})
-	      		}
+	      		okFun(this.param);
 	      	},
 	      	showModal:function(title, param) {
 	      		this.modal.title = title;
 	      		this.param = param;
 	      		this.modal.showModal = true;
+	      	},
+	      	hideModal:function() {
+	      		this.modal.showModal = false;
 	      	}
 		}
 	})
@@ -147,7 +141,7 @@ function newModal(id, okFun) {
 		data: {
 	      	modal:{
 	      		showModal:false,title:'',width:'500px',showOk:typeof okFun == "function",
-	      		ok:function(param) {okFun(param)}
+	      		ok:function(param) {okFun(this.param)}
 	      	},
 	      	param:{}
 		},
