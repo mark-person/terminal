@@ -31,7 +31,7 @@ window.onload = function() {
 			// 查询时选择级联
 			queryForm.q.qValue = id;
 			queryForm.q.qDesc = name;
-			chainModal.hideModal();
+			chainModal.hide();
 		}
 		else {
 			// 列表里选择级联
@@ -73,7 +73,7 @@ function tableChange(obj) {
 	result.count = 0;
 	
 	loading.show();
-    axios.post(contextPath + "dbTool/listColumn", "tableName=" +  obj.value).then(function(res) {
+    axios.post(contextPath + "dbTool/listColumn", {tableName:obj.value}).then(function(res) {
     	loading.hide();
     	var d = res;
     	// 栏位全部选中
@@ -143,9 +143,9 @@ function queryData(isOrder) {
 	if (primaryKeyN != result.primaryKey.length) {alert("必须包含主键");return false;}
 	
 	loading.show();
-    axios.post(contextPath + "dbTool/queryData", Qs.stringify(queryForm.q, {arrayFormat:'repeat'})).then(function(res) {
+    axios.post(contextPath + "dbTool/queryData", queryForm.q).then(function(res) {
     	loading.hide();
-    	result.count = res.data.page.count;
+    	result.count = res.page.count;
     	if (!queryForm.isOrder) {
     		result.title = [];
     		queryForm.q.colVal.forEach(function(o, i) {
@@ -153,7 +153,7 @@ function queryData(isOrder) {
         	})
     	}
     	
-    	res.data.list.forEach(function(o, i) {
+    	res.list.forEach(function(o, i) {
     		o["action"] = {disabled:true, type:'update'};
     	})
     	
@@ -163,8 +163,8 @@ function queryData(isOrder) {
     		newObj[queryForm.q.colVal[i]] = "";
     	}
     	newObj["action"] = {disabled:true, type:'insert'};
-    	res.data.list.push(newObj);
-    	result.list = res.data.list;
+    	res.list.push(newObj);
+    	result.list = res.list;
     });
 }
 
@@ -176,9 +176,9 @@ function selectSingle(row, key) {
 	var param = Qs.stringify({tableName:queryForm.q.tableName, columnName:key});
     axios.post(contextPath + "dbTool/listSingleData", param).then(function(res) {
     	loading.hide();
-    	singleModal.title = res.data.title;
-    	singleModal.list = res.data.list;
-    	singleModal.count = res.data.count;
+    	singleModal.title = res.title;
+    	singleModal.list = res.list;
+    	singleModal.count = res.count;
     	singleModal.show('选择');
     });
 }
@@ -202,7 +202,7 @@ function singleOk(item) {
 		result.list[i][singleModal.key + "__desc"] = name;
 		
 		Vue.set(result.list, i, result.list[i]);
-		singleModal.show();
+		singleModal.hide();
 		dataChange(singleModal.row, singleModal.key);
 	}
 }
@@ -214,7 +214,7 @@ function selectChain(row, key) {
 	loading.show();
     axios.post(contextPath + "dbTool/listChainData", param).then(function(res) {
     	loading.hide();
-    	chainModal.firstList = res.data.list;
+    	chainModal.firstList = res.list;
     	chainModal.secondList = [];
     	chainModal.show('选择');
     	var interval = setInterval(function() {
@@ -250,10 +250,10 @@ function singleQuery() {
 	singleModal.param.tableName = queryForm.q.tableName;
 	singleModal.param.columnName = singleModal.key;
 	loading.show();
-	axios.post(contextPath + "dbTool/listSingleData", Qs.stringify(singleModal.param)).then(function(res) {
+	axios.post(contextPath + "dbTool/listSingleData", singleModal.param).then(function(res) {
 		loading.hide();
-    	singleModal.list = res.data.list;
-    	singleModal.count = res.data.count;
+    	singleModal.list = res.list;
+    	singleModal.count = res.count;
     	singleModal.$forceUpdate();
     });
 }
@@ -279,19 +279,18 @@ function editOrAdd(type, row) {
 			param.idCode.push(pk);
 		}
 	}
-	param.idCode = param.idCode.join(",");
 	param.tableName = queryForm.q.tableName;
 	needUpdate[row].forEach(function(o, i) {
 		param[o] = rowObj[o];
 	});
 	
 	loading.show();
-	axios.post(contextPath + "dbTool/editOrAdd", Qs.stringify(param)).then(function(res) {
+	axios.post(contextPath + "dbTool/editOrAdd", param).then(function(res) {
 		loading.hide();
-    	if (res.data.code == 40000) {
+    	if (res.code == 40000) {
     		queryData();
     	}
-    	else if (res.data.code == 40001) {
+    	else if (res.code == 40001) {
     		result.list[singleModal.row]["action"].disabled = true;
     	}
     });
@@ -314,13 +313,12 @@ function delRow(row) {
 			param.idCode.push(pk);
 		}
 	}
-	param.idCode = param.idCode.join(",");
 	param.tableName = queryForm.q.tableName;
 	
 	loading.show();
-	axios.post(contextPath + "dbTool/delRow", Qs.stringify(param)).then(function(res) {
+	axios.post(contextPath + "dbTool/delRow", param).then(function(res) {
 		loading.hide();
-    	if (res.data.code == 40000) {
+    	if (res.code == 40000) {
     		queryData();
     	}
     });
@@ -331,9 +329,9 @@ function noExistDescProp(v) {
 }
 
 function firstChange(obj) {
-	var param = Qs.stringify({tableName:queryForm.q.tableName, columnName:chainModal.key, parentId:obj.value});
+	var param = {tableName:queryForm.q.tableName, columnName:chainModal.key, parentId:obj.value};
     axios.post(contextPath + "dbTool/listChainSecondData", param).then(function(res) {
-    	chainModal.secondList = res.data.list;
+    	chainModal.secondList = res.list;
     	chainModal.$forceUpdate();
     });
 }

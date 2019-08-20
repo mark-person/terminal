@@ -246,7 +246,7 @@ public class DbToolImpl extends MyDaoSupport {
 		
 		String actionType = map.get("actionType")[0];
 		String tableName = map.get("tableName")[0];
-		String[] idCode = map.get("idCode")[0].split(",");
+		String[] idCode = map.get("idCode");
 		
 		Set<String> keySet = map.keySet();
 		if ("insert".equals(actionType)) {
@@ -296,7 +296,7 @@ public class DbToolImpl extends MyDaoSupport {
 	
 	public Map<String, Object> delRow(Map<String, String[]> map) {
 		String tableName = map.get("tableName")[0];
-		String[] idCode = map.get("idCode")[0].split(",");
+		String[] idCode = map.get("idCode");
 		
 		List<Object> pkParam = new ArrayList<Object>();
 		List<String> pkSqlList = new ArrayList<String>();

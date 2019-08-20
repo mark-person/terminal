@@ -1,5 +1,13 @@
 
-
+axios.interceptors.request.use(function (config) { 
+	config.transformRequest=[function (data) {
+		if (typeof data == "object")  return  Qs.stringify(data, {arrayFormat:'repeat'});
+         return data;
+      }]
+      return config;
+}, function (error) {
+     return Promise.reject(error);
+});
 
 axios.interceptors.response.use(function(res) {
 	var code = res.data.code;
@@ -80,7 +88,7 @@ function page(list, url) {
 	    		this.param.pageNumber = n;
 	    		this.param.pageSize = this.p.pageSize;
 	    		loading.show();
-	            axios.post(contextPath + url, Qs.stringify(this.param)).then(function(res) {
+	            axios.post(contextPath + url, this.param).then(function(res) {
 	            	loading.hide();
 	            	page.list = res.data.list;
 	            	page.p = res.data.page;
@@ -128,33 +136,4 @@ function modal(id, okFun, validateFun) {
 
 
 
-
-
-// >>>>>>>>>>>>>>>>>>...new...
-
-/*
-function newModal(id, okFun) {
-	var m = new Vue({
-		el: '#' + id,
-		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {param:Object, modal:Object}},
-		data: {
-	      	modal:{
-	      		showModal:false,title:'',width:'500px',showOk:typeof okFun == "function",
-	      		ok:function(param) {okFun(param)}
-	      	},
-	      	param:{}
-		},
-		computed: {},
-		methods: {
-	      	showModal:function(title) {
-	      		this.modal.title = title;
-	      		this.modal.showModal = true;
-	      	},
-	      	hideModal:function() {
-	      		this.modal.showModal = false;
-	      	}
-		}
-	})
-	return m;
-}*/
 

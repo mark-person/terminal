@@ -22,7 +22,7 @@ window.onload = function() {
 	
 	myModal = modal("modal", function(param) {
 		loading.show();
-		axios.post(contextPath + "demo/insertOrUpdate", Qs.stringify(param)).then(function(res) {
+		axios.post(contextPath + "demo/insertOrUpdate", param).then(function(res) {
 			loading.hide();
 			myModal.hide();
 	     	page.gotoPage(1);
@@ -32,7 +32,7 @@ window.onload = function() {
 
 function edit(id) {
 	loading.show();
-	axios.post(contextPath + "demo/get", "id=" + id).then(function(res) {
+	axios.post(contextPath + "demo/get", {id:id}).then(function(res) {
 		loading.hide();
 		myModal.show("修改", res.data.pojo);
 	})
