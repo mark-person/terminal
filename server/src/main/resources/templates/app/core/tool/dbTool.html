@@ -476,7 +476,7 @@ function viewText(value, row, key) {
 		</span>
 	</td>
 	</tr>
-	<tr><td :colspan="title.length + 1"><span v-if="count > list.length">还有{{count - list.length + 1}}未显示</span> count:{{count}}</td></tr>
+	<tr><td :colspan="title.length + 1">共{{count}}条记录<span v-if="count > 0 && count >= list.length" style="margin-left:10px">还有{{count - list.length + 1}}条未显示</span></td></tr>
 </table>
 
 <div id="modal">
