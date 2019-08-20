@@ -19,7 +19,6 @@ window.onload = function() {
 			demoNum:V.isNum(param.demoNum)
 		}
 	}
-	// myModal = modal("modal", "demo/insertOrUpdate", validate);
 	
 	myModal = modal("modal", function(param) {
 		loading.show();
@@ -29,15 +28,13 @@ window.onload = function() {
 	     	page.gotoPage(1);
 		})
 	}, validate);
-	
-	
 }
 
 function edit(id) {
 	loading.show();
 	axios.post(contextPath + "demo/get", "id=" + id).then(function(res) {
 		loading.hide();
-		myModal.showModal("修改", res.data.param);
+		myModal.showModal("修改", res.data.pojo);
 	})
 }
 
@@ -45,7 +42,7 @@ function getDemoType(type) {
 	return Dict.getDictVal("dictType", type);
 }
 </script>
-<body>
+<body class="block-template">
 
 <select id="dictType" th:fragment="dictType" style="display: none">
 	<option value="NEW">新的</option>
@@ -55,11 +52,11 @@ function getDemoType(type) {
 <div id="page">
 	<div>
 		<label class="v-title">我是标题</label>
-		<button onclick="showModal('新增',  myModal)">新增</button>
-		<input type="text" v-model="param.demoName" maxlength="32">
-		<button @click="gotoPage(1)">搜索</button>
+		<button class="v-button" onclick="myModal.showModal('新增')">新增</button>
+		<input type="text" class="v-text"  v-model="param.demoName" maxlength="32">
+		<button class="v-button" @click="gotoPage(1)">搜索</button>
 	</div>
-	<table class="table-template v-table">
+	<table class="v-table">
 	<tr>
 		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">DEMO_ID<span :class="sortType['demo_id']"></span></th>
 		<th class="active" @click="sortPage('demo_name', sortType['demo_name'])">DEMO_NAME<span :class="sortType['demo_name']"></span></th>
@@ -80,31 +77,31 @@ function getDemoType(type) {
 	<div th:replace="common/fragment::page"/>
 </div>
 
-<div id="modal" class="block-template">
-<modal v-if="modal.showModal" :modal="modal" :param="p" :validate="v" @ok="ok" @close="modal.showModal = false">
-<table slot="body">
+<div id="modal">
+<modal v-if="modal.showModal" :modal="modal">
+<table class="v-table" slot="body" >
 	<tr>
 		<th style="width:100px">DEMO_NAME</th>
-		<td><input type="text" v-model="param.demoName" maxlength="32"><span class="v-error">{{v.demoName}}</span></td>
+		<td><input class="v-text" type="text" v-model="param.demoName" maxlength="32"><span class="v-error">{{v.demoName}}</span></td>
 	</tr>
 	<tr>
 		<th>DEMO_TYPE</th>
 		<td>	
-			<select v-model="p.demoType"><option th:include="::dictType"/></select>
+			<select class="v-select" v-model="param.demoType"><option th:include="::dictType"/></select>
 			<span class="v-error">{{v.demoType}}</span>
 		</td>
 	</tr>
 	<tr>
 		<th>DEMO_INT</th>
-		<td><input type="text" v-model="p.demoInt" maxlength="5"><span class="v-error">{{v.demoInt}}</span></td>
+		<td><input class="v-text" type="text" v-model="param.demoInt" maxlength="5"><span class="v-error">{{v.demoInt}}</span></td>
 	</tr>
 	<tr>
 		<th>DEMO_NUM</th>
-		<td><input type="text" v-model="p.demoNum" maxlength="7"><span class="v-error">{{v.demoNum}}</span></td>
+		<td><input type="text" class="v-text" v-model="param.demoNum" maxlength="7"><span class="v-error">{{v.demoNum}}</span></td>
 	</tr>
 	<tr>
 		<th>DEMO_DATE</th>
-		<td><input type="date" v-model="p.demoDate"><span class="v-error"></td>
+		<td><input type="date" class="v-date"  v-model="param.demoDate"><span class="v-error"></td>
 	</tr>
 </table>
 </modal>

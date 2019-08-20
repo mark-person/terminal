@@ -15,9 +15,9 @@ var queryForm;
 var result;
 window.onload = function() {
 	
-	singleModal = newModal("modal");
+	singleModal = modal("modal");
 	
-	chainModal = newModal("chainModal", function(param) {
+	chainModal = modal("chainModal", function(param) {
 		var id = param.value;
 		if (!id) {alert("请选择");return;}
 				
@@ -446,7 +446,7 @@ function columnClick(value, n) {
 </table>
 
 <div id="modal">
-<modal v-if="modal.showModal" :modal="modal" :param="param">
+<modal v-if="modal.showModal" :modal="modal">
 <div slot="body">
 	<div>
 		<input type="text" class="v-text" v-model="param.queryVal" maxlength="32">
@@ -465,7 +465,7 @@ function columnClick(value, n) {
 </div>
 
 <div id="chainModal">
-<modal v-if="modal.showModal" :modal="modal" :param="param">
+<modal v-if="modal.showModal" :modal="modal">
 <table slot="body" class="v-table">
 <tr>
 	<td>

@@ -54,8 +54,7 @@ function initLoading() {
 	      	}
 		}
 	})
-
-	document.querySelectorAll(".table-template").forEach(function(o, i) {o.style.display = "table";})
+	
 	document.querySelectorAll(".block-template").forEach(function(o, i) {o.style.display = "block";})
 }
  
@@ -94,9 +93,12 @@ function page(list, url) {
 function modal(id, okFun, validateFun) {
 	var m = new Vue({
 		el: '#' + id,
-		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {param:Object, validate:Object, modal:Object}},
+		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {param:Object, modal:Object}},
 		data: {
-	      	modal:{showModal:false,title:'',width:'500px',showOk:typeof okFun == "function"},
+	      	modal:{
+	      		showModal:false,title:'',width:'500px',showOk:typeof okFun == "function",
+	      		ok:function() {if (!m.isValid) return;okFun(m.param);}
+	      	},
 	      	param:{}
 		},
 		computed: {
@@ -111,13 +113,9 @@ function modal(id, okFun, validateFun) {
 			}
 		},
 		methods: {
-	      	ok:function() {
-	      		if (!this.isValid) return;
-	      		okFun(this.param);
-	      	},
-	      	showModal:function(title, param) {
+			showModal:function(title, param) {
 	      		this.modal.title = title;
-	      		this.param = param;
+	      		this.param = param ? param : {};
 	      		this.modal.showModal = true;
 	      	},
 	      	hideModal:function() {
@@ -134,6 +132,7 @@ function modal(id, okFun, validateFun) {
 
 // >>>>>>>>>>>>>>>>>>...new...
 
+/*
 function newModal(id, okFun) {
 	var m = new Vue({
 		el: '#' + id,
@@ -141,7 +140,7 @@ function newModal(id, okFun) {
 		data: {
 	      	modal:{
 	      		showModal:false,title:'',width:'500px',showOk:typeof okFun == "function",
-	      		ok:function(param) {okFun(this.param)}
+	      		ok:function(param) {okFun(param)}
 	      	},
 	      	param:{}
 		},
@@ -157,5 +156,5 @@ function newModal(id, okFun) {
 		}
 	})
 	return m;
-}
+}*/
 
