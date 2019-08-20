@@ -46,7 +46,7 @@ window.onload = function() {
 	
 	queryForm = new Vue({
 	    el:'#queryForm',
-	    data:{colList:[], q:{tableName:'', colVal:[],  qKey:'', qOperator:'=', qValue:'', limit:3, orderName:'', orderType:'', qDesc:''}}
+	    data:{colList:[], isOrder:false, q:{tableName:'', colVal:[],  qKey:'', qOperator:'=', qValue:'', limit:3, orderName:'', orderType:'', qDesc:''}}
 	});
 	
 	result = new Vue({
@@ -70,11 +70,12 @@ function tableChange(obj) {
 	result.title = [];
 	result.list = [];
 	result.primaryKey = [];
+	result.count = 0;
 	
 	loading.show();
     axios.post(contextPath + "dbTool/listColumn", "tableName=" +  obj.value).then(function(res) {
     	loading.hide();
-    	var d = res.data;
+    	var d = res;
     	// 栏位全部选中
     	for (i in d.colList) {
     		d.colList[i].spanClass = "columnSelected";
@@ -119,16 +120,15 @@ function sortTable(colCode, orderType) {
 	}
 	queryForm.q.orderName = colCode;
 	queryForm.q.orderType = orderType;
+	
 	queryData(true);
 }
-
-var globalIsOrder = false;
 
 function queryData(isOrder) {
 	
 	if (queryForm.q.tableName == "") {alert("请选表");return false;}
 	
-	globalIsOrder = isOrder;
+	queryForm.isOrder = isOrder;
 	if (!isOrder) {
 		queryForm.q.orderName = "";
 		queryForm.q.orderType = "";
@@ -146,7 +146,7 @@ function queryData(isOrder) {
     axios.post(contextPath + "dbTool/queryData", Qs.stringify(queryForm.q, {arrayFormat:'repeat'})).then(function(res) {
     	loading.hide();
     	result.count = res.data.page.count;
-    	if (!globalIsOrder) {
+    	if (!queryForm.isOrder) {
     		result.title = [];
     		queryForm.q.colVal.forEach(function(o, i) {
         		result.title.push({v:o, t:getColName(o), orderType:''});
@@ -346,7 +346,7 @@ function columnClick(value, n) {
 	var obj = queryForm.colList[n];
 	if (obj.spanClass == "columnSelected") {
 		obj.spanClass = "";
-		for (var u = 0; i < queryForm.q.colVal.length; i++) {
+		for (var i = 0; i < queryForm.q.colVal.length; i++) {
 			if (queryForm.q.colVal[i] == value) {
 				queryForm.q.colVal.splice(i, 1);
 				break;
@@ -363,7 +363,7 @@ function columnClick(value, n) {
 	// 对queryForm.colList排序
 	var newColVal = [];
 	for (var i = 0; i < queryForm.colList.length; i++) {
-		for (var j = 0; j < queryForm.q.colVal.length; jj++) {
+		for (var j = 0; j < queryForm.q.colVal.length; j++) {
 			if (queryForm.colList[i].value == queryForm.q.colVal[j]) {
 				newColVal.push(queryForm.q.colVal[j]);
 				continue;
@@ -382,11 +382,15 @@ function columnClick(value, n) {
 	border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;padding:5px;margin:0px 3px;cursor: pointer;
 	line-height: 36px;
 }
+
+.query-div {display: flex;align-items:center; margin-bottom: 2px;}
+
+.query-div select, .query-div input, .query-div button {margin-left:3px}
 </style>
 </head>
 <body class="block-template">
 <form id="queryForm">
-	<div style="display: flex;align-items:center; margin-bottom: 2px;">
+	<div class="query-div">
 	表: <select id="table" class="v-select" v-model="q.tableName" onchange="tableChange(this)">
 		<option value="">请选择</option>
 		<option th:each="item: ${tableList}" th:value="${item.value}" th:text="${item.text}"></option>
@@ -398,6 +402,10 @@ function columnClick(value, n) {
 	<select class="v-select" style="width:60px" v-model="q.qOperator">
 		<option value="=">=</option>
 		<option value="like">like</option>
+		<option value=">">></option>
+		<option value=">=">>=</option>
+		<option value="<"><</option>
+		<option value="<="><=</option>
 	</select>
 	<select v-if="getTdType(q.qKey) == 'select'" class="v-select" v-model="q.qValue">
 			<option v-for="item in result.dict[q.qKey]" :value="item.v">{{item.t}}</option>

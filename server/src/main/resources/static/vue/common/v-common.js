@@ -6,7 +6,7 @@ axios.interceptors.response.use(function(res) {
 	if (code != 0) {
 		alert(res.data.msg);
 	}
-	return res;
+	return res.data;
 }, function(error) {
 	return Promise.reject(error);
 });
