@@ -11,12 +11,12 @@ var list = [[${list}]];
 var myModal;
 window.onload = function() {
 	page(list, "demo/list");
-	var validate = function(pojo) {
+	var validate = function(param) {
 		return {
-			demoName:V.notNull(pojo.demoName),
-			demoType:V.notNull(pojo.demoType),
-			demoInt:V.notNull(pojo.demoInt) || V.isInt(pojo.demoInt),
-			demoNum:V.isNum(pojo.demoNum)
+			demoName:V.notNull(param.demoName),
+			demoType:V.notNull(param.demoType),
+			demoInt:V.notNull(param.demoInt) || V.isInt(param.demoInt),
+			demoNum:V.isNum(param.demoNum)
 		}
 	}
 	// myModal = modal("modal", "demo/insertOrUpdate", validate);
@@ -37,7 +37,7 @@ function edit(id) {
 	loading.show();
 	axios.post(contextPath + "demo/get", "id=" + id).then(function(res) {
 		loading.hide();
-		myModal.showModal("修改", res.data.pojo);
+		myModal.showModal("修改", res.data.param);
 	})
 }
 
@@ -56,7 +56,7 @@ function getDemoType(type) {
 	<div>
 		<label class="v-title">我是标题</label>
 		<button onclick="showModal('新增',  myModal)">新增</button>
-		<input type="text" v-model="pojo.demoName" maxlength="32">
+		<input type="text" v-model="param.demoName" maxlength="32">
 		<button @click="gotoPage(1)">搜索</button>
 	</div>
 	<table class="table-template v-table">
@@ -81,30 +81,30 @@ function getDemoType(type) {
 </div>
 
 <div id="modal" class="block-template">
-<modal v-if="modal.showModal" :modal="modal" :pojo="pojo" :validate="v" @ok="ok" @close="modal.showModal = false">
+<modal v-if="modal.showModal" :modal="modal" :param="p" :validate="v" @ok="ok" @close="modal.showModal = false">
 <table slot="body">
 	<tr>
 		<th style="width:100px">DEMO_NAME</th>
-		<td><input type="text" v-model="pojo.demoName" maxlength="32"><span class="v-error">{{v.demoName}}</span></td>
+		<td><input type="text" v-model="param.demoName" maxlength="32"><span class="v-error">{{v.demoName}}</span></td>
 	</tr>
 	<tr>
 		<th>DEMO_TYPE</th>
 		<td>	
-			<select v-model="pojo.demoType"><option th:include="::dictType"/></select>
+			<select v-model="p.demoType"><option th:include="::dictType"/></select>
 			<span class="v-error">{{v.demoType}}</span>
 		</td>
 	</tr>
 	<tr>
 		<th>DEMO_INT</th>
-		<td><input type="text" v-model="pojo.demoInt" maxlength="5"><span class="v-error">{{v.demoInt}}</span></td>
+		<td><input type="text" v-model="p.demoInt" maxlength="5"><span class="v-error">{{v.demoInt}}</span></td>
 	</tr>
 	<tr>
 		<th>DEMO_NUM</th>
-		<td><input type="text" v-model="pojo.demoNum" maxlength="7"><span class="v-error">{{v.demoNum}}</span></td>
+		<td><input type="text" v-model="p.demoNum" maxlength="7"><span class="v-error">{{v.demoNum}}</span></td>
 	</tr>
 	<tr>
 		<th>DEMO_DATE</th>
-		<td><input type="date" v-model="pojo.demoDate"><span class="v-error"></td>
+		<td><input type="date" v-model="p.demoDate"><span class="v-error"></td>
 	</tr>
 </table>
 </modal>

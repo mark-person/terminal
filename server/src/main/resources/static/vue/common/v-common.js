@@ -64,7 +64,7 @@ function page(list, url) {
 	page = new Vue({
 	    el:'#page',
 	    data:{
-	        pojo:{},
+	        param:{},
 	        list:list.list,
 	        sortType:[],
 	        p:list.page
@@ -73,15 +73,15 @@ function page(list, url) {
 	    	sortPage:function(orderName, orderType) {
 	    		orderType = (orderType == 'asc' ? 'desc' : 'asc');
 	    		this.sortType[orderName] = orderType;
-	    		this.pojo.orderName = orderName;
-	    		this.pojo.orderType = orderType;
+	    		this.param.orderName = orderName;
+	    		this.param.orderType = orderType;
 	    		this.gotoPage(1);
 	    	},
 	    	gotoPage:function(n) {
-	    		this.pojo.pageNumber = n;
-	    		this.pojo.pageSize = this.p.pageSize;
+	    		this.param.pageNumber = n;
+	    		this.param.pageSize = this.p.pageSize;
 	    		loading.show();
-	            axios.post(contextPath + url, Qs.stringify(this.pojo)).then(function(res) {
+	            axios.post(contextPath + url, Qs.stringify(this.param)).then(function(res) {
 	            	loading.hide();
 	            	page.list = res.data.list;
 	            	page.p = res.data.page;
