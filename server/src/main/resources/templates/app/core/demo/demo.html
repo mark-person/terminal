@@ -10,7 +10,7 @@ var list = [[${list}]];
 
 var myModal;
 window.onload = function() {
-	var page = page(list, "demo/list");
+	var myPage = page(list, "demo/list");
 	var validate = function(param) {
 		return {
 			demoName:V.notNull(param.demoName),
@@ -25,7 +25,7 @@ window.onload = function() {
 		axios.post(contextPath + "demo/insertOrUpdate", param).then(function(res) {
 			loading.hide();
 			myModal.hide();
-	     	page.gotoPage();
+			myPage.gotoPage();
 		})
 	}, validate);
 }
@@ -34,20 +34,21 @@ function edit(id) {
 	loading.show();
 	axios.post(contextPath + "demo/get", {id:id}).then(function(res) {
 		loading.hide();
-		myModal.show("修改", res.data.pojo);
+		myModal.show("修改", res.pojo);
 	})
 }
 
 function getDemoType(type) {
 	return Dict.getDictVal("dictType", type);
 }
+
+var demoType = {NEW:'新的', OLD:'旧的'};
+// demoType["NEW"] = "新的";
+// demoType["OLD"] = "旧的";
+
+
 </script>
 <body class="block-template">
-
-<select id="dictType" th:fragment="dictType" style="display: none">
-	<option value="NEW">新的</option>
-	<option value="OLD">旧的</option>
-</select>
 
 <div id="page">
 	<div>
@@ -68,7 +69,7 @@ function getDemoType(type) {
 	<tr v-for="item in list">
 		<td>{{item.demoId}}</td>
 		<td>{{item.demoName}}</td>
-		<td>{{getDemoType(item.demoType)}}</td>
+		<td>{{demoType[item.demoType]}}</td>
 		<td class="v-right">{{item.demoNum}}</td>
 		<td>{{item.demoDate}}</td>
 		<td><a href="#this" @click="edit(item.demoId)">修改</a></td>
@@ -79,7 +80,7 @@ function getDemoType(type) {
 
 <div id="modal">
 <modal v-if="modal.showModal" :modal="modal">
-<table class="v-table" slot="body" >
+<table class="v-table" slot="body">
 	<tr>
 		<th style="width:100px">DEMO_NAME</th>
 		<td><input class="v-text" type="text" v-model="param.demoName" maxlength="32"><span class="v-error">{{v.demoName}}</span></td>
@@ -87,7 +88,9 @@ function getDemoType(type) {
 	<tr>
 		<th>DEMO_TYPE</th>
 		<td>	
-			<select class="v-select" v-model="param.demoType"><option th:include="::dictType"/></select>
+			<select class="v-select" v-model="param.demoType">
+				<option v-for="(item, key) in demoType" :value="key">{{item}}</option>
+			</select>
 			<span class="v-error">{{v.demoType}}</span>
 		</td>
 	</tr>

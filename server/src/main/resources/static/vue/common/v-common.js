@@ -33,16 +33,6 @@ V.isNum = function(v) {
 	return isNaN(v) ? '必须为数字' : '';
 }
 
-var Dict = {};
-Dict.getDictVal = function(id, val) {
-	var option = document.getElementById(id).querySelectorAll("option");
-	for (var i = 0; i < option.length; i++) {
-		if (option[i].value == val) {
-			return option[i].text;
-		}
-	}
-}
-
 function initLoading() {
 	loading = new Vue({
 		el: '#loading',
@@ -90,8 +80,8 @@ function page(list, url) {
 	    		loading.show();
 	            axios.post(contextPath + url, this.param).then(function(res) {
 	            	loading.hide();
-	            	page.list = res.data.list;
-	            	page.p = res.data.page;
+	            	page.list = res.list;
+	            	page.p = res.page;
 	            });
 	    	}
 	    }
