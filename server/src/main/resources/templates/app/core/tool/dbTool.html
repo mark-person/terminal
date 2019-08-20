@@ -11,6 +11,7 @@
 <script type="text/javascript" th:inline="javascript">
 var singleModal;
 var chainModal;
+var textModal;
 var queryForm;
 var result;
 window.onload = function() {
@@ -18,8 +19,16 @@ window.onload = function() {
 	
 	singleModal = modal("modal");
 	
-	chainModal = modal("chainModal", function(param) {
-		var id = param.value;
+	textModal = modal("textModal", function(p) {
+		var i = textModal.row;
+		result.list[i][textModal.key] = p.value;
+		Vue.set(result.list, i, result.list[i]);
+		textModal.hide();
+		dataChange(i, textModal.key);
+	});
+	
+	chainModal = modal("chainModal", function(p) {
+		var id = p.value;
 		if (!id) {alert("请选择");return;}
 				
 		var name = "";
@@ -371,6 +380,12 @@ function columnClick(value, n) {
 	queryForm.q.colVal = newColVal;
 }
 
+function viewText(value, row, key) {
+	textModal.row = row;
+	textModal.key = key;
+	textModal.show('', {value:value});
+}
+
 </script>
 
 <style type="text/css">
@@ -448,7 +463,7 @@ function columnClick(value, n) {
 			<option v-for="item in dict[k]" :value="item.v">{{item.t}}</option>
 		</select>
 		<input v-if="getTdType(k) == 'number'" class="v-number" type="number" v-model="item[k]" @keyup="dataChange(row, k)"> 
-		<input v-if="getTdType(k) == 'varchar'" class="v-text" type="text" v-model="item[k]" @keyup="dataChange(row, k)">
+		<input v-if="getTdType(k) == 'varchar'" class="v-text" type="text" v-model="item[k]" @keyup="dataChange(row, k)" @dblclick="viewText(item[k], row, k)">
 		<input v-if="getTdType(k) == 'date'" class="v-date" type="date" v-model="item[k]" @change="dataChange(row, k)"> 
 		<span v-if="getTdType(k) == 'timestamp'" style="white-space: nowrap;">{{v}}</span>
 		<span v-if="getTdType(k) == 'span'">{{v}}</span>
@@ -501,6 +516,15 @@ function columnClick(value, n) {
 	</td>
 </tr>
 </table>
+</modal>
+</div>
+
+
+<div id="textModal">
+<modal v-if="modal.showModal" :modal="modal" >
+<div slot="body">
+	<textarea v-model="p.value" style="width:490px;height:200px" class="v-text"></textarea>
+</div>
 </modal>
 </div>
 
