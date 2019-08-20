@@ -215,6 +215,7 @@ function selectChain(row, key) {
     	chainModal.firstList = res.list;
     	chainModal.secondList = [];
     	chainModal.show('选择');
+    	
     	var interval = setInterval(function() {
     		if ($("#chainModal .single-select2").length != 0) {
     			$("#chainModal .single-select2").select2();
