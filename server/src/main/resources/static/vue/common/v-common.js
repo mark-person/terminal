@@ -98,8 +98,7 @@ function modal(id, okFun, validateFun) {
 	      		showModal:false,title:'',width:'500px',showOk:typeof okFun == "function",
 	      		ok:function() {if (!m.isValid) return;okFun(m.p);}
 	      	},
-	      	p:{},
-	      	firstList:[]
+	      	p:{}
 		},
 		computed: {
 			v:function() {
@@ -111,13 +110,6 @@ function modal(id, okFun, validateFun) {
 				}
 				return true;
 			}
-		},
-		watch: {
-			firstList: function () {
-				this.$nextTick(function() {
-					alert($("#chainModal .single-select2").length);//.select2();
-				})
-		     }
 		},
 		methods: {
 			show:function(title, p) {

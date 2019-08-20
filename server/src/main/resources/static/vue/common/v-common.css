@@ -12,7 +12,7 @@
 /* common */
 body {font-family: Helvetica Neue, Arial, sans-serif;font-size: 14px; color: #444;}
 a, a:link, a:active{text-decoration:none;color:blue}
- .tableTemplate,.blockTemplate {display:none;}
+ .table-template,.block-template {display:none;}
 
 /* input */
 .v-text  {border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;height:24px; width:180px}
