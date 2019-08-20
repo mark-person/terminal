@@ -68,7 +68,7 @@ function initLoading() {
  
 function page(list, url) {
 	initLoading();
-	page = new Vue({
+	var page = new Vue({
 	    el:'#page',
 	    data:{
 	        param:{},
@@ -82,10 +82,10 @@ function page(list, url) {
 	    		this.sortType[orderName] = orderType;
 	    		this.param.orderName = orderName;
 	    		this.param.orderType = orderType;
-	    		this.gotoPage(1);
+	    		this.gotoPage();
 	    	},
 	    	gotoPage:function(n) {
-	    		this.param.pageNumber = n;
+	    		this.param.pageNumber = n ? n : 1;
 	    		this.param.pageSize = this.p.pageSize;
 	    		loading.show();
 	            axios.post(contextPath + url, this.param).then(function(res) {
@@ -96,6 +96,7 @@ function page(list, url) {
 	    	}
 	    }
 	});
+	return page;
 }
 
 function modal(id, okFun, validateFun) {

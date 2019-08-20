@@ -10,7 +10,7 @@ var list = [[${list}]];
 
 var myModal;
 window.onload = function() {
-	page(list, "demo/list");
+	var page = page(list, "demo/list");
 	var validate = function(param) {
 		return {
 			demoName:V.notNull(param.demoName),
@@ -25,7 +25,7 @@ window.onload = function() {
 		axios.post(contextPath + "demo/insertOrUpdate", param).then(function(res) {
 			loading.hide();
 			myModal.hide();
-	     	page.gotoPage(1);
+	     	page.gotoPage();
 		})
 	}, validate);
 }
@@ -54,7 +54,7 @@ function getDemoType(type) {
 		<label class="v-title">我是标题</label>
 		<button class="v-button" onclick="myModal.show('新增')">新增</button>
 		<input type="text" class="v-text"  v-model="param.demoName" maxlength="32">
-		<button class="v-button" @click="gotoPage(1)">搜索</button>
+		<button class="v-button" @click="gotoPage()">搜索</button>
 	</div>
 	<table class="v-table">
 	<tr>
