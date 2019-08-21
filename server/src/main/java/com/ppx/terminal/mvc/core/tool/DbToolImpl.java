@@ -19,7 +19,10 @@ public class DbToolImpl extends MyDaoSupport {
 	
 	public List<Map<String, Object>> listTable() {
 		String sql = "select TABLE_NAME value, concat(TABLE_COMMENT, '(', TABLE_NAME, ')') text "
-				+ "from information_schema.tables where TABLE_NAME in ('core_demo', 'core_db_test', 'core_demo_sub', 'core_demo_main', 'core_more')";
+		//		+ " from information_schema.tables where TABLE_NAME in ('core_demo', 'core_db_test', 'core_demo_sub', 'core_demo_main', 'core_more')";
+				+ " from information_schema.tables where TABLE_NAME in ('config_value', 'repo_knowledge_category')";
+		// repo_knowledge_category
+		
 		return getJdbcTemplate().queryForList(sql);
 	}
 	
@@ -90,17 +93,18 @@ public class DbToolImpl extends MyDaoSupport {
 				String leftName = itemArray[2].replace(",", "");
 				
 				// 关联表字段
-				leftColMap.put(name, leftTableName + "." + name + " " + name + "," +  leftTableName + "." + leftName + " " + name + "__desc");
-				leftTable += " left join " + leftTableName + " on " + tableName + "." + name + " = " + leftTableName + "." + leftId;
+				leftColMap.put(name, "t." + name + " " + name + "," +  leftTableName + "." + leftName + " " + name + "__desc");
+				leftTable += "left join " + leftTableName + " on t." + name + " = " + leftTableName + "." + leftId;
 			}
 		}
 		
+		colVal = "t." + colVal.replaceAll(",", ",t.");
 		
 		for (String key : leftColMap.keySet()) {
-			colVal = colVal.replace(key, leftColMap.get(key));
+			colVal = colVal.replace("t." + key, leftColMap.get(key));
 		}
 		
-		String tempSql = "select " + colVal + " from " + tableName + leftTable;		
+		String tempSql = "select " + colVal + " from " + tableName + " t " + leftTable;		
 		
 		String where = "";
 		List<Object> paraList = new ArrayList<Object>();

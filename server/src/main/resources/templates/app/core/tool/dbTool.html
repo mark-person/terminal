@@ -248,8 +248,10 @@ function getTdType(key) {
 	if (result.primaryKey.indexOf(key) >-1) return "PRI";
 	
 	var keyType = result.type[key];
-	if (keyType == "decimal" || keyType == "int") return "number";
+	if (keyType == "decimal" || keyType.indexOf("int") > -1) return "number";
 	if (keyType == "varchar" || keyType == "timestamp" || keyType == "date") return keyType;
+	
+	if (keyType == "json") return "varchar";
 	
 	return "span";
 }
@@ -386,6 +388,10 @@ function columnClick(value, n) {
 function viewText(value, row, key) {
 	textModal.row = row;
 	textModal.key = key;
+	if (value != "" && result.type[key] == "json") {
+		value = formatJson(value);
+	}
+	
 	textModal.show('', {value:value});
 }
 
@@ -422,6 +428,7 @@ function viewText(value, row, key) {
 		<option value=">=">>=</option>
 		<option value="<"><</option>
 		<option value="<="><=</option>
+		<option value=">">!=</option>
 	</select>
 	<select v-if="getTdType(q.qKey) == 'select'" class="v-select" v-model="q.qValue">
 			<option v-for="item in result.dict[q.qKey]" :value="item.v">{{item.t}}</option>
