@@ -76,7 +76,7 @@ var demoType = {NEW:'新的', OLD:'旧的'};
 
 <div id="modal">
 <modal v-if="modal.showModal" :modal="modal">
-<table class="v-table" slot="body">
+<table class="v-table v-table-hover" slot="body">
 	<tr>
 		<th style="width:100px">DEMO_NAME</th>
 		<td><input class="v-text" type="text" v-model="p.demoName" maxlength="32"><span class="v-error">{{v.demoName}}</span></td>

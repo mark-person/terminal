@@ -413,7 +413,7 @@ function viewText(value, row, key) {
 <body class="block-template">
 <form id="queryForm">
 	<div class="query-div">
-	表: <select id="table" class="v-select" v-model="q.tableName" onchange="tableChange(this)">
+	表: <select id="table" class="v-select" v-model="q.tableName" onchange="tableChange(this)" style="width:auto;">
 		<option value="">请选择</option>
 		<option th:each="item: ${tableList}" th:value="${item.value}" th:text="${item.text}"></option>
 		</select>
@@ -455,9 +455,9 @@ function viewText(value, row, key) {
 		<span v-for="(item, i) in colList" @click="columnClick(item.value, i)" :class="item.spanClass">{{item.text}}</span>
 	</div>
 </form>
-<table id="result" class="v-table">
+<table id="result" class="v-table v-table-hover">
 	<tr>
-		<th v-for="item in title" @click="sortTable(item.v, item.orderType)">{{item.t}}<span :class="item.orderType"></span></th>
+		<th v-for="item in title" @click="sortTable(item.v, item.orderType)" class="v-pointer">{{item.t}}<span :class="item.orderType"></span></th>
 		<th>操作</th>
 	</tr>
 	<tr v-for="(item, row) in list">
@@ -496,7 +496,7 @@ function viewText(value, row, key) {
 		<input class="v-text" type="text" v-model="p.queryVal" maxlength="32">
 		<button class="v-button" @click="singleQuery()">搜索</button><span>共{{count}}条记录</span>
 	</div>
-	<table class="v-table">
+	<table class="v-table v-table-hover">
 		<tr>
 			<th v-for="v in title">{{v}}</th><th>操作</th>
 		</tr>

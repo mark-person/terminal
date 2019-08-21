@@ -19,8 +19,8 @@ public class DbToolImpl extends MyDaoSupport {
 	
 	public List<Map<String, Object>> listTable() {
 		String sql = "select TABLE_NAME value, concat(TABLE_COMMENT, '(', TABLE_NAME, ')') text "
-				+ " from information_schema.tables where TABLE_NAME in ('core_demo', 'core_db_test', 'core_demo_sub', 'core_demo_main', 'core_more')";
-		//		+ " from information_schema.tables where TABLE_NAME in ('config_value', 'repo_knowledge_category')";
+		//		+ " from information_schema.tables where TABLE_NAME in ('core_demo', 'core_db_test', 'core_demo_sub', 'core_demo_main', 'core_more')";
+				+ " from information_schema.tables where TABLE_NAME in ('repo_knowledge_content', 'repo_knowledge_category')";
 		// repo_knowledge_category
 		
 		return getJdbcTemplate().queryForList(sql);
@@ -111,7 +111,7 @@ public class DbToolImpl extends MyDaoSupport {
 		
 		String orderBy = "";
 		if (Strings.isNotEmpty(page.getOrderName()) && Strings.isNotEmpty(page.getOrderType())) {
-			orderBy = " order by " + tableName + "." + page.getOrderName() + " " + page.getOrderType();
+			orderBy = " order by t." + page.getOrderName() + " " + page.getOrderType();
 		}
 		
 		tempSql += where + orderBy + limit;
