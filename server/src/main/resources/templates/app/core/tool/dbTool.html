@@ -55,7 +55,7 @@ window.onload = function() {
 	
 	queryForm = new Vue({
 	    el:'#queryForm',
-	    data:{colList:[], isOrder:false, q:{tableName:'', colVal:[],  qKey:'', qOperator:'=', qValue:'', limit:3, orderName:'', orderType:'', qDesc:''}}
+	    data:{colList:[], isOrder:false, q:{tableName:'', colVal:[],  qKey:'', qOperator:'=', qValue:'', limit:10, orderName:'', orderType:'', qDesc:''}}
 	});
 	
 	result = new Vue({
@@ -447,7 +447,7 @@ function viewText(value, row, key) {
 	<button type="button" class="v-button" onclick="queryData()">查询</button>
 	
 	<select class="v-select" style="width:80px" v-model="q.limit">
-		<option value="3">limit 3</option>
+		<option value="10">limit 10</option>
 		<option value="200">limit 200</option>
 	</select>
 	</div>
