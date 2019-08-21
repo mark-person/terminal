@@ -248,11 +248,11 @@ function getTdType(key) {
 	if (result.primaryKey.indexOf(key) >-1) return "PRI";
 	
 	var keyType = result.type[key];
-	if (keyType == "decimal" || keyType.indexOf("int") > -1) return "number";
-	if (keyType == "varchar" || keyType == "timestamp" || keyType == "date") return keyType;
-	
-	if (keyType == "json") return "varchar";
-	
+	if (keyType) {
+		if (keyType == "decimal" || keyType.indexOf("int") > -1) return "number";
+		if (keyType == "varchar" || keyType == "timestamp" || keyType == "date") return keyType;
+		if (keyType == "json") return "varchar";
+	}
 	return "span";
 }
 

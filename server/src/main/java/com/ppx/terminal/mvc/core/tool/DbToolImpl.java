@@ -19,8 +19,8 @@ public class DbToolImpl extends MyDaoSupport {
 	
 	public List<Map<String, Object>> listTable() {
 		String sql = "select TABLE_NAME value, concat(TABLE_COMMENT, '(', TABLE_NAME, ')') text "
-		//		+ " from information_schema.tables where TABLE_NAME in ('core_demo', 'core_db_test', 'core_demo_sub', 'core_demo_main', 'core_more')";
-				+ " from information_schema.tables where TABLE_NAME in ('config_value', 'repo_knowledge_category')";
+				+ " from information_schema.tables where TABLE_NAME in ('core_demo', 'core_db_test', 'core_demo_sub', 'core_demo_main', 'core_more')";
+		//		+ " from information_schema.tables where TABLE_NAME in ('config_value', 'repo_knowledge_category')";
 		// repo_knowledge_category
 		
 		return getJdbcTemplate().queryForList(sql);
@@ -109,7 +109,7 @@ public class DbToolImpl extends MyDaoSupport {
 		String where = "";
 		List<Object> paraList = new ArrayList<Object>();
 		if (Strings.isNotEmpty(qKey) && Strings.isNotEmpty(qValue)) {
-			where = " where " + tableName + "." + qKey + " " + qOperator + " ? ";
+			where = " where t." + qKey + " " + qOperator + " ? ";
 		
 			if ("like".equals(qOperator)) {
 				qValue = "%" + qValue + "%";
@@ -118,7 +118,7 @@ public class DbToolImpl extends MyDaoSupport {
 		}
 		
 		// 总数
-		String countSql = "select count(*) from " + tableName + where;
+		String countSql = "select count(*) from " + tableName + " t " + where;
 		int count = getJdbcTemplate().queryForObject(countSql, Integer.class, paraList.toArray());
 		page.setCount(count);
 		if (count == 0) {
@@ -320,7 +320,7 @@ public class DbToolImpl extends MyDaoSupport {
 		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT"
 				+ " from information_schema.COLUMNS where TABLE_NAME = ? and COLUMN_NAME = ?";
 		Map<String, Object> commentMap = getJdbcTemplate().queryForMap(commentSql, tableName, columnName);
-		String sql = ((String)commentMap.get("COLUMN_COMMENT")).split(";")[2];
+		String sql = ((String)commentMap.get("COLUMN_COMMENT")).split(";")[2] + " limit 100";
 		
 		List<Map<String, Object>> dataList = getJdbcTemplate().queryForList(sql);
 		
@@ -343,7 +343,7 @@ public class DbToolImpl extends MyDaoSupport {
 		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT"
 				+ " from information_schema.COLUMNS where TABLE_NAME = ? and COLUMN_NAME = ?";
 		Map<String, Object> commentMap = getJdbcTemplate().queryForMap(commentSql, tableName, columnName);
-		String sql = ((String)commentMap.get("COLUMN_COMMENT")).split(";")[1];
+		String sql = ((String)commentMap.get("COLUMN_COMMENT")).split(";")[1] + " limit 100";
 		
 		List<Map<String, Object>> dataList = getJdbcTemplate().queryForList(sql, parentId);
 		
