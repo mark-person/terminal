@@ -20,7 +20,7 @@ public class DbToolImpl extends MyDaoSupport {
 	public List<Map<String, Object>> listTable() {
 		String sql = "select TABLE_NAME value, concat(TABLE_COMMENT, '(', TABLE_NAME, ')') text "
 		//		+ " from information_schema.tables where TABLE_NAME in ('core_demo', 'core_db_test', 'core_demo_sub', 'core_demo_main', 'core_more')";
-				+ " from information_schema.tables where TABLE_NAME in ('repo_knowledge_usp', 'repo_knowledge_category')";
+				+ " from information_schema.tables where TABLE_NAME in ('temp_imp_hr_staff_edu')";
 		// repo_knowledge_category
 		
 		return getJdbcTemplate().queryForList(sql);
