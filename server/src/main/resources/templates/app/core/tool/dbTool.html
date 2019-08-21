@@ -332,9 +332,7 @@ function delRow(row) {
 	loading.show();
 	axios.post(contextPath + "dbTool/delRow", param).then(function(res) {
 		loading.hide();
-    	if (res.code == 40000) {
-    		queryData();
-    	}
+    	queryData();
     });
 }
 
@@ -369,7 +367,6 @@ function columnClick(value, n) {
 		obj.spanClass = "columnSelected";
 		queryForm.q.colVal.push(value);
 	}
-	
 	Vue.set(queryForm.colList, n, obj);
 	
 	// 对queryForm.colList排序
@@ -391,7 +388,6 @@ function viewText(value, row, key) {
 	if (value != "" && result.type[key] == "json") {
 		value = formatJson(value);
 	}
-	
 	textModal.show('', {value:value});
 }
 
