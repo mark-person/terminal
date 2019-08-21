@@ -124,17 +124,16 @@ public class DbToolContoller {
 	
 	
 	// >>>>>>>>>...chain
-	// >>>>>>>>>>>>>>>>>>
 	@RequestMapping("/listChainData") @ResponseBody
 	public Map<String, Object> listChainData(String tableName, String columnName) {
-		Map<String, Object> map = impl.listChainData(tableName, columnName);
-		return ControllerReturn.of(map);
+		List<Map<String, Object>> list = impl.listChainData(tableName, columnName);
+		return ControllerReturn.of("list", list);
 	}
 	
 	@RequestMapping("/listChainSecondData") @ResponseBody
 	public Map<String, Object> listChainSecondData(String tableName, String columnName, Integer parentId) {
-		Map<String, Object> map = impl.listChainSecondData(tableName, columnName, parentId);
-		return ControllerReturn.of(map);
+		List<Map<String, Object>> list = impl.listChainSecondData(tableName, columnName, parentId);
+		return ControllerReturn.of("list", list);
 	}
 	
 	

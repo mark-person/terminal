@@ -34,45 +34,25 @@ public class DbToolImpl extends MyDaoSupport {
 				+ " from information_schema.COLUMNS where TABLE_NAME = ? order by ORDINAL_POSITION";
 		List<Map<String, Object>> list = getJdbcTemplate().queryForList(sql, tableName);
 		
-		
 		for (Map<String, Object> map : list) {
-			
 			String comment = (String)map.get("comment");
 			String value = (String)map.get("value");
 			String isNull = (String)map.get("IS_NULLABLE");
 			String key = (String)map.get("COLUMN_KEY");
 			
-			if ("NO".equals(isNull)) {
-				isNull = "*";
-			}
-			else {
-				isNull = "";
-			}
-			
-			if ("PRI".equals(key)) {
-				key = "PK";
-			}
-			else {
-				key = "";
-			}
-			
+			isNull = "NO".equals(isNull) ? "*" : "";
+			key = "PRI".equals(key) ? "PK" : "";
 			
 			String text = comment.split(";")[0] + "(" + value + ")" + isNull + key;
 			map.put("text", text);
-			
 		}
-		
 		return list;
 	}
 	
 	public List<Map<String, Object>> queryData(String tableName, String colVal, String qKey, String qOperator, String qValue, DbPage page) {
-		
-		
-		
 		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT from information_schema.COLUMNS where TABLE_NAME = ?" +
 				" and COLUMN_NAME in ('" + colVal.replaceAll(",", "','") + "')";
 		List<Map<String, Object>> commentList = getJdbcTemplate().queryForList(commentSql, tableName);
-		
 		
 		Map<String, String> leftColMap = new HashMap<String, String>();
 		String leftTable = "";
@@ -137,9 +117,6 @@ public class DbToolImpl extends MyDaoSupport {
 		tempSql += where + orderBy + limit;
 		List<Map<String, Object>> list = getJdbcTemplate().queryForList(tempSql, paraList.toArray());
 		
-		
-		
-		
 		for (Map<String, Object> map : list) {
 			map.keySet().forEach(k -> {
 				if (map.get(k) == null) {
@@ -178,8 +155,6 @@ public class DbToolImpl extends MyDaoSupport {
 		}
 		
 		
-		
-		
 		// 总数
 		String countSql = "select count(*) from (" + sql +") t";
 		int count = -1;
@@ -209,11 +184,8 @@ public class DbToolImpl extends MyDaoSupport {
 		}
 		
 		returnMap.put("count", count);
-		
 		returnMap.put("list", list);
-		
 		return returnMap;
-		
 	}
 	
 	
@@ -242,7 +214,6 @@ public class DbToolImpl extends MyDaoSupport {
 	}
 	
 	public Map<String, Object> updateOrInsert(Map<String, String[]> map) {
-		
 		Set<String> ignoreColSet = new HashSet<String>();
 		ignoreColSet.add("actionType");
 		ignoreColSet.add("idCode");
@@ -308,15 +279,13 @@ public class DbToolImpl extends MyDaoSupport {
 			pkParam.add(map.get(idCode[i])[0]);
 			pkSqlList.add(idCode[i] + " = ?");
 		}
-		String updateSql = "delete from " + tableName + " where " + StringUtils.collectionToDelimitedString(pkSqlList, " and ");
+		String delSql = "delete from " + tableName + " where " + StringUtils.collectionToDelimitedString(pkSqlList, " and ");
 		
-		getJdbcTemplate().update(updateSql, pkParam.toArray());
+		getJdbcTemplate().update(delSql, pkParam.toArray());
 		return ControllerReturn.of(40000, "删除成功");
 	}
 	
-	
-	public Map<String, Object> listChainData(String tableName, String columnName) {
-		Map<String, Object> returnMap = new HashMap<String, Object>();
+	public List<Map<String, Object>> listChainData(String tableName, String columnName) {
 		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT"
 				+ " from information_schema.COLUMNS where TABLE_NAME = ? and COLUMN_NAME = ?";
 		Map<String, Object> commentMap = getJdbcTemplate().queryForMap(commentSql, tableName, columnName);
@@ -333,13 +302,10 @@ public class DbToolImpl extends MyDaoSupport {
 			m.put("t", map.get(tName));
 			returnList.add(m);
 		}
-		returnMap.put("list", returnList);
-		
-		return returnMap;
+		return returnList;
 	}
 	
-	public Map<String, Object> listChainSecondData(String tableName, String columnName, Integer parentId) {
-		Map<String, Object> returnMap = new HashMap<String, Object>();
+	public List<Map<String, Object>> listChainSecondData(String tableName, String columnName, Integer parentId) {
 		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT"
 				+ " from information_schema.COLUMNS where TABLE_NAME = ? and COLUMN_NAME = ?";
 		Map<String, Object> commentMap = getJdbcTemplate().queryForMap(commentSql, tableName, columnName);
@@ -356,9 +322,7 @@ public class DbToolImpl extends MyDaoSupport {
 			m.put("t", map.get(tName));
 			returnList.add(m);
 		}
-		returnMap.put("list", returnList);
-		
-		return returnMap;
+		return returnList;
 	}
 	
 	
