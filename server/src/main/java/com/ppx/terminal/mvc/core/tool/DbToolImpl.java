@@ -1,6 +1,7 @@
 package com.ppx.terminal.mvc.core.tool;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -19,14 +21,19 @@ public class DbToolImpl extends MyDaoSupport {
 	
 	public List<Map<String, Object>> listTable() {
 		String sql = "select TABLE_NAME value, concat(trim(substring_index(TABLE_COMMENT, '--', 1)), '(', TABLE_NAME, ')') text "
-		//		+ " from information_schema.tables where TABLE_NAME in ('core_demo', 'core_db_test', 'core_demo_sub', 'core_demo_main', 'core_more')";
-				+ " from information_schema.tables where TABLE_NAME in ('repo_todo')";
-		// repo_knowledge_category
+				+ " from information_schema.tables where TABLE_NAME in (:tableName)";
 		
-		return getJdbcTemplate().queryForList(sql);
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("tableName", DbConfig.TABLE_SET);
+		
+		NamedParameterJdbcTemplate nameJdbcTemplate = new NamedParameterJdbcTemplate(getJdbcTemplate());
+		return nameJdbcTemplate.queryForList(sql, paramMap);
 	}
 	
 	public List<Map<String, Object>> listColumnMsg(String tableName) {
+		if (!DbConfig.TABLE_SET.contains(tableName)) {
+			return new ArrayList<Map<String, Object>>();
+		}
 		// DATA_TYPE = 'date'
 		// ID -- 其它说明
 		// IS_NULLABLE:YES|NO COLUMN_KEY:PRI
@@ -49,10 +56,22 @@ public class DbToolImpl extends MyDaoSupport {
 		return list;
 	}
 	
-	public List<Map<String, Object>> queryData(String tableName, String colVal, String qKey, String qOperator, String qValue, DbPage page) {
-		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT from information_schema.COLUMNS where TABLE_NAME = ?" +
-				" and COLUMN_NAME in ('" + colVal.replaceAll(",", "','") + "')";
-		List<Map<String, Object>> commentList = getJdbcTemplate().queryForList(commentSql, tableName);
+	public List<Map<String, Object>> queryData(String tableName, String colVal[], String qKey, String qOperator, String qValue, DbPage page) {
+		if (!DbConfig.TABLE_SET.contains(tableName)) {
+			return new ArrayList<Map<String, Object>>();
+		}
+		
+		NamedParameterJdbcTemplate nameJdbcTemplate = new NamedParameterJdbcTemplate(getJdbcTemplate());
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("tableName", tableName);
+		paramMap.put("colVal", Arrays.asList(colVal));
+		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT from information_schema.COLUMNS where TABLE_NAME = :tableName" +
+				" and COLUMN_NAME in (:colVal)";
+		List<Map<String, Object>> commentList = nameJdbcTemplate.queryForList(commentSql, paramMap);
+		
+		if (commentList.size() != colVal.length) {
+			return new ArrayList<Map<String, Object>>();
+		}
 		
 		Map<String, String> leftColMap = new HashMap<String, String>();
 		String leftTable = "";
@@ -74,17 +93,19 @@ public class DbToolImpl extends MyDaoSupport {
 				
 				// 关联表字段
 				leftColMap.put(name, "t." + name + " " + name + "," +  leftTableName + "." + leftName + " " + name + "__desc");
-				leftTable += "left join " + leftTableName + " on t." + name + " = " + leftTableName + "." + leftId;
+				leftTable += " left join " + leftTableName + " on t." + name + " = " + leftTableName + "." + leftId;
 			}
 		}
 		
-		colVal = "t." + colVal.replaceAll(",", ",t.");
+		String colValStr = Strings.join(Arrays.asList(colVal), ',');
+		
+		colValStr = "t." + colValStr.replaceAll(",", ",t.");
 		
 		for (String key : leftColMap.keySet()) {
-			colVal = colVal.replace("t." + key, leftColMap.get(key));
+			colValStr = colValStr.replace("t." + key, leftColMap.get(key));
 		}
 		
-		String tempSql = "select " + colVal + " from " + tableName + " t " + leftTable;		
+		String tempSql = "select " + colValStr + " from " + tableName + " t " + leftTable;		
 		
 		String where = "";
 		List<Object> paraList = new ArrayList<Object>();
@@ -130,6 +151,7 @@ public class DbToolImpl extends MyDaoSupport {
 	
 	// 
 	public Map<String, Object> listSingleData(String tableName, String columnName, String queryVal) {
+		
 		Map<String, Object> returnMap = new HashMap<String, Object>();
 		String commentSql = "select COLUMN_NAME, trim(substring_index(COLUMN_COMMENT, '--', 1)) COLUMN_COMMENT"
 				+ " from information_schema.COLUMNS where TABLE_NAME = ? and COLUMN_NAME = ?";
@@ -222,6 +244,10 @@ public class DbToolImpl extends MyDaoSupport {
 		String actionType = map.get("actionType")[0];
 		String tableName = map.get("tableName")[0];
 		String[] idCode = map.get("idCode");
+		
+		if (!DbConfig.TABLE_SET.contains(tableName)) {
+			return new HashMap<String, Object>();
+		}
 		
 		Set<String> keySet = map.keySet();
 		if ("insert".equals(actionType)) {

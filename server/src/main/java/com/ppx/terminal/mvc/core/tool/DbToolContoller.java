@@ -92,7 +92,8 @@ public class DbToolContoller {
 	}
 	
 	@RequestMapping("/queryData") @ResponseBody
-	public Map<String, Object> queryData(String tableName, String colVal, String qKey, String qOperator, String qValue, DbPage page) {
+	public Map<String, Object> queryData(String tableName, String[] colVal, String qKey, String qOperator, String qValue, DbPage page) {
+		
 		
 		List<Map<String, Object>> list = impl.queryData(tableName, colVal, qKey, qOperator, qValue, page);
 		
