@@ -1,5 +1,5 @@
 
-test_p, CREATE TABLE `test_p` (
+CREATE TABLE `test_p` (
   `item_id` int(11) NOT NULL,
   `policy_type` varchar(1) DEFAULT NULL,
   `policy_group` int(11) DEFAULT NULL,
@@ -25,8 +25,14 @@ from test_p group by policy_group
 
 
 
+select @su:= 0;
+select t.*, t.n - 2 from (
+select test_p.*, @su:=num + @su n from test_p order by p) t where n > 2
 
 
+
+sselect t.* from (
+select test_p.*, @r := (@su := num + @su) - 3  n, if(@r <= 0, 0, if(num - @r <= 0, num, @r)) r from test_p, (select @su:=0) tt order by p) t
 
 
 
