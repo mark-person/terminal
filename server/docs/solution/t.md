@@ -31,8 +31,10 @@ select test_p.*, @su:=num + @su n from test_p order by p) t where n > 2
 
 
 
-sselect t.* from (
-select test_p.*, @r := (@su := num + @su) - 3  n, if(@r <= 0, 0, if(num - @r <= 0, num, @r)) r from test_p, (select @su:=0) tt order by p) t
+
+select t.* from (
+select test_p.*, @r := (@su := num + @su) - @di  n, if(@r <= 0, 0, if(num - @r <= 0, num, @r)) r from test_p, 
+(select @su:=0) tt, (select @di := sum(num) div 4 from test_p) ttt order by p) t
 
 
 
