@@ -1,4 +1,13 @@
 
+test_p, CREATE TABLE `test_p` (
+  `item_id` int(11) NOT NULL,
+  `policy_type` varchar(1) DEFAULT NULL,
+  `policy_group` int(11) DEFAULT NULL,
+  `policy_info` varchar(64) DEFAULT NULL,
+  `num` int(11) DEFAULT NULL,
+  `p` decimal(7,2) DEFAULT NULL,
+  PRIMARY KEY (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk
 
 
 
@@ -7,6 +16,7 @@ select sum(num), policy_group, min(p), sum(num * p),
 case policy_group 
 when 100 then sum(num) div 3 * 10 + sum(num) mod 3 * min(p)
 when 101 then sum(num * p) - sum(num) div 2 * max(p)
+when 102 then sum(num * p) - sum(num) div 4 * max(p)
 else -1 end D
 from test_p group by policy_group
 
