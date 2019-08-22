@@ -295,9 +295,10 @@ public class DbToolImpl extends MyDaoSupport {
 		return ControllerReturn.of(40002, "actionType参数错误");
 	}
 	
-	public int delRow(Map<String, String[]> map) {
-		String tableName = map.get("tableName")[0];
-		String[] idCode = map.get("idCode");
+	public int delRow(String tableName, String[] idCode, Map<String, String[]> map) {
+		if (!DbConfig.TABLE_SET.contains(tableName) || idCode.length == 0) {
+			return 0;
+		}
 		
 		List<Object> pkParam = new ArrayList<Object>();
 		List<String> pkSqlList = new ArrayList<String>();
@@ -307,8 +308,7 @@ public class DbToolImpl extends MyDaoSupport {
 		}
 		String delSql = "delete from " + tableName + " where " + StringUtils.collectionToDelimitedString(pkSqlList, " and ");
 		
-		int r = getJdbcTemplate().update(delSql, pkParam.toArray());
-		return r;
+		return getJdbcTemplate().update(delSql, pkParam.toArray());
 	}
 	
 	public List<Map<String, Object>> listChainData(String tableName, String columnName) {

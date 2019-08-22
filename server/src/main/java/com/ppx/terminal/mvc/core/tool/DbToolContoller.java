@@ -116,8 +116,8 @@ public class DbToolContoller {
 	
 	// >>>>>>>>>>>>>>>>>>
 	@PostMapping("/delRow") @ResponseBody
-	public Map<String, Object> delRow(HttpServletRequest request) {
-		impl.delRow(request.getParameterMap());
+	public Map<String, Object> delRow(String tableName, String[] idCode, HttpServletRequest request) {
+		impl.delRow(tableName, idCode, request.getParameterMap());
 		return ControllerReturn.of();
 	}
 	
