@@ -1,4 +1,18 @@
 
+
+题目:买4免1,价低者免
+表:
+create table test_cart (
+	sku_id int not null,
+	sku_num int not null,
+	sku_price decimal(7, 2) not null,
+	primary key (sku_id)
+);
+问题 :一个SQL计算出总价
+
+
+
+
 CREATE TABLE `test_p` (
   `item_id` int(11) NOT NULL,
   `policy_type` varchar(1) DEFAULT NULL,
