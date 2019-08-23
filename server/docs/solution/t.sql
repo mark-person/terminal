@@ -26,3 +26,16 @@ from (select c.group_id, sum(c.sku_num) div 4 group_sum from test_cart c group b
 
 
 
+
+select t.*, @group_num := group_num,
+case @group_id := t.group_id
+when 100 then
+(
+select sum(sku_price * real_num) price from (
+	select t.*, @r := (@minus := sku_num + @minus) - @group_num div 4 n, if(@r <= 0, 0, if(sku_num - @r <= 0, sku_num, @r)) real_num 
+	from (select * from test_cart where group_id = @group_id) t, (select @minus := 0) t0 order by sku_price) t
+) 
+else -1 end D
+from (select c.group_id, sum(c.sku_num) group_num from test_cart c group by c.group_id) t
+
+
