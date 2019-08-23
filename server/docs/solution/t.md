@@ -12,6 +12,8 @@ CREATE TABLE `test_p` (
 
 
 
+
+
 select sum(num), policy_group, min(p), sum(num * p),
 case policy_group 
 when 100 then sum(num) div 3 * 10 + sum(num) mod 3 * min(p)
@@ -35,6 +37,9 @@ select test_p.*, @su:=num + @su n from test_p order by p) t where n > 2
 select t.* from (
 select test_p.*, @r := (@su := num + @su) - @di  n, if(@r <= 0, 0, if(num - @r <= 0, num, @r)) r from test_p, 
 (select @su:=0) tt, (select @di := sum(num) div 4 from test_p) ttt order by p) t
+
+
+
 
 
 
