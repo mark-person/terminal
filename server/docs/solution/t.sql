@@ -39,3 +39,11 @@ else -1 end D
 from (select c.group_id, sum(c.sku_num) group_num from test_cart c group by c.group_id) t
 
 
+
+-- 子查询不能套两层以上 ，上面代码有BUG，使用
+select 'A', 100
+union all
+select 'B', 100
+
+
+
