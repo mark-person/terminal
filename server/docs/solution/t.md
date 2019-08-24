@@ -55,19 +55,47 @@ select test_p.*, @r := (@su := num + @su) - @di  n, if(@r <= 0, 0, if(num - @r <
 
 
 
+用json存select JSON_EXTRACT('{"Y":10}', '$.Y')
 
 
-
-
+P:10(10元均价)
 N:3,Y:10(10元3件)
-+1(加一元多一件)
-B:4,F:1(买4免1)
+A:1(加一元多一件)
+B:4(买4免1)
 D:0.5(5折)
 D:0.9,2:0.8(单件9折，第二件8折)
 D:0.9,2+:0.8(单件9折，第二件及以上8折)
 1:0.9,2:0.8(第一件9折，任两件8折)
 1:0.9,2+:0.8(第一件9折，任两件及以上8折)
 E:10,-3(满10元立减3元)
+
 * 价低者免，价低者折
+
+特价
+-- 10元均价 10元3件 加一元多一件 买4免1 满10元立减3元
+select JSON_EXTRACT('{"P":10}', '$.P');
+select JSON_EXTRACT('{"Y":10,"N":3}', '$.Y');
+select JSON_EXTRACT('{"A":1}', '$.A');
+select JSON_EXTRACT('{"B":4}', '$.B');
+select JSON_EXTRACT('{"E":10, "M":3}', '$.E');
+-- 5折 单件9折，第二件8折  单件9折，第二件及以上8折  第一件9折，任两件8折  第一件9折，任两件及以上8折
+select JSON_EXTRACT('{"D":0.5}', '$.D');
+select JSON_EXTRACT('{"D1":0.9,"D2":0.8}', '$.D2');
+select JSON_EXTRACT('{"D1":0.9,"D2M":0.8}', '$.D2M');
+select JSON_EXTRACT('{"D1":0.9,"D2A":0.8"}', '$.D2A');
+select JSON_EXTRACT('{"D1":0.9,"D2MA":0.8"}', '$.D2MA');
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
