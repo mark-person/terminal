@@ -35,6 +35,7 @@ create table program_target (
 
 /**
  * ->活动启动后生成冗余数据，过期和作废的清除
+ * 日期处理，生成日期对应的program_id
  */
 create table program_target_active (
 	program_id		int not null,
