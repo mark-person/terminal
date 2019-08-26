@@ -43,13 +43,13 @@ create table program_target_active (
 	program_type 	json not null,
 	program_prio	tinyint not null,
 	primary key(program_id, target_id)
-) comment '';
+) comment '方案';
 
 create table program_target_data (
 	activity_date	date not null comment '活动日期--活动启动时生成,9.1~9.3生成3个',
 	program_id		int not null,
 	primary key(activity_date, program_id)
-) comment '';
+) comment '方案日期--活动日期决定';
 
 
 create table e_target (
