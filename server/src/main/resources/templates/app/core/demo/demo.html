@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <link th:replace="common/fragment::base"/>
-</head>
+
 <script type="text/javascript" th:inline="javascript">
 
 var list = [[${list}]];
@@ -44,6 +44,7 @@ function getDemoType(type) {
 
 var demoType = {NEW:'新的', OLD:'旧的'};
 </script>
+</head>
 <body class="block-template">
 
 <div id="page">
@@ -53,7 +54,7 @@ var demoType = {NEW:'新的', OLD:'旧的'};
 		<input type="text" class="v-text"  v-model="p.demoName" maxlength="32">
 		<button class="v-button" @click="gotoPage()">搜索</button>
 	</div>
-	<table class="v-table">
+	<table class="v-table v-table-hover">
 	<tr>
 		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">DEMO_ID<span :class="sortType['demo_id']"></span></th>
 		<th class="active" @click="sortPage('demo_name', sortType['demo_name'])">DEMO_NAME<span :class="sortType['demo_name']"></span></th>
@@ -76,7 +77,7 @@ var demoType = {NEW:'新的', OLD:'旧的'};
 
 <div id="modal">
 <modal v-if="modal.showModal" :modal="modal">
-<table class="v-table v-table-hover" slot="body">
+<table class="v-table" slot="body">
 	<tr>
 		<th style="width:100px">DEMO_NAME</th>
 		<td><input class="v-text" type="text" v-model="p.demoName" maxlength="32"><span class="v-error">{{v.demoName}}</span></td>

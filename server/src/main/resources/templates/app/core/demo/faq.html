@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<link th:replace="common/fragment::base"/>
+<script type="text/javascript" th:src="@{/static/tool/showdown.min.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+
+var form;
+window.onload = function() {
+	form = new Vue({
+	    el:'#faq',
+	    data:{val:""},
+	    computed:{
+	    	content:function() {
+	    		return getMarkdown(this.val);
+	    	}
+	    }
+	})
+}
+
+function getMarkdown(val) {
+	var converter = new showdown.Converter();
+	return converter.makeHtml(val);
+}
+
+</script>
+</head>
+<body>
+
+<div id="faq">
+
+	<div><textarea style="width:300px" rows="5" v-model="val"></textarea></div>
+	
+	<div v-html="content"></div>
+	
+</div>
+
+
+
+</body>
+</html>
