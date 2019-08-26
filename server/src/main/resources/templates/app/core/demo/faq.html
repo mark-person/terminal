@@ -27,8 +27,8 @@ window.onload = function() {
 	    watch: {
 	    	val(n, o) {
 	    		this.$nextTick(function () {   //或者用 this.$nextTick 
-	    			
-	              })
+	    			hljs.highlightBlock(document.getElementById("content"));
+	             })
 	    	
 	    	}
 	    }
@@ -39,12 +39,14 @@ function getMarkdown(val) {
 	var converter = new showdown.Converter();
 	var newVal = converter.makeHtml(val);
 	
+	/*
 	var r = newVal.replace(/(^<pre><code.*>)([\w\W]*)(<\/code><\/pre>$)/mg,  function(a, b, c, d) {
 		alert("c:" + c)
 		return b + hljs.highlightAuto(c).value + d;
 	});
 	if (r) alert(r)
-	return r;
+	*/
+	return newVal;
 }
 
 function getA(s) {
@@ -65,7 +67,7 @@ var r = 'aaa<pre><code>select 1 from </code></pre>bbb'.replace(/(<pre><code>)(.*
 
 	<div><textarea style="width:500px" rows="8" v-model="val"></textarea></div>
 	
-	<div v-html="content" class="markdown-body"></div>
+	<div id="content" v-html="content" class="markdown-body"></div>
 	
 </div>
 <pre>
