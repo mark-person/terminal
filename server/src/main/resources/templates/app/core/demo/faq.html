@@ -4,11 +4,18 @@
 <meta charset="utf-8">
 <link th:replace="common/fragment::base"/>
 <script type="text/javascript" th:src="@{/static/tool/showdown.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/tool/highlight.pack.js}"></script>
+<link rel="stylesheet" th:href="@{/static/tool/github-markdown.css}">
+<link rel="stylesheet" th:href="@{/static/tool/github-gist.css}">
+
 
 <script type="text/javascript" th:inline="javascript">
 
 var form;
 window.onload = function() {
+	// hljs.highlightAuto("select 1 from").value;
+	
+	
 	form = new Vue({
 	    el:'#faq',
 	    data:{val:""},
@@ -16,28 +23,56 @@ window.onload = function() {
 	    	content:function() {
 	    		return getMarkdown(this.val);
 	    	}
+	    },
+	    watch: {
+	    	val(n, o) {
+	    		this.$nextTick(function () {   //或者用 this.$nextTick 
+	    			
+	              })
+	    	
+	    	}
 	    }
 	})
 }
 
 function getMarkdown(val) {
 	var converter = new showdown.Converter();
-	return converter.makeHtml(val);
+	var newVal = converter.makeHtml(val);
+	
+	var r = newVal.replace(/(^<pre><code.*>)([\w\W]*)(<\/code><\/pre>$)/mg,  function(a, b, c, d) {
+		alert("c:" + c)
+		return b + hljs.highlightAuto(c).value + d;
+	});
+	if (r) alert(r)
+	return r;
 }
 
+function getA(s) {
+	return ;
+}
+
+var left  = '<pre><code\\b[^>]*>';
+var right = '</code></pre>';
+
+// var r = 'aaa<pre><code>select 1 from </code></pre>bbb'.replace(/<pre><code\\b[^>]*>.*<\/code><\/pre>/, "xxxx");
+var r = 'aaa<pre><code>select 1 from </code></pre>bbb'.replace(/(<pre><code>)(.*)(<\/code><\/pre>)/, "$1" + getA("$2") + "$3");
+//alert(r)
 </script>
 </head>
 <body>
 
 <div id="faq">
 
-	<div><textarea style="width:300px" rows="5" v-model="val"></textarea></div>
+	<div><textarea style="width:500px" rows="8" v-model="val"></textarea></div>
 	
-	<div v-html="content"></div>
+	<div v-html="content" class="markdown-body"></div>
 	
 </div>
-
-
+<pre>
+<code class="javascript">
+var a = 1;
+</code>
+</pre>
 
 </body>
 </html>
