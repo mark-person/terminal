@@ -13,8 +13,6 @@
 
 var form;
 window.onload = function() {
-	// hljs.highlightAuto("select 1 from").value;
-	
 	
 	form = new Vue({
 	    el:'#faq',
@@ -26,10 +24,9 @@ window.onload = function() {
 	    },
 	    watch: {
 	    	val(n, o) {
-	    		this.$nextTick(function () {   //或者用 this.$nextTick 
+		    	this.$nextTick(function () {
 	    			hljs.highlightBlock(document.getElementById("content"));
-	             })
-	    	
+	    		})
 	    	}
 	    }
 	})
@@ -38,14 +35,6 @@ window.onload = function() {
 function getMarkdown(val) {
 	var converter = new showdown.Converter();
 	var newVal = converter.makeHtml(val);
-	
-	/*
-	var r = newVal.replace(/(^<pre><code.*>)([\w\W]*)(<\/code><\/pre>$)/mg,  function(a, b, c, d) {
-		alert("c:" + c)
-		return b + hljs.highlightAuto(c).value + d;
-	});
-	if (r) alert(r)
-	*/
 	return newVal;
 }
 
@@ -53,12 +42,7 @@ function getA(s) {
 	return ;
 }
 
-var left  = '<pre><code\\b[^>]*>';
-var right = '</code></pre>';
 
-// var r = 'aaa<pre><code>select 1 from </code></pre>bbb'.replace(/<pre><code\\b[^>]*>.*<\/code><\/pre>/, "xxxx");
-var r = 'aaa<pre><code>select 1 from </code></pre>bbb'.replace(/(<pre><code>)(.*)(<\/code><\/pre>)/, "$1" + getA("$2") + "$3");
-//alert(r)
 </script>
 </head>
 <body>
