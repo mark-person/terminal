@@ -212,13 +212,13 @@ function answerDel() {
 
 <table class="v-table" id="faq">
 <tr>
-	<th style="width:30px">问题</th><td><input class="v-text" type="text" style="width:500px;" maxlength="128"></td>
+	<th style="width:30px">问题</th><td><input class="v-text" type="text" style="width:504px;" maxlength="128"></td>
 </tr>
 <tr>
 	<th>描述</th>
 	<td>
 		<div style="float:left">
-			<div><textarea class="v-text" id="contentInput" style="width:500px;height:200px" v-model="val" onfocus="currentInput=this;"></textarea></div>
+			<div><textarea class="v-text" id="contentInput" style="width:500px;height:180px" v-model="val" onfocus="currentInput=this;"></textarea></div>
 			
 			<div>
 				<button class="v-button" onclick="add()">+</button>
@@ -235,9 +235,9 @@ function answerDel() {
 </tr>
 <tr>
 	<th>参考答案</th>
-	<td>
+	<td style="background-color: white;border-top:1px solid #ddd;border-bottom:1px solid #ddd">
 		<div style="float:left">
-			<div><textarea class="v-text" id="answerContentInput" style="width:500px;height:200px" v-model="answerVal" onfocus="currentInput=this;"></textarea></div>
+			<div><textarea class="v-text" id="answerContentInput" style="width:500px;height:180px" v-model="answerVal" onfocus="currentInput=this;"></textarea></div>
 			<div v-for="index of answerSubLength">
 				<textarea class="v-text" :id="'answerSub' + index" style="width:500px;height:100px" rows="4" v-model="answerSub[index]"></textarea>
 			</div>
@@ -245,6 +245,12 @@ function answerDel() {
 			<button class="v-button" onclick="answerDel()">-</button>
 		</div>
 		<div id="answerContent" v-html="answerContent" class="markdown-body" style="margin-left:520px"></div>
+	</td>
+</tr>
+
+<tr>
+	<td colspan="2" style="text-align: center;">
+		<button class="v-button" onclick="ok()">确定</button>
 	</td>
 </tr>
 </table>
