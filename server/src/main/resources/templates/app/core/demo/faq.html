@@ -41,8 +41,21 @@ function upload(file) {
 	let config = {headers:{"Content-Type":"multipart/form-data"}};
 	axios.post(contextPath + "uploadImg/uploadFaq", formData, config).then(function(r) {
 		var path = "/img/faq/" + r.list[0];
-		replaceSelection("contentInput", "![](" + path + ")\r\n");
-		form.val = document.getElementById("contentInput").value;
+		
+		
+		var editorId = "contentInput";
+		if (currentInput != null) {
+			editorId = currentInput.id;
+		}
+		
+		replaceSelection(editorId, "![](" + path + ")\r\n");
+		
+		if (editorId == "contentInput") {
+			form.val = document.getElementById(editorId).value;
+		}
+		else {
+			form.answerVal = document.getElementById(editorId).value;
+		}
 	})
 }
 
@@ -63,10 +76,13 @@ window.onload = function() {
 	
 	form = new Vue({
 	    el:'#faq',
-	    data:{val:"", sub:[], subLength:1},
+	    data:{val:"", sub:[], subLength:1, answerVal:"", answerSub:[], answerSubLength:1},
 	    computed:{
 	    	content:function() {
-	    		return getMarkdown(this.val, this);
+	    		return getMarkdown(this.val, this, 0);
+	    	},
+	    	answerContent:function() {
+	    		return getMarkdown(this.answerVal, this, 1000);
 	    	}
 	    },
 	    watch: {
@@ -85,14 +101,29 @@ window.onload = function() {
 		    			hljs.highlightBlock(el)
 		    		})
 	    		})
+	    	},
+	    	answerVal(n, o) {
+		    	this.$nextTick(function () {
+		    		const preEl = document.getElementById("answerContent").querySelectorAll('code');
+		    		preEl.forEach((el) => {
+		    			hljs.highlightBlock(el)
+		    		})
+	    		})
+	    	},
+	    	answerSub(n, o) {
+	    		this.$nextTick(function () {
+		    		const preEl = document.getElementById("answerContent").querySelectorAll('code');
+		    		preEl.forEach((el) => {
+		    			hljs.highlightBlock(el)
+		    		})
+	    		})
 	    	}
 	    }
 	})
 }
 
 var converter = new showdown.Converter();
-function getMarkdown(val, obj) {
-	var i = 0;
+function getMarkdown(val, obj, i) {
 	var newVal = val.replace(/<m>/g, function() {
 		i++;
 		var arrowId = 'arrow' + i;
@@ -101,13 +132,20 @@ function getMarkdown(val, obj) {
 			'<div id="' + divId + '" style="margin-top:-15px;margin-bottom:-15px;display:none">';
 	});
 	newVal = newVal.replace(/<\/m>/g, '</div>');
-	
-	for (var n = 1; n <= obj.subLength; n++) {
+	var len = obj.subLength;
+	if (i >= 1000) {
+		len = obj.answerSubLength;
+	}
+	for (var n = 1; n <= len; n++) {
 		newVal = newVal.replace(new RegExp("<sub" + n + "/>", "g"), function() {
-			return form.sub[n];
+			if (i >= 1000) {
+				return form.answerSub[n];
+			}
+			else {
+				return form.sub[n];
+			}
 		});
 	}
-	
 	
 	return converter.makeHtml(newVal);
 }
@@ -123,7 +161,7 @@ function more(i) {
 	var display = divObj.style.display == 'none' ? '' : 'none';
 	divObj.style.display = display;
 }
-
+var currentInput = null;
 function replaceSelection(id, text) {
 	var editor = document.getElementById(id);
 	if (!editor.setSelectionRange) return;
@@ -147,25 +185,56 @@ function add() {
 
 function del() {
 	if (form.subLength == 1) return;
-	
 	form.subLength -= 1;
+}
+
+function answerAdd() {
+	form.answerSubLength += 1;
+}
+
+function answerDel() {
+	if (form.answerSubLength == 1) return;
+	form.answerSubLength -= 1;
 }
 </script>
 </head>
 <body>
 
-<div id="faq">
-
-	<div style="float:left">
-		<div><textarea class="v-text" id="contentInput" style="width:500px;height:200px" v-model="val"></textarea></div>
-		<div v-for="index of subLength">
-			<textarea class="v-text" :id="'sub' + index" style="width:500px;height:100px" rows="4" v-model="sub[index]"></textarea>
+<table class="v-table" id="faq">
+<tr>
+	<th style="width:30px">问题</th><td><input class="v-text" type="text" style="width:500px;" maxlength="128"></td>
+</tr>
+<tr>
+	<th>描述</th>
+	<td>
+		<div style="float:left">
+			<div><textarea class="v-text" id="contentInput" style="width:500px;height:200px" v-model="val" onfocus="currentInput=this;"></textarea></div>
+			<div v-for="index of subLength">
+				<textarea class="v-text" :id="'sub' + index" style="width:500px;height:100px" rows="4" v-model="sub[index]"></textarea>
+			</div>
+			<button class="v-button" onclick="add()">+</button>
+			<button class="v-button" onclick="del()">-</button>
 		</div>
-		<button class="v-button" onclick="add()">+</button>
-		<button class="v-button" onclick="del()">-</button>
-	</div>
-	<div id="content" v-html="content" class="markdown-body" style="margin-left:520px"></div>
-</div>
+		<div id="content" v-html="content" class="markdown-body" style="margin-left:520px"></div>
+	</td>
+</tr>
+<tr>
+	<th>参考答案</th>
+	<td>
+		<div style="float:left">
+			<div><textarea class="v-text" id="answerContentInput" style="width:500px;height:200px" v-model="answerVal" onfocus="currentInput=this;"></textarea></div>
+			<div v-for="index of answerSubLength">
+				<textarea class="v-text" :id="'answerSub' + index" style="width:500px;height:100px" rows="4" v-model="answerSub[index]"></textarea>
+			</div>
+			<button class="v-button" onclick="answerAdd()">+</button>
+			<button class="v-button" onclick="answerDel()">-</button>
+		</div>
+		<div id="answerContent" v-html="answerContent" class="markdown-body" style="margin-left:520px"></div>
+	</td>
+</tr>
+</table>
+
+
 
 
 
