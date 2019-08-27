@@ -76,7 +76,7 @@ window.onload = function() {
 	
 	form = new Vue({
 	    el:'#faq',
-	    data:{val:"", sub:[], subLength:1, answerVal:"", answerSub:[], answerSubLength:1},
+	    data:{val:"", sub:[], subLength:0, answerVal:"", answerSub:[], answerSubLength:0},
 	    computed:{
 	    	content:function() {
 	    		return getMarkdown(this.val, this, 0);
@@ -128,10 +128,20 @@ function getMarkdown(val, obj, i) {
 		i++;
 		var arrowId = 'arrow' + i;
 		var divId = 'div' + i;
-		return  '<a href="#this" onclick="more(' + i + ')">more</a><span id="' + arrowId + '" class="left"></span>' +
-			'<div id="' + divId + '" style="margin-top:-15px;margin-bottom:-15px;display:none">';
+		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + arrowId + '" class="left"></span>' +
+			'<div id="' + divId + '" style="margin-top:-10px;margin-bottom:-10px;display:none">';
 	});
+	
+	newVal = newVal.replace(/<mm>/g, function() {
+		i++;
+		var arrowId = 'arrow' + i;
+		var divId = 'div' + i;
+		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + arrowId + '" class="right"></span>' +
+			'<div id="' + divId + '" style="margin-top:-10px;margin-bottom:-10px;">';
+	});
+	
 	newVal = newVal.replace(/<\/m>/g, '</div>');
+	newVal = newVal.replace(/<\/mm>/g, '</div>');
 	var len = obj.subLength;
 	if (i >= 1000) {
 		len = obj.answerSubLength;
@@ -184,7 +194,7 @@ function add() {
 }
 
 function del() {
-	if (form.subLength == 1) return;
+	if (form.subLength == 0) return;
 	form.subLength -= 1;
 }
 
@@ -193,7 +203,7 @@ function answerAdd() {
 }
 
 function answerDel() {
-	if (form.answerSubLength == 1) return;
+	if (form.answerSubLength == 0) return;
 	form.answerSubLength -= 1;
 }
 </script>
@@ -209,11 +219,16 @@ function answerDel() {
 	<td>
 		<div style="float:left">
 			<div><textarea class="v-text" id="contentInput" style="width:500px;height:200px" v-model="val" onfocus="currentInput=this;"></textarea></div>
+			
+			<div>
+				<button class="v-button" onclick="add()">+</button>
+				<button class="v-button" onclick="del()">-</button>
+			</div>
+			
 			<div v-for="index of subLength">
 				<textarea class="v-text" :id="'sub' + index" style="width:500px;height:100px" rows="4" v-model="sub[index]"></textarea>
 			</div>
-			<button class="v-button" onclick="add()">+</button>
-			<button class="v-button" onclick="del()">-</button>
+			
 		</div>
 		<div id="content" v-html="content" class="markdown-body" style="margin-left:520px"></div>
 	</td>
