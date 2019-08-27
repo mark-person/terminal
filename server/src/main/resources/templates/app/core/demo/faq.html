@@ -58,7 +58,14 @@ window.onload = function() {
 }
 
 function getMarkdown(val) {
-	var newVal = val.replace(/<m>/g, '<a href="#this" onclick="more(\'abc\')">more</a><span class="left"></span><div style="margin-top:-15px" id=\'abc\'>');
+	var i = 0;
+	var newVal = val.replace(/<m>/g, function() {
+		i++;
+		var arrowId = 'arrow' + i;
+		var divId = 'div' + i;
+		return  '<a href="#this" onclick="more(' + i + ')">more</a><span id="' + arrowId + '" class="left"></span>' +
+			'<div id="' + divId + '" style="margin-top:-15px;margin-bottom:-15px;display:none">';
+	});
 	newVal = newVal.replace(/<\/m>/g, '</div>');
 	
 	var converter = new showdown.Converter();
@@ -66,17 +73,24 @@ function getMarkdown(val) {
 	return r;
 }
 
-function more(id) {
-	var display = document.getElementById(id).style.display;
-	display = display == 'none' ? '' : 'none';
-	document.getElementById(id).style.display=display;
+function more(i) {
+	var arrowObj = document.getElementById("arrow" + i);
+	var divObj = document.getElementById("div" + i);
+	
+	var direction = arrowObj.getAttribute("class");
+	direction = direction == 'left' ? 'right' : 'left';
+	alert(direction)
+	arrowObj.setAttribute("class", direction);
+	
+	var display = divObj.style.display == 'none' ? '' : 'none';
+	divObj.style.display = display;
 }
 
 </script>
 </head>
 <body>
 
-<div id="faq" style="">
+<div id="faq">
 
 	<div><textarea style="width:500px" rows="8" v-model="val"></textarea></div>
 	
