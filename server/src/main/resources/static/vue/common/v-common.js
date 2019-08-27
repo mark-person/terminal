@@ -1,5 +1,8 @@
 
-axios.interceptors.request.use(function (config) { 
+axios.interceptors.request.use(function (config) {
+	if (config.url.indexOf("uploadImg") > -1) {
+		return config;
+	}
 	config.transformRequest=[function (data) {
 		if (typeof data == "object")  return  Qs.stringify(data, {arrayFormat:'repeat'});
          return data;

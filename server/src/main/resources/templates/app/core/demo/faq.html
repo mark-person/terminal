@@ -34,8 +34,44 @@
 </style>
 <script type="text/javascript" th:inline="javascript">
 
+var img = {};
+
+let config = {
+	//添加请求头
+    headers: { "Content-Type": "multipart/form-data" }
+ };
+
+function upload(file) {
+	var formData = new FormData();
+	formData.append("mFile", file);
+	
+	axios.post(contextPath + "uploadImg/uploadFaq", formData, config).then(function(r) {
+		alert(JSON.stringify(r));
+	})
+	
+	/*
+	$.ajax({url:[[@{/uploadImg/uploadFaq}]], type:"post", contentType:false, data:formData ,processData:false,
+		success:function(r) {
+			
+		}
+	})*/
+}
+
 var form;
 window.onload = function() {
+	// 截图，用Ctrl+v
+	document.body.addEventListener('paste', function(e) {
+		if (e.clipboardData) {
+			for(var i = 0; i < e.clipboardData.items.length; i++) {
+				var c = e.clipboardData.items[i];
+	          	var f = c.getAsFile();
+	          	if (f) {
+					upload(f);
+	          	}
+	        }
+		}
+	})
+	
 	form = new Vue({
 	    el:'#faq',
 	    data:{val:""},

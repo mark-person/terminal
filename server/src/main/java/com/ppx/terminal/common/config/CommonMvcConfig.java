@@ -2,6 +2,7 @@ package com.ppx.terminal.common.config;
 
 import java.util.List;
 
+import org.springframework.boot.system.ApplicationHome;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import com.ppx.terminal.common.api.ApiInterceptor;
+import com.ppx.terminal.common.util.ApplicationUtils;
 
 
 
@@ -53,6 +55,12 @@ public class CommonMvcConfig extends WebMvcConfigurationSupport {
 		super.addResourceHandlers(registry);
 	    registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/favicon.ico").addResourceLocations("classpath:/static/favicon.ico");
+        
+        // jar路径的上一层
+        ApplicationHome home = new ApplicationHome(CommonMvcConfig.class);
+        ApplicationUtils.JAR_PARENT_HOME = home.getSource().getParentFile().getParent() + "/";
+        registry.addResourceHandler("/img/**").addResourceLocations("file:" + ApplicationUtils.JAR_PARENT_HOME + "img/")
+        	.setCachePeriod(Integer.MAX_VALUE);
     }
 	
 }  
