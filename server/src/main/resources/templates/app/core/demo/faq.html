@@ -8,12 +8,34 @@
 <link rel="stylesheet" th:href="@{/static/tool/github-markdown.css}">
 <link rel="stylesheet" th:href="@{/static/tool/github-gist.css}">
 
-
+<style type="text/css">
+.right {
+    display: inline-block;
+    vertical-align: middle;
+    width: 0;
+    height: 0;
+    margin-left: 4px;
+    opacity: 0.66;
+    border-bottom: 5px solid transparent;
+    border-top: 5px solid transparent;
+    border-left:5px solid red;
+}
+.left {
+    display: inline-block;
+    vertical-align: middle;
+    width: 0;
+    height: 0;
+    margin-left: 4px;
+    opacity: 0.66;
+    border-bottom: 5px solid transparent;
+    border-top: 5px solid transparent;
+    border-right:5px solid red;
+}
+</style>
 <script type="text/javascript" th:inline="javascript">
 
 var form;
 window.onload = function() {
-	
 	form = new Vue({
 	    el:'#faq',
 	    data:{val:""},
@@ -25,7 +47,10 @@ window.onload = function() {
 	    watch: {
 	    	val(n, o) {
 		    	this.$nextTick(function () {
-	    			hljs.highlightBlock(document.getElementById("content"));
+		    		const preEl = document.getElementById("content").querySelectorAll('code');
+		    		preEl.forEach((el) => {
+		    			hljs.highlightBlock(el)
+		    		})
 	    		})
 	    	}
 	    }
@@ -33,32 +58,31 @@ window.onload = function() {
 }
 
 function getMarkdown(val) {
+	var newVal = val.replace(/<m>/g, '<a href="#this" onclick="more(\'abc\')">more</a><span class="left"></span><div style="margin-top:-15px" id=\'abc\'>');
+	newVal = newVal.replace(/<\/m>/g, '</div>');
+	
 	var converter = new showdown.Converter();
-	var newVal = converter.makeHtml(val);
-	return newVal;
+	var r = converter.makeHtml(newVal);
+	return r;
 }
 
-function getA(s) {
-	return ;
+function more(id) {
+	var display = document.getElementById(id).style.display;
+	display = display == 'none' ? '' : 'none';
+	document.getElementById(id).style.display=display;
 }
-
 
 </script>
 </head>
 <body>
 
-<div id="faq">
+<div id="faq" style="">
 
 	<div><textarea style="width:500px" rows="8" v-model="val"></textarea></div>
 	
 	<div id="content" v-html="content" class="markdown-body"></div>
 	
 </div>
-<pre>
-<code class="javascript">
-var a = 1;
-</code>
-</pre>
 
 </body>
 </html>

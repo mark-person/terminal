@@ -19,6 +19,7 @@ public class FaqController {
 	public ModelAndView demo(ModelAndView mv) {
 		mv.setViewName("app/core/demo/faq");
 		
+		
 		impl.test();
 		return mv;
 	}
