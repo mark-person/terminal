@@ -34,50 +34,39 @@
 </style>
 <script type="text/javascript" th:inline="javascript">
 
-var img = {};
-
-let config = {
-	//添加请求头
-    headers: { "Content-Type": "multipart/form-data" }
- };
-
 function upload(file) {
 	var formData = new FormData();
 	formData.append("mFile", file);
 	
+	let config = {headers:{"Content-Type":"multipart/form-data"}};
 	axios.post(contextPath + "uploadImg/uploadFaq", formData, config).then(function(r) {
-		alert(JSON.stringify(r));
+		var path = "/img/faq/" + r.list[0];
+		replaceSelection("contentInput", "![](" + path + ")\r\n");
+		form.val = document.getElementById("contentInput").value;
 	})
-	
-	/*
-	$.ajax({url:[[@{/uploadImg/uploadFaq}]], type:"post", contentType:false, data:formData ,processData:false,
-		success:function(r) {
-			
-		}
-	})*/
 }
 
 var form;
 window.onload = function() {
-	// 截图，用Ctrl+v
+	// 截图，用Ctrl+V
 	document.body.addEventListener('paste', function(e) {
-		if (e.clipboardData) {
-			for(var i = 0; i < e.clipboardData.items.length; i++) {
-				var c = e.clipboardData.items[i];
-	          	var f = c.getAsFile();
-	          	if (f) {
-					upload(f);
-	          	}
-	        }
-		}
+		if (!e.clipboardData) return;
+		
+		for (var i = 0; i < e.clipboardData.items.length; i++) {
+			var c = e.clipboardData.items[i];
+          	var f = c.getAsFile();
+          	if (f) {
+				upload(f);
+          	}
+        }
 	})
 	
 	form = new Vue({
 	    el:'#faq',
-	    data:{val:""},
+	    data:{val:"", sub:[], subLength:1},
 	    computed:{
 	    	content:function() {
-	    		return getMarkdown(this.val);
+	    		return getMarkdown(this.val, this);
 	    	}
 	    },
 	    watch: {
@@ -88,12 +77,21 @@ window.onload = function() {
 		    			hljs.highlightBlock(el)
 		    		})
 	    		})
+	    	},
+	    	sub(n, o) {
+	    		this.$nextTick(function () {
+		    		const preEl = document.getElementById("content").querySelectorAll('code');
+		    		preEl.forEach((el) => {
+		    			hljs.highlightBlock(el)
+		    		})
+	    		})
 	    	}
 	    }
 	})
 }
 
-function getMarkdown(val) {
+var converter = new showdown.Converter();
+function getMarkdown(val, obj) {
 	var i = 0;
 	var newVal = val.replace(/<m>/g, function() {
 		i++;
@@ -104,9 +102,14 @@ function getMarkdown(val) {
 	});
 	newVal = newVal.replace(/<\/m>/g, '</div>');
 	
-	var converter = new showdown.Converter();
-	var r = converter.makeHtml(newVal);
-	return r;
+	for (var n = 1; n <= obj.subLength; n++) {
+		newVal = newVal.replace(new RegExp("<sub" + n + "/>", "g"), function() {
+			return form.sub[n];
+		});
+	}
+	
+	
+	return converter.makeHtml(newVal);
 }
 
 function more(i) {
@@ -115,24 +118,56 @@ function more(i) {
 	
 	var direction = arrowObj.getAttribute("class");
 	direction = direction == 'left' ? 'right' : 'left';
-	alert(direction)
 	arrowObj.setAttribute("class", direction);
 	
 	var display = divObj.style.display == 'none' ? '' : 'none';
 	divObj.style.display = display;
 }
 
+function replaceSelection(id, text) {
+	var editor = document.getElementById(id);
+	if (!editor.setSelectionRange) return;
+	
+	var selectionStart = editor.selectionStart;
+	var selectionEnd = editor.selectionEnd;
+	var selectStr = editor.value.substring(selectionStart, selectionEnd);
+	if (selectStr && selectStr.substring(selectStr.length - 1) == " ") {
+		text += " ";
+	}
+	var leftStr = editor.value.substring(0, selectionStart);
+	var rightStr = editor.value.substring(selectionEnd, editor.value.length);
+	var selectStr = editor.value.substring(selectionStart, selectionEnd)
+	editor.value = leftStr + text + rightStr;
+    editor.focus();
+}
+
+function add() {
+	form.subLength += 1;
+}
+
+function del() {
+	if (form.subLength == 1) return;
+	
+	form.subLength -= 1;
+}
 </script>
 </head>
 <body>
 
 <div id="faq">
 
-	<div><textarea style="width:500px" rows="8" v-model="val"></textarea></div>
-	
-	<div id="content" v-html="content" class="markdown-body"></div>
-	
+	<div style="float:left">
+		<div><textarea class="v-text" id="contentInput" style="width:500px;height:200px" v-model="val"></textarea></div>
+		<div v-for="index of subLength">
+			<textarea class="v-text" :id="'sub' + index" style="width:500px;height:100px" rows="4" v-model="sub[index]"></textarea>
+		</div>
+		<button class="v-button" onclick="add()">+</button>
+		<button class="v-button" onclick="del()">-</button>
+	</div>
+	<div id="content" v-html="content" class="markdown-body" style="margin-left:520px"></div>
 </div>
+
+
 
 </body>
 </html>

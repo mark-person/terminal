@@ -50,7 +50,6 @@ public class UploadImgController {
 			imgPathFile.mkdirs();
 		}
 		
-		System.out.println("ooooooooo..N:" + mFile.length);
 		
 		for (int i = 0; i < mFile.length; i++) {
 			MultipartFile file = mFile[i];

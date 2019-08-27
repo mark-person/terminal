@@ -1,6 +1,6 @@
 
 axios.interceptors.request.use(function (config) {
-	if (config.url.indexOf("uploadImg") > -1) {
+	if (config.headers["Content-Type"] && config.headers["Content-Type"].indexOf("multipart") >= 0) {
 		return config;
 	}
 	config.transformRequest=[function (data) {
