@@ -58,4 +58,10 @@ a, a:link, a:active{text-decoration:none;color:blue}
 .modal-leave-to .modal-container {-webkit-transform: scale(1.1);transform: scale(1.1);}
 
 
+/* more */
+.rightArrow {display: inline-block;vertical-align: middle;margin-left: 4px;opacity: 0.66;
+    border-bottom: 5px solid transparent; border-top: 5px solid transparent; border-left:5px solid red;}
+.leftArrow {display: inline-block;vertical-align: middle;margin-left: 4px;opacity: 0.66;
+	border-bottom: 5px solid transparent;border-top: 5px solid transparent;border-right:5px solid red;}
+
 

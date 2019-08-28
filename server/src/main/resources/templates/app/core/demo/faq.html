@@ -9,39 +9,16 @@
 <link rel="stylesheet" th:href="@{/static/tool/github-gist.css}">
 
 <style type="text/css">
-.right {
-    display: inline-block;
-    vertical-align: middle;
-    width: 0;
-    height: 0;
-    margin-left: 4px;
-    opacity: 0.66;
-    border-bottom: 5px solid transparent;
-    border-top: 5px solid transparent;
-    border-left:5px solid red;
-}
-.left {
-    display: inline-block;
-    vertical-align: middle;
-    width: 0;
-    height: 0;
-    margin-left: 4px;
-    opacity: 0.66;
-    border-bottom: 5px solid transparent;
-    border-top: 5px solid transparent;
-    border-right:5px solid red;
-}
+
 </style>
 <script type="text/javascript" th:inline="javascript">
 
 function upload(file) {
 	var formData = new FormData();
 	formData.append("mFile", file);
-	
 	let config = {headers:{"Content-Type":"multipart/form-data"}};
 	axios.post(contextPath + "uploadImg/uploadFaq", formData, config).then(function(r) {
 		var path = "/img/faq/" + r.list[0];
-		
 		
 		var editorId = "contentInput";
 		if (currentInput != null) {
@@ -128,7 +105,7 @@ function getMarkdown(val, obj, i) {
 		i++;
 		var arrowId = 'arrow' + i;
 		var divId = 'div' + i;
-		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + arrowId + '" class="left"></span>' +
+		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + arrowId + '" class="leftArrow"></span>' +
 			'<div id="' + divId + '" style="margin-top:-10px;margin-bottom:-10px;display:none">';
 	});
 	
@@ -136,7 +113,7 @@ function getMarkdown(val, obj, i) {
 		i++;
 		var arrowId = 'arrow' + i;
 		var divId = 'div' + i;
-		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + arrowId + '" class="right"></span>' +
+		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + arrowId + '" class="rightArrow"></span>' +
 			'<div id="' + divId + '" style="margin-top:-10px;margin-bottom:-10px;">';
 	});
 	
@@ -165,7 +142,7 @@ function more(i) {
 	var divObj = document.getElementById("div" + i);
 	
 	var direction = arrowObj.getAttribute("class");
-	direction = direction == 'left' ? 'right' : 'left';
+	direction = direction == 'leftArrow' ? 'rightArrow' : 'leftArrow';
 	arrowObj.setAttribute("class", direction);
 	
 	var display = divObj.style.display == 'none' ? '' : 'none';
