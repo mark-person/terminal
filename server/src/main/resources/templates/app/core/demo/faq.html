@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <link th:replace="common/fragment::base"/>
+<script type="text/javascript" th:src="@{/static/vue/common/v-tool.js}"></script>
 <script type="text/javascript" th:src="@{/static/tool/showdown.min.js}"></script>
 <script type="text/javascript" th:src="@{/static/tool/highlight.pack.js}"></script>
 <link rel="stylesheet" th:href="@{/static/tool/github-markdown.css}">
@@ -13,6 +14,7 @@
 </style>
 <script type="text/javascript" th:inline="javascript">
 
+var currentInput = null;
 function upload(file) {
 	var formData = new FormData();
 	formData.append("mFile", file);
@@ -20,19 +22,9 @@ function upload(file) {
 	axios.post(contextPath + "uploadImg/uploadFaq", formData, config).then(function(r) {
 		var path = "/img/faq/" + r.list[0];
 		
-		var editorId = "contentInput";
-		if (currentInput != null) {
-			editorId = currentInput.id;
-		}
-		
+		var editorId = currentInput != null ? currentInput.id : "faqDescr";
 		replaceSelection(editorId, "![](" + path + ")\r\n");
-		
-		if (editorId == "contentInput") {
-			form.val = document.getElementById(editorId).value;
-		}
-		else {
-			form.answerVal = document.getElementById(editorId).value;
-		}
+		form[editorId] = document.getElementById(editorId).value;
 	})
 }
 
@@ -53,78 +45,53 @@ window.onload = function() {
 	
 	form = new Vue({
 	    el:'#faq',
-	    data:{faqTitle:'', faqCategory:'TECH', faqTimeType:'LONG', val:"", sub:[], subLength:0, answerVal:"", answerSub:[], answerSubLength:0},
+	    data:{faqTitle:'', faqCategory:'TECH', faqTimeType:'LONG', faqDescr:"", sub:[],  faqAnswer:"", answerSub:[]},
 	    computed:{
-	    	content:function() {
-	    		return getMarkdown(this.val, this, 0);
+	    	faqDescrView:function() {
+	    		return getMarkdown(this.faqDescr, this, 0);
 	    	},
-	    	answerContent:function() {
-	    		return getMarkdown(this.answerVal, this, 1000);
+	    	faqAnswerView:function() {
+	    		return getMarkdown(this.faqAnswer, this, 1000);
+	    	}
+	    },
+	    methods: {
+	    	refreshCode:function(id) {
+	    		this.$nextTick(function () {
+		    		const preEl = document.getElementById(id).querySelectorAll('code');
+		    		preEl.forEach((el) => {
+		    			hljs.highlightBlock(el)
+		    		})
+	    		})
 	    	}
 	    },
 	    watch: {
-	    	val(n, o) {
-		    	this.$nextTick(function () {
-		    		const preEl = document.getElementById("content").querySelectorAll('code');
-		    		preEl.forEach((el) => {
-		    			hljs.highlightBlock(el)
-		    		})
-	    		})
-	    	},
-	    	sub(n, o) {
-	    		this.$nextTick(function () {
-		    		const preEl = document.getElementById("content").querySelectorAll('code');
-		    		preEl.forEach((el) => {
-		    			hljs.highlightBlock(el)
-		    		})
-	    		})
-	    	},
-	    	answerVal(n, o) {
-		    	this.$nextTick(function () {
-		    		const preEl = document.getElementById("answerContent").querySelectorAll('code');
-		    		preEl.forEach((el) => {
-		    			hljs.highlightBlock(el)
-		    		})
-	    		})
-	    	},
-	    	answerSub(n, o) {
-	    		this.$nextTick(function () {
-		    		const preEl = document.getElementById("answerContent").querySelectorAll('code');
-		    		preEl.forEach((el) => {
-		    			hljs.highlightBlock(el)
-		    		})
-	    		})
-	    	}
+	    	faqDescr(n, o) {this.refreshCode("faqDescrView")},
+	    	sub(n, o) {this.refreshCode("faqDescrView")},
+	    	faqAnswer(n, o) {this.refreshCode("faqAnswerView")},
+	    	answerSub(n, o) {this.refreshCode("faqAnswerView")}
 	    }
 	})
 }
 
 var converter = new showdown.Converter();
-function getMarkdown(val, obj, i) {
-	var newVal = val.replace(/<m>/g, function() {
+function getMarkdown(html, obj, i) {
+	html = html.replace(/<m>/g, function() {
 		i++;
-		var arrowId = 'arrow' + i;
-		var divId = 'div' + i;
-		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + arrowId + '" class="leftArrow"></span>' +
-			'<div id="' + divId + '" style="margin-top:-10px;margin-bottom:-10px;display:none">';
+		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + 'arrow' + i + '" class="leftArrow"></span>' +
+			'<div id="' + 'div' + i + '" style="margin-top:-10px;margin-bottom:-10px;display:none">';
 	});
 	
-	newVal = newVal.replace(/<mm>/g, function() {
+	html = html.replace(/<mm>/g, function() {
 		i++;
-		var arrowId = 'arrow' + i;
-		var divId = 'div' + i;
-		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + arrowId + '" class="rightArrow"></span>' +
-			'<div id="' + divId + '" style="margin-top:-10px;margin-bottom:-10px;">';
+		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + 'arrow' + i + '" class="rightArrow"></span>' +
+			'<div id="' + 'div' + i + '" style="margin-top:-10px;margin-bottom:-10px;">';
 	});
 	
-	newVal = newVal.replace(/<\/m>/g, '</div>');
-	newVal = newVal.replace(/<\/mm>/g, '</div>');
-	var len = obj.subLength;
-	if (i >= 1000) {
-		len = obj.answerSubLength;
-	}
+	html = html.replace(/<\/m>/g, '</div>');
+	html = html.replace(/<\/mm>/g, '</div>');
+	var len = (i >= 1000) ? obj.answerSub.length : obj.sub.length;
 	for (var n = 1; n <= len; n++) {
-		newVal = newVal.replace(new RegExp("<sub" + n + "/>", "g"), function() {
+		html = html.replace(new RegExp("<sub" + n + "/>", "g"), function() {
 			if (i >= 1000) {
 				return form.answerSub[n];
 			}
@@ -134,7 +101,7 @@ function getMarkdown(val, obj, i) {
 		});
 	}
 	
-	return converter.makeHtml(newVal);
+	return converter.makeHtml(html);
 }
 
 function more(i) {
@@ -148,40 +115,24 @@ function more(i) {
 	var display = divObj.style.display == 'none' ? '' : 'none';
 	divObj.style.display = display;
 }
-var currentInput = null;
-function replaceSelection(id, text) {
-	var editor = document.getElementById(id);
-	if (!editor.setSelectionRange) return;
-	
-	var selectionStart = editor.selectionStart;
-	var selectionEnd = editor.selectionEnd;
-	var selectStr = editor.value.substring(selectionStart, selectionEnd);
-	if (selectStr && selectStr.substring(selectStr.length - 1) == " ") {
-		text += " ";
-	}
-	var leftStr = editor.value.substring(0, selectionStart);
-	var rightStr = editor.value.substring(selectionEnd, editor.value.length);
-	var selectStr = editor.value.substring(selectionStart, selectionEnd)
-	editor.value = leftStr + text + rightStr;
-    editor.focus();
-}
+
 
 function add() {
-	form.subLength += 1;
+	form.sub.push('');
 }
 
 function del() {
-	if (form.subLength == 0) return;
-	form.subLength -= 1;
+	if (form.sub.length == 0) return;
+	form.sub.splice(-1, 1);
 }
 
 function answerAdd() {
-	form.answerSubLength += 1;
+	form.answerSub.push('');
 }
 
 function answerDel() {
-	if (form.answerSubLength == 0) return;
-	form.answerSubLength -= 1;
+	if (form.answerSub.length == 0) return;
+	form.answerSub.splice(-1, 1);
 }
 
 function ok() {
@@ -214,30 +165,30 @@ function ok() {
 	<th>DESCR</th>
 	<td style="background-color: white;border-top:1px solid #ddd;border-bottom:1px solid #ddd">
 		<div style="float:left">
-			<div><textarea class="v-text" id="contentInput" style="width:500px;height:180px" v-model="val" onfocus="currentInput=this;"></textarea></div>
+			<div><textarea class="v-text" id="faqDescr" style="width:500px;height:180px" v-model="faqDescr" onfocus="currentInput=this;"></textarea></div>
 			<div>
 				<button class="v-button" onclick="add()">+</button>
 				<button class="v-button" onclick="del()">-</button>
 			</div>
-			<div v-for="index of subLength">
-				<textarea class="v-text" :id="'sub' + index" style="width:500px;height:100px" rows="4" v-model="sub[index]"></textarea>
+			<div v-for="(item, index) in sub">
+				<textarea class="v-text" style="width:500px;height:100px" rows="4" v-model="sub[index]"></textarea>
 			</div>
 		</div>
-		<div id="content" v-html="content" class="markdown-body" style="margin-left:520px"></div>
+		<div id="faqDescrView" v-html="faqDescrView" class="markdown-body" style="margin-left:520px"></div>
 	</td>
 </tr>
 <tr>
 	<th>A</th>
 	<td>
 		<div style="float:left">
-			<div><textarea class="v-text" id="answerContentInput" style="width:500px;height:180px" v-model="answerVal" onfocus="currentInput=this;"></textarea></div>
-			<div v-for="index of answerSubLength">
-				<textarea class="v-text" :id="'answerSub' + index" style="width:500px;height:100px" rows="4" v-model="answerSub[index]"></textarea>
+			<div><textarea class="v-text" id="faqAnswer" style="width:500px;height:180px" v-model="faqAnswer" onfocus="currentInput=this;"></textarea></div>
+			<div v-for="(item, index) in answerSub">
+				<textarea class="v-text" style="width:500px;height:100px" rows="4" v-model="answerSub[index]"></textarea>
 			</div>
 			<button class="v-button" onclick="answerAdd()">+</button>
 			<button class="v-button" onclick="answerDel()">-</button>
 		</div>
-		<div id="answerContent" v-html="answerContent" class="markdown-body" style="margin-left:520px"></div>
+		<div id="faqAnswerView" v-html="faqAnswerView" class="markdown-body" style="margin-left:520px"></div>
 	</td>
 </tr>
 
