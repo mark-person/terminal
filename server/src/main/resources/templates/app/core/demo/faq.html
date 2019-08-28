@@ -206,36 +206,48 @@ function answerDel() {
 	if (form.answerSubLength == 0) return;
 	form.answerSubLength -= 1;
 }
+
+function ok() {
+	
+}
 </script>
 </head>
 <body>
 
 <table class="v-table" id="faq">
 <tr>
-	<th style="width:30px">问题</th><td><input class="v-text" type="text" style="width:504px;" maxlength="128"></td>
+	<th style="width:30px">Q</th><td><input class="v-text" type="text" style="width:504px;" maxlength="128"></td>
 </tr>
 <tr>
-	<th>描述</th>
+	<th>ATTR</th>
 	<td>
+		<select class="v-select">
+			<option value="LONG">长期</option>
+			<option value="SHORT">短期</option>
+		</select>
+		
+		
+	</td>
+</tr>
+<tr>
+	<th>DESCR</th>
+	<td style="background-color: white;border-top:1px solid #ddd;border-bottom:1px solid #ddd">
 		<div style="float:left">
 			<div><textarea class="v-text" id="contentInput" style="width:500px;height:180px" v-model="val" onfocus="currentInput=this;"></textarea></div>
-			
 			<div>
 				<button class="v-button" onclick="add()">+</button>
 				<button class="v-button" onclick="del()">-</button>
 			</div>
-			
 			<div v-for="index of subLength">
 				<textarea class="v-text" :id="'sub' + index" style="width:500px;height:100px" rows="4" v-model="sub[index]"></textarea>
 			</div>
-			
 		</div>
 		<div id="content" v-html="content" class="markdown-body" style="margin-left:520px"></div>
 	</td>
 </tr>
 <tr>
-	<th>参考答案</th>
-	<td style="background-color: white;border-top:1px solid #ddd;border-bottom:1px solid #ddd">
+	<th>A</th>
+	<td>
 		<div style="float:left">
 			<div><textarea class="v-text" id="answerContentInput" style="width:500px;height:180px" v-model="answerVal" onfocus="currentInput=this;"></textarea></div>
 			<div v-for="index of answerSubLength">

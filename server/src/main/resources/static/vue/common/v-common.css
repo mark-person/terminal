@@ -1,14 +1,10 @@
 
-
-
 /* demo */
 .v-title {font-size: 16px;font-weight: bold;}
 .v-title:before {content:"🔖";}
 .v-error {color:red}
 .v-right {text-align: right;}
 .v-pointer {cursor: pointer;}
-
-
 
 /* common */
 body {font-family: Helvetica Neue, Arial, sans-serif;font-size: 14px; color: #444;}
