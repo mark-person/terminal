@@ -45,7 +45,8 @@ window.onload = function() {
 	
 	form = new Vue({
 	    el:'#faq',
-	    data:{faqTitle:'', faqCategory:'TECH', faqTimeType:'LONG', faqDescr:"", sub:[],  faqAnswer:"", answerSub:[]},
+	    // data:{faqId:0, faqTitle:'', faqCategory:'BRAIN', faqTimeType:'LONG', faqDescr:"", sub:[],  faqAnswer:"", answerSub:[]},
+	    data:[[${pojo}]],
 	    computed:{
 	    	faqDescrView:function() {
 	    		return getMarkdown(this.faqDescr, this, 0);
@@ -69,8 +70,14 @@ window.onload = function() {
 	    	sub(n, o) {this.refreshCode("faqDescrView")},
 	    	faqAnswer(n, o) {this.refreshCode("faqAnswerView")},
 	    	answerSub(n, o) {this.refreshCode("faqAnswerView")}
+	    },
+	    mounted() {
+	    	this.refreshCode("faqDescrView");
+	    	this.refreshCode("faqAnswerView");
 	    }
 	})
+	
+	
 }
 
 var converter = new showdown.Converter();
@@ -90,13 +97,13 @@ function getMarkdown(html, obj, i) {
 	html = html.replace(/<\/m>/g, '</div>');
 	html = html.replace(/<\/mm>/g, '</div>');
 	var len = (i >= 1000) ? obj.answerSub.length : obj.sub.length;
-	for (var n = 1; n <= len; n++) {
+	for (var n = 0; n < len; n++) {
 		html = html.replace(new RegExp("<sub" + n + "/>", "g"), function() {
 			if (i >= 1000) {
-				return form.answerSub[n];
+				return obj.answerSub[n];
 			}
 			else {
-				return form.sub[n];
+				return obj.sub[n];
 			}
 		});
 	}
@@ -136,6 +143,23 @@ function answerDel() {
 }
 
 function ok() {
+	if (form.faqTitle == "") {alert("问题不能为空");return}
+	
+	if (form.faqId == 0) {
+		axios.post(contextPath + "faq/insert", form._data).then(function(r) {
+			if (r.code === 0) {
+				form.faqId = r.faqId;
+				alert("新增成功");
+			}
+		})
+	}
+	else {
+		axios.post(contextPath + "faq/update", form._data).then(function(r) {
+			if (r.code === 0) {
+				alert("修改成功");
+			}
+		})
+	}
 	
 }
 </script>
@@ -150,9 +174,10 @@ function ok() {
 	<th>ATTR</th>
 	<td>
 		<select class="v-select" v-model="faqCategory">
+			<option value="BRAIN">头脑</option>
 			<option value="TECH">技术</option>
 			<option value="BUSI">业务</option>
-			<option value="BRAIN">头脑</option>
+			
 		</select>
 		
 		<select class="v-select" v-model="faqTimeType">
@@ -165,7 +190,7 @@ function ok() {
 	<th>DESCR</th>
 	<td style="background-color: white;border-top:1px solid #ddd;border-bottom:1px solid #ddd">
 		<div style="float:left">
-			<div><textarea class="v-text" id="faqDescr" style="width:500px;height:180px" v-model="faqDescr" onfocus="currentInput=this;"></textarea></div>
+			<div><textarea class="v-text" id="faqDescr" style="width:500px;height:170px" v-model="faqDescr" onfocus="currentInput=this;"></textarea></div>
 			<div>
 				<button class="v-button" onclick="add()">+</button>
 				<button class="v-button" onclick="del()">-</button>
@@ -181,7 +206,7 @@ function ok() {
 	<th>A</th>
 	<td>
 		<div style="float:left">
-			<div><textarea class="v-text" id="faqAnswer" style="width:500px;height:180px" v-model="faqAnswer" onfocus="currentInput=this;"></textarea></div>
+			<div><textarea class="v-text" id="faqAnswer" style="width:500px;height:170px" v-model="faqAnswer" onfocus="currentInput=this;"></textarea></div>
 			<div v-for="(item, index) in answerSub">
 				<textarea class="v-text" style="width:500px;height:100px" rows="4" v-model="answerSub[index]"></textarea>
 			</div>
