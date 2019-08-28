@@ -126,7 +126,7 @@ create table core_locker (
 
 
 
->>>>>>>>>>>>......faq
+-- >>>>>>>>>>>>......faq
 
 
 
