@@ -76,7 +76,7 @@ window.onload = function() {
 	
 	form = new Vue({
 	    el:'#faq',
-	    data:{val:"", sub:[], subLength:0, answerVal:"", answerSub:[], answerSubLength:0},
+	    data:{title:'', category:'', timeStatus:'', val:"", sub:[], subLength:0, answerVal:"", answerSub:[], answerSubLength:0},
 	    computed:{
 	    	content:function() {
 	    		return getMarkdown(this.val, this, 0);
@@ -216,17 +216,21 @@ function ok() {
 
 <table class="v-table" id="faq">
 <tr>
-	<th style="width:30px">Q</th><td><input class="v-text" type="text" style="width:504px;" maxlength="128"></td>
+	<th style="width:30px">Q</th><td><input class="v-text" type="text" style="width:504px;" maxlength="128" v-model="title"></td>
 </tr>
 <tr>
 	<th>ATTR</th>
 	<td>
-		<select class="v-select">
+		<select class="v-select" v-model="category">
+			<option value="TECH">技术</option>
+			<option value="BUSI">业务</option>
+			<option value="BRAIN">头脑</option>
+		</select>
+		
+		<select class="v-select" v-model="timeStatus">
 			<option value="LONG">长期</option>
 			<option value="SHORT">短期</option>
 		</select>
-		
-		
 	</td>
 </tr>
 <tr>

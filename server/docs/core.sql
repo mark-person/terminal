@@ -126,6 +126,47 @@ create table core_locker (
 
 
 
+>>>>>>>>>>>>......faq
+
+
+
+create table core_faq (
+	faq_id 			int not null auto_increment,
+    faq_title 		varchar(64) not null, 
+    faq_category	varchar(5) not null,
+    faq_time_status	varchar(5) not null,
+    faq_created		timestamp not null default current_timestamp,
+    faq_descr		text,
+    faq_answer		text,
+    primary key(faq_id)
+);
+
+create table core_faq_descr_item (
+	faq_descr_index  int not null,
+    faq_id			 int not null,
+    item_content	 text not null,
+    primary key(faq_descr_index, faq_id)
+);
+
+create table core_faq_answer_item (
+	faq_descr_index  int not null,
+    faq_id			 int not null,
+    item_content	 text not null,,
+    primary key(faq_descr_index, faq_id)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
