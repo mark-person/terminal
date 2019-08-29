@@ -43,10 +43,13 @@ window.onload = function() {
         }
 	})
 	
+	var initData = [[${pojo}]];
+	if (initData == null) {
+		initData = {faqId:0, faqTitle:'', faqCategory:'BRAIN', faqTimeType:'LONG', faqDescr:"", sub:[],  faqAnswer:"", answerSub:[]};
+	}
 	form = new Vue({
 	    el:'#faq',
-	    // data:{faqId:0, faqTitle:'', faqCategory:'BRAIN', faqTimeType:'LONG', faqDescr:"", sub:[],  faqAnswer:"", answerSub:[]},
-	    data:[[${pojo}]],
+	    data:initData,
 	    computed:{
 	    	faqDescrView:function() {
 	    		return getMarkdown(this.faqDescr, this, 0);
