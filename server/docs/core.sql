@@ -152,7 +152,7 @@ create table core_faq_answer_item (
     faq_id			 int not null,
 	faq_answer_index int not null,
     item_content	 text not null,
-    primary key(faq_id, faq_descr_index)
+    primary key(faq_id, faq_answer_index)
 );
 
 
