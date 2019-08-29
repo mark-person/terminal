@@ -15,6 +15,12 @@ import com.ppx.terminal.common.page.Page;
 @Service
 public class FaqImpl extends MyDaoSupport {
 	
+	
+	public String getDirection(String tableName, String code) {
+		
+		
+		return "";
+	}
 
 	public List<Faq> list(Page page, Faq pojo) {
 		

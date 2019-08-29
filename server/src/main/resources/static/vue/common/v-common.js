@@ -79,7 +79,7 @@ function page(list, url) {
 	    	},
 	    	gotoPage:function(n) {
 	    		this.p.pageNumber = n ? n : 1;
-	    		this.p.pageSize = this.p.pageSize;
+	    		this.p.pageSize = this.page.pageSize;
 	    		loading.show();
 	            axios.post(contextPath + url, this.p).then(function(res) {
 	            	loading.hide();

@@ -34,6 +34,12 @@ public class FaqController {
 	public ModelAndView faqIndex(ModelAndView mv) {
 		mv.setViewName("app/core/faq/faqIndex");
 		mv.addObject("list", list(new Page(), new Faq()));
+		
+		String jsonStr = "{brain:'头脑风暴',tech:'技术',busi:'业务'}";
+		mv.addObject("faqCategory", JSONObject.fromObject(jsonStr));
+		
+		
+		
 		return mv;
 	}
 	
@@ -42,13 +48,15 @@ public class FaqController {
 		
 		
 		try {
-			String jsonStr = "{A:'value',B:\"value2\"}";
+			String jsonStr = "{brain:'头脑风暴',tech:'技术',busi:'业务'}";
 			
 			
-			JSONObject mainfestObject = JSONObject.fromObject(jsonStr);
+			JSONObject jsonObject = JSONObject.fromObject(jsonStr);
 			// JsonNode jn = new ObjectMapper().readTree(jsonStr);
-			List<String> list = IteratorUtils.toList(mainfestObject.keys());
+			List<String> list = IteratorUtils.toList(jsonObject.keys());
 			
+			
+			System.out.println("9999999:");
 			System.out.println("..........jn:" + list);
 		} catch (Exception e) {
 			e.printStackTrace();
