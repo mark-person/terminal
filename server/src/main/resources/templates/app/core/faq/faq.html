@@ -152,6 +152,7 @@ function ok() {
 		axios.post(contextPath + "faq/insert", form._data).then(function(r) {
 			if (r.code === 0) {
 				form.faqId = r.faqId;
+				opener.location.reload();
 				alert("新增成功");
 			}
 		})
@@ -159,6 +160,7 @@ function ok() {
 	else {
 		axios.post(contextPath + "faq/update", form._data).then(function(r) {
 			if (r.code === 0) {
+				opener.location.reload();
 				alert("修改成功");
 			}
 		})

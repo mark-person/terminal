@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<link th:replace="common/fragment::base"/>
+
+<script type="text/javascript" th:inline="javascript">
+
+var list = [[${list}]];
+
+var myModal;
+window.onload = function() {
+	var myPage = page(list, "faq/list");
+}
+
+function add() {
+	open(contextPath + 'faq/faq');
+}
+function edit(id) {
+	open(contextPath + "faq/faq?id=" + id);
+}
+
+var faqCategory = {TECH:'TECH1', BUSI:'BUSI1'};
+</script>
+</head>
+<body class="block-template">
+
+<div id="page">
+	<div>
+		<label class="v-title">我是标题</label>
+		<button class="v-button" onclick="add()">新增</button>
+		<input type="text" class="v-text" v-model="p.demoName" maxlength="32">
+		<button class="v-button" @click="gotoPage()">搜索</button>
+	</div>
+	<table class="v-table v-table-hover">
+	<tr>
+		<th>FAQ_ID</th>
+		<th>标题</th>
+		<th>TYPE</th>
+		<th>TIME_TYPE</th>
+		<th>created</th>
+		<th>ACTIOLN</th>
+	</tr>
+	<tr v-for="item in list">
+		<td>{{item.faqId}}</td>
+		<td>{{item.faqTitle}}</td>
+		<td>{{faqCategory[item.faqCategory]}}</td>
+		<td>{{item.faqTimeType}}</td>
+		<td>{{item.faqCreated}}</td>
+		<td><a href="#this" @click="edit(item.faqId)">修改</a></td>
+	</tr>
+	</table>
+	<div th:replace="common/fragment::page"/>
+</div>
+
+
+<div id="loading"><loading v-if="showLoading"></loading></div>
+
+</body>
+</html>
+

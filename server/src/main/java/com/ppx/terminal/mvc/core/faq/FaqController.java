@@ -1,18 +1,25 @@
 package com.ppx.terminal.mvc.core.faq;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.ppx.terminal.common.controller.ControllerReturn;
+import com.ppx.terminal.common.page.Page;
+
+import net.sf.json.JSONObject;
 
 
 
@@ -23,14 +30,45 @@ public class FaqController {
 	@Autowired
 	private FaqImpl impl;
 	
-	@GetMapping("/faq")
-	public ModelAndView demo(ModelAndView mv, Integer id) {
+	@GetMapping("/faqIndex")
+	public ModelAndView faqIndex(ModelAndView mv) {
+		mv.setViewName("app/core/faq/faqIndex");
+		mv.addObject("list", list(new Page(), new Faq()));
+		return mv;
+	}
+	
+	@PostMapping("/list") @ResponseBody
+	public Map<String, Object> list(Page page, Faq pojo) {
 		
-		mv.setViewName("app/core/demo/faq");
+		
+		try {
+			String jsonStr = "{A:'value',B:\"value2\"}";
+			
+			
+			JSONObject mainfestObject = JSONObject.fromObject(jsonStr);
+			// JsonNode jn = new ObjectMapper().readTree(jsonStr);
+			List<String> list = IteratorUtils.toList(mainfestObject.keys());
+			
+			System.out.println("..........jn:" + list);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		List<Faq> list = impl.list(page, pojo);
+		return ControllerReturn.page(page, list);
+	}
+	
+	@GetMapping("/faq")
+	public ModelAndView faq(ModelAndView mv, Integer id) {
+		
+		mv.setViewName("app/core/faq/faq");
 		if (id != null) {
 			Faq pojo = impl.get( id);
 			mv.addObject("pojo", pojo);
 		}
+		
+		
+		
 		
 		return mv;
 	}
@@ -50,7 +88,7 @@ public class FaqController {
 	}
 	
 	@PostMapping("/update") @ResponseBody
-	public Map<String, Object> update(@RequestParam Faq pojo, HttpServletRequest request) {
+	public Map<String, Object> update(Faq pojo, HttpServletRequest request) {
 		String[] sub = request.getParameterValues("sub");
 		if (sub != null && sub.length == 1) {
 			pojo.setSub(Arrays.asList(sub[0]));
