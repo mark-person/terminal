@@ -18,6 +18,35 @@
 * 数据库mysql CPU高或慢 怎么处理
 
 
+-- 字段 可以使用->或->>
+select @sex:=JSON_OBJECT('1','男', '0','女');
+select test_id, JSON_UNQUOTE(JSON_EXTRACT(@sex, concat('$.', sex))) sex from test;
+
+
+
+怎么设计数据字典？
+例如
+性别,1:男 0:女
+状态,0:失败 1:成功
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
