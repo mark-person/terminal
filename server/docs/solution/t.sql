@@ -47,6 +47,6 @@ select 'B', 100
 
 select JSON_EXTRACT(@a, '$.tech') from core_faq, (select @a:='{"brain":"头脑风暴","tech":"技术","busi":"业务"}') t;
 
-
+ 
 
 
