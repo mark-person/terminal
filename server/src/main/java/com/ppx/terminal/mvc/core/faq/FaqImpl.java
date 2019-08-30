@@ -22,7 +22,15 @@ public class FaqImpl extends MyDaoSupport {
 		return "";
 	}
 
+	@Transactional
 	public List<Faq> list(Page page, Faq pojo) {
+		
+		// >>>>>>>>..test
+		String sql = "select @j:=JSON_OBJECT('1','OK1', '2','NB')";
+		getJdbcTemplate().queryForMap(sql);
+		sql = "select test_id, JSON_UNQUOTE(JSON_EXTRACT(@j, concat('$.\"', test_name, '\"'))) n from test";
+		List<Map<String, Object>> testList = getJdbcTemplate().queryForList(sql);
+		System.out.println("xxxxx:" + testList.size());
 		
 		
 		MyCriteria c = createCriteria("where")
