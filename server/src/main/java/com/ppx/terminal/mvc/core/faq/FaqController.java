@@ -35,8 +35,9 @@ public class FaqController {
 		mv.setViewName("app/core/faq/faqIndex");
 		mv.addObject("list", list(new Page(), new Faq()));
 		
-		String jsonStr = "{brain:'头脑风暴',tech:'技术',busi:'业务'}";
-		mv.addObject("faqCategory", JSONObject.fromObject(jsonStr));
+		// 的sql里转JSON_OBJECT
+		String s = "{'hidden':'1', '1': 'OK1', '2':'NB'}";
+		mv.addObject("faqCategory", JSONObject.fromObject(s));
 		
 		
 		
