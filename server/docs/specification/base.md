@@ -30,14 +30,48 @@ select test_id, JSON_UNQUOTE(JSON_EXTRACT(@sex, concat('$.', sex))) sex from tes
 状态,0:失败 1:成功
 
 
+分类{"brain":"头脑风暴","tech":"技术","busi":"业务"}  -- 其它说明
+
+{"dict":"分类","brain":"头脑风暴","tech":"技术","busi":"业务"}
+
+
+
+DELIMITER $$ 
+create function myselect12() returns varchar(10)
+begin
+declare c varchar(10); 
+
+-- IF @a is null THEN 
+
+select @a:=concat('abc', @a) into c;
+-- END IF;
+
+ return @a;
+end;
+$$
+
+select @a:='';
+
+select myselect12(), myselect12(),myselect12()
 
 
 
 
 
+DELIMITER $$ 
+create function myselect17(v varchar(10), vv varchar(10)) returns varchar(10)
+begin
+declare c varchar(10); 
 
+IF v is null THEN
+select concat('abc', vv) into v;
+END IF;
 
-
+ return v;
+end;
+$$
+-- 保存只运行一次
+select @a:=myselect17(@a, 'xxxs') , @a:=myselect17(@a, 'xxxs') 
 
 
 
