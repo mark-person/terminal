@@ -17,7 +17,7 @@
 * 服务器tomcat CPU高或慢 怎么处理
 * 数据库mysql CPU高或慢 怎么处理
 
-
+-- nosql 替代 sql
 -- 字段 可以使用->或->>
 select @sex:=JSON_OBJECT('1','男', '0','女', '2','中性人', 'hidden', '2');
 select test_id, JSON_UNQUOTE(JSON_EXTRACT(@sex, concat('$.', sex))) sex from test;
