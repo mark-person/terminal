@@ -36,7 +36,7 @@ public class FaqController {
 		mv.addObject("list", list(new Page(), new Faq()));
 		
 		// 的sql里转JSON_OBJECT
-		String s = "{'hidden':'1', '1': 'OK1', '2':'NB'}";
+		String s = "[]";
 		mv.addObject("faqCategory", JSONObject.fromObject(s));
 		
 		
