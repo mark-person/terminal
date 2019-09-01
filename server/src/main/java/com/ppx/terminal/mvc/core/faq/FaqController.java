@@ -2,10 +2,12 @@ package com.ppx.terminal.mvc.core.faq;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,37 @@ public class FaqController {
 	
 	@Autowired
 	private FaqImpl impl;
+	
+	@GetMapping("/faqTest")
+	public ModelAndView faqTest(ModelAndView mv) {
+		
+		
+		
+		mv.setViewName("app/core/faq/faqTest");
+		return mv;
+	}
+	
+	@GetMapping("/js")
+	public void js(HttpServletResponse response) {
+		
+		/*
+		 3.max-age 指定的是从文档被访问后的存活时间，这个时间是个相对值(比如:3600s),相对的是文档第一次被请求时服务器记录的Request_time(请求时间)
+		 */
+		// response.setHeader("Expires", new Date(new Date().getTime() + 5000).toGMTString());
+		// response.setHeader("Expires", "Sun, 01 Sep 2019 06:56:33 GMT");
+		
+		response.setHeader("Cache-Control", "max-age=5");
+		
+		try {
+			System.out.println("99999999999");
+			response.getWriter().write("001");
+			response.flushBuffer();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 	@GetMapping("/faqIndex")
 	public ModelAndView faqIndex(ModelAndView mv) {
