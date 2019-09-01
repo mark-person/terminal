@@ -36,10 +36,10 @@ public class FaqController {
 		mv.addObject("list", list(new Page(), new Faq()));
 		
 		// 的sql里转JSON_OBJECT
-		String s = "[]";
+		String s = "{\"B\":1,\"A\":2}";
 		mv.addObject("faqCategory", JSONObject.fromObject(s));
 		
-		
+		System.out.println("99999999:" + JSONObject.fromObject(s));
 		
 		return mv;
 	}
