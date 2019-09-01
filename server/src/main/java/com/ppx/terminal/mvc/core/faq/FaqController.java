@@ -50,7 +50,7 @@ public class FaqController {
 		// response.setHeader("Expires", new Date(new Date().getTime() + 5000).toGMTString());
 		// response.setHeader("Expires", "Sun, 01 Sep 2019 06:56:33 GMT");
 		
-		response.setHeader("Cache-Control", "max-age=5");
+		response.setHeader("Cache-Control", "max-age=10");
 		
 		try {
 			System.out.println("99999999999");
