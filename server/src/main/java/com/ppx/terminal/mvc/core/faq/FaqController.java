@@ -55,9 +55,6 @@ public class FaqController {
 			mv.addObject("pojo", pojo);
 		}
 		
-		
-		
-		
 		return mv;
 	}
 	
