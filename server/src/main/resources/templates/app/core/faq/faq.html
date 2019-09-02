@@ -9,7 +9,7 @@
 <link rel="stylesheet" th:href="@{/static/tool/github-markdown.css}">
 <link rel="stylesheet" th:href="@{/static/tool/github-gist.css}">
 
-<script type="text/javascript" th:src="@{/dict/list?code=faq_category}"></script>
+<script type="text/javascript" th:src="@{/dict/list?code=faq_category,faq_time_type}"></script>
 
 <style type="text/css">
 
@@ -47,7 +47,7 @@ window.onload = function() {
 	
 	var initData = [[${pojo}]];
 	if (initData == null) {
-		initData = {faqId:0, faqTitle:'', faqCategory:'tech', faqTimeType:'LONG', faqDescr:"", sub:[],  faqAnswer:"", answerSub:[]};
+		initData = {faqId:0, faqTitle:'', faqCategory:'tech', faqTimeType:'long', faqDescr:"", sub:[],  faqAnswer:"", answerSub:[]};
 	}
 	form = new Vue({
 	    el:'#faq',
@@ -186,8 +186,7 @@ function ok() {
 		</select>
 		
 		<select class="v-select" v-model="faqTimeType">
-			<option value="LONG">长期</option>
-			<option value="SHORT">短期</option>
+			<option v-for="(v, k) in common.listDict('faq_time_type')" :value="k">{{v}}</option>
 		</select>
 	</td>
 </tr>

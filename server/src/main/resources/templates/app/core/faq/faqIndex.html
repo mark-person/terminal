@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <link th:replace="common/fragment::base"/>
-<script type="text/javascript" th:src="@{/dict/list?code=faq_category}"></script>
+<script type="text/javascript" th:src="@{/dict/list?code=faq_category,faq_time_type}"></script>
 
 <script type="text/javascript" th:inline="javascript">
 
@@ -45,7 +45,7 @@ function edit(id) {
 		<td>{{item.faqId}}</td>
 		<td>{{item.faqTitle}}</td>
 		<td>{{dict.faq_category[item.faqCategory]}}</td>
-		<td>{{item.faqTimeType}}</td>
+		<td>{{dict.faq_time_type[item.faqTimeType]}}</td>
 		<td>{{item.faqCreated}}</td>
 		<td><a href="#this" @click="edit(item.faqId)">修改</a></td>
 	</tr>
