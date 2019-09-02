@@ -28,7 +28,7 @@ public class DictController {
 		
 		
 		response.setHeader("content-type", "application/javascript;charset=utf-8");
-		response.setHeader("cache-control", "max-age=10");
+		response.setHeader("cache-control", "max-age=600");
 		
 		Map<String, Object> map = impl.list(code);
 		
