@@ -169,20 +169,7 @@ function ok() {
 	}
 }
 
-function listDict(code) {
-	if (dict[code]) {
-		var disabled = dict[code + "_disabled"];
-		if (!disabled) return dict[code];
-		
-		var newDict = {};
-		for (i in dict[code]) {
-			if (disabled.split(",").indexOf(i) == -1) {
-				newDict[i] = dict[code][i]; 
-			}
-		}
-		return newDict;
-	}
-}
+
 </script>
 </head>
 <body>
@@ -195,7 +182,7 @@ function listDict(code) {
 	<th>ATTR</th>
 	<td>
 		<select class="v-select" v-model="faqCategory">
-			<option v-for="(v, k) in listDict('faq_category')" :value="k">{{v}}</option>
+			<option v-for="(v, k) in common.listDict('faq_category')" :value="k">{{v}}</option>
 		</select>
 		
 		<select class="v-select" v-model="faqTimeType">

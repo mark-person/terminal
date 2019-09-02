@@ -36,6 +36,22 @@ V.isNum = function(v) {
 	return isNaN(v) ? '必须为数字' : '';
 }
 
+var common = {};
+common.listDict = function(code) {
+	if (!dict[code]) {alert("没有找到数据字典:" + code);return;}
+
+	var disabled = dict[code + "_disabled"];
+	if (!disabled) return dict[code];
+	
+	var newDict = {};
+	for (i in dict[code]) {
+		if (disabled.split(",").indexOf(i) == -1) {
+			newDict[i] = dict[code][i];
+		}
+	}
+	return newDict;
+}
+
 function initLoading() {
 	loading = new Vue({
 		el: '#loading',
