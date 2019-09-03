@@ -12,11 +12,19 @@
 
 <script type="text/javascript" th:inline="javascript">
 
-var menu = [{id:1,t:'发布管理',s:1,c:[{id:2,t:'发布代码'}]},{id:3,t:'发版相关信息',s:0,c:[{id:4,t:'越权测试1'},{id:5,t:'越权测试2'}]}]
+var menu = [{id:1,t:'发布管理',s:1,c:[{id:2,t:'发布代码',s:0}]},
+	{id:3,t:'发版相关信息',s:0,c:[{id:4,t:'越权测试1',s:0},{id:5,t:'越权测试2',s:0}]},
+	{id:10,t:'发版相关信息',s:0,c:[{id:11,t:'越权测试1',s:0},{id:12,t:'越权测试2',s:0}]}
+	]
 window.onload = function() {
 	menuDiv = new Vue({
 	    el:'#menuDiv',
-	    data:{open:'', menu:menu}
+	    data:{show:true, menu:menu}
+	});
+	
+	divTop = new Vue({
+	    el:'#divTop',
+	    data:{}
 	});
 	
 }
@@ -33,76 +41,62 @@ function onFold(fold) {
 			menuDiv.menu[i].s = 0;
 		}
 	}
-	fold.d = (fold.s == 1 ? 'block' : '');
+	fold.s = (fold.s == 1 ? 0 : 1);
 }
 
-function onMenu() {
-	alert(1)
+var selectedMenu = {};
+function onMenu(m) {
+	selectedMenu.s = 0;
+	selectedMenu = m;
+	m.s = 1;
+}
+
+
+function toggleMenu() {
+	menuDiv.show = (menuDiv.show) ? false : true;
+	
+	
 }
 </script>
 
-<style>
-html {height:100%}
-body {
-	margin:0px;padding:0px;height:100%;overflow:hidden;
-	display:flex;flex-direction:row;flex-wrap:nowrap;
-}
 
-ul {
-	list-style-type: none;
-}
-
-
-
-
-
-[v-cloak] {display: none;}
-
-
-</style>
 
 
 </head>
 <body>
 
-<!--  
-	<ul id="accordion" class="accordion"><li class="open"><div class="link" style="display: block;"><i name="folder" class="fa fa-folder-open"></i>发布管理<i class="fa fa-chevron-down"></i></div><ul class="submenu" style="display: block;"><li><a class="menuItem menuSelected" href="#" onclick="onMenu(this, 2, '/publish/publish')">发布代码</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 15, '/sql/sql')">发布SQL</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 17, '/env/envView')">环境浏览</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 13, '/stable/stable')">稳定版管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 16, '/rollback/rollback')">代码回滚</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 18, '/restart/restart')">环境重启</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 24, '/svnSql/listSvnSql')">SQL同步</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 58, '/dbbackup/dbbackup')">数据库备份</a></li></ul></li><li><div class="link"><i name="folder" class="fa fa-folder"></i>发版相关信息<i class="fa fa-chevron-down"></i></div><ul class="submenu"><li><a class="menuItem" href="#" onclick="onMenu(this, 22, '/sqlDir/sqlDir')">SQL分支管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 25, '/branch/branch')">分支管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 29, '/repository/repository')">版本库管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 27, '/compile/compile')">编译方法</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 28, '/projectType/projectType')">项目类型</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 33, '/stablepath/stablepath')">稳定版存储管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 46, '/pathCheck/pathCheck')">增量文件检测</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 53, '/workOrder/workOrder')">提交代码和SQL</a></li></ul></li>
-	<li><div class="link"><i name="folder" class="fa fa-folder"></i>环境配置检测<i class="fa fa-chevron-down"></i></div><ul class="submenu"><li><a class="menuItem" href="#" onclick="onMenu(this, 50, '/menucheck/menuchecklist')">菜单检测</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 88, '/exceed/exceed')">越权检测</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 43, '/checkItem/checkItem')">通用检测项目</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 44, '/personalCheck/personalCheck')">个性化检测项目</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 45, '/testTask/testTask')">检测任务</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 48, '/source/sourcelist')">菜单列表来源</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 51, '/secondcheck/secondlist')">二次检测</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 52, '/personalcheck/personalSecondlist')">个性化二次检测项</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 54, '/filecheck/filechecklist')">文件对比</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 56, '/compareType/compareType')">数据表对比类型</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 57, '/compare/compare')">环境数据表对比</a></li></ul></li><li><div class="link"><i name="folder" class="fa fa-folder"></i>功能日志巡检<i class="fa fa-chevron-down"></i></div><ul class="submenu"><li><a class="menuItem" href="#" onclick="onMenu(this, 67, '/funcCheckResult/funcCheckResult')">功能日志巡查</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 65, '/funcCheckItem/funcCheckItem')">通用功能日志表</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 66, '/funcPersonalCheck/funcPersonalCheck')">个性化功能日志表</a></li></ul></li><li><div class="link"><i name="folder" class="fa fa-folder"></i>数据巡检<i class="fa fa-chevron-down"></i></div><ul class="submenu"><li><a class="menuItem" href="#" onclick="onMenu(this, 71, '/dataCheckTask/dataCheckTask')">数据巡检记录</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 69, '/dataCheckItem/dataCheckItem')">通用巡检项目</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 70, '/dataPersonalCheck/dataPersonalCheck')">个性化巡检项目</a></li></ul></li><li><div class="link"><i name="folder" class="fa fa-folder"></i>日志管理<i class="fa fa-chevron-down"></i></div><ul class="submenu"><li><a class="menuItem" href="#" onclick="onMenu(this, 63, '/logView/logList')">日志解析查看</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 61, '/logInfo/logInfo')">日志文件信息</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 62, '/log/log')">日志下载记录</a></li></ul></li><li><div class="link"><i name="folder" class="fa fa-folder"></i>脚本提交<i class="fa fa-chevron-down"></i></div><ul class="submenu"><li><a class="menuItem" href="#" onclick="onMenu(this, 34, '/sqlSentence/auditSqlist')">待审核脚本</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 35, '/sqlSentence/sqlSentence')">提交脚本</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 82, '/sqlCheckRule/test')">测试脚本</a></li></ul></li><li><div class="link"><i name="folder" class="fa fa-folder"></i>脚本管理<i class="fa fa-chevron-down"></i></div><ul class="submenu"><li><a class="menuItem" href="#" onclick="onMenu(this, 39, '/packageSql/packageSql')">打包脚本</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 32, '/sqlEnvSql/sqlEnvSql')">环境封版</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 37, '/sqlEnvVersion/sqlEnvVersion')">历史封版</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 38, '/sqlSentence/historySql')">历史脚本</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 31, '/sqlVersion/sqlVersion')">分支版本管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 36, '/sqlCheckRule/sqlCheckRule')">脚本检测规则</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 40, '/sqlTag/sqlTag')">SQL标签管理</a></li></ul></li><li><div class="link"><i name="folder" class="fa fa-folder"></i>环境信息<i class="fa fa-chevron-down"></i></div><ul class="submenu"><li><a class="menuItem" href="#" onclick="onMenu(this, 8, '/client/client')">客户管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 9, '/host/host')">主机管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 12, '/database/database')">数据库管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 10, '/env/env')">环境管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 11, '/project/project')">项目管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 59, '/envaccount/envaccount')">账号管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 78, '/accountview/accountview')">账号查看</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 79, '/accountview/accountviewRecord')">账号查看记录</a></li></ul></li><li><div class="link"><i name="folder" class="fa fa-folder"></i>发版信息<i class="fa fa-chevron-down"></i></div><ul class="submenu"><li><a class="menuItem" href="#" onclick="onMenu(this, 83, '/helpinfo/helpinfo')">帮助信息</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 80, '/portmap/portmap')">端口映射管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 77, '/vpnproxy/vpnproxy')">VPN代理机管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 75, '/clientvpn/clientvpn')">vpn信息管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 76, '/remotedesktop/remotedesktop')">远程桌面管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 84, '/updatedeploy/updatedeploy')">更新发版系统</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 73, '/deploylocal/deploylocal')">本地发版管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 81, '/blj/blj')">堡垒机管理</a></li><li><a class="menuItem" href="#" onclick="onMenu(this, 74, '/deploysrcipt/deploysrcipt')">脚本参数</a></li></ul></li></ul>
-	
-	:style="'display: ' + fold.d"
-	
-	<ul id="accordion" class="accordion">
-		<li class="open"><div class="link" style="display: block;"><i name="folder" class="fa fa-folder-open"></i>发布管理<i class="fa fa-chevron-down"></i></div><ul class="submenu" style="display: block;"><li><a class="menuItem menuSelected" href="#" onclick="onMenu(this, 2, '/publish/publish')">发布代码</a></li></ul></li>
-		<li :class="open" @click="liOpen()"><div class="link" ><i name="folder" class="fa fa-folder"></i>发版相关信息<i class="fa fa-chevron-down"></i></div><ul class="submenu"><li><a class="menuItem menuSelected" href="#" onclick="onMenu(this, 2, '/publish/publish')">越权测试</a></li></ul></li>
-	</ul>
-	-->
-	
-<div id="menuDiv" class="list-group" >
+
+<div id="menuDiv" v-if="show">
 	<ul id="accordion" class="accordion" v-cloak>
-		<li v-for="fold in menu" :class="fold.s == '1'?'open':''">
-			<div class="link" @click="onFold(fold)">
-				<i name="folder" :class="'fa fa-folder' + (fold.s == '1'?'-open':'')"></i>{{fold.t}}<i class="fa fa-chevron-down"></i>
-			</div>
-			<ul class="submenu" :style="'display: ' + fold.d">
-				<li v-for="m in fold.c" @click="onMenu()"><a class="menuSelected" href="#">{{m.t}}</a></li>
-			</ul>
-		</li>
+	<li v-for="fold in menu" :class="fold.s=='1'?'open':''">
+		<div class="link" @click="onFold(fold)">
+			<i name="folder" :class="'fa fa-folder' + (fold.s=='1'?'-open':'')"></i>{{fold.t}}<i class="fa fa-chevron-down"></i>
+		</div>
+		<ul class="submenu" :style="'display: ' + (fold.s==1?'block':'')">
+			<li v-for="m in fold.c" @click="onMenu(m)"><a :class="m.s==1?'menu-selected':''" href="#">{{m.t}}</a></li>
+		</ul>
+	</li>
 	</ul>
 </div>
 
 
 <div style="width:100%">
 
-<div style="height:50px;background-color:#EEEEEE">head</div>
+<div id="divTop" style="height:50px;background-color:#EEEEEE">
 
+	<a :class="'fa fa-chevron-'+(menuDiv.show?'left':'right')" style="padding:0px 20px;" href="javascript:toggleMenu()"></a>
+	
+	帐号： TEST   用户名称：TEST
+	
+	<a href="javascript:editPassword()">首页</a>｜</span>
+	<a href="javascript:editPassword()">修改密码</a>｜</span>
+    <a href="javascript:logout()">退出</a>&nbsp;&nbsp;
 
+</div>
 
-<iframe src="http://192.168.101.145:8081/exceed/exceed#this"
- style="border:none;overflow:scroll;width:100%;height:calc(100% - 50px);" onload="">
+<iframe src="http://192.168.101.145:8081/exceed/exceed#this" style="border:none;overflow:scroll;width:100%;height:calc(100% - 50px);" onload="">
  
- <div id="iframeLoading">请稍候...</div>
-
-
+<div id="iframeLoading">请稍候...</div>
 </div>
 
 
