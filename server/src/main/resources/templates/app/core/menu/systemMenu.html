@@ -22,8 +22,8 @@ window.onload = function() {
 	    data:{show:true, menu:menu}
 	});
 	
-	divTop = new Vue({
-	    el:'#divTop',
+	topDiv = new Vue({
+	    el:'#topDiv',
 	    data:{}
 	});
 	
@@ -82,7 +82,7 @@ function toggleMenu() {
 
 <div style="width:100%">
 
-<div id="divTop" style="height:50px;background-color:#EEEEEE">
+<div id="topDiv">
 
 	<a :class="'fa fa-chevron-'+(menuDiv.show?'left':'right')" style="padding:0px 20px;" href="javascript:toggleMenu()"></a>
 	
