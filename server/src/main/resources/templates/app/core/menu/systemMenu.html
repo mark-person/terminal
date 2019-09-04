@@ -24,20 +24,24 @@
 	</ul>
 </div>
 
+<style>
+
+
+</style>
 
 <div style="width:100%">
 
-<div id="topDiv">
+<div id="topDiv" style="display: flex;align-items:center;">
 	<a :class="'fa fa-chevron-'+(menuDiv.show?'left':'right')" style="padding:0px 20px;" href="javascript:toggleMenu()"></a>
+	<span>帐号：</span><span>TEST</span>
+	<span style="margin-left:20px">用户名称：</span><span>TEST</span>
 	
-	帐号： TEST   用户名称：TEST
-	
-	<a href="javascript:editPassword()">首页</a>｜</span>
-	<a href="javascript:editPassword()">修改密码</a>｜</span>
+	<a href="javascript:index()" style="margin-left:20px">首页</a><span>｜</span>
+	<a href="javascript:editPassword()">修改密码</a><span>｜</span>
     <a href="javascript:logout()">退出</a>&nbsp;&nbsp;
 </div>
 
-<iframe id="content" src="" style="" onload=""></iframe>
+<iframe id="content" src="http://localhost:8081/exceed/exceed" style="" onload=""></iframe>
 <div id="iframeLoading">请稍候...</div>
 
 </div>
