@@ -9,10 +9,10 @@
 <body>
 
 <div id="page" v-cloak>
-	<div>
+	<div style="display: flex;align-items:center;height:38px;">
 		<label class="v-title">我是标题</label>
 		<button class="v-button" onclick="add()">新增</button>
-		<input type="text" class="v-text" v-model="p.demoName" maxlength="32">
+		<input type="text" class="v-text" v-model="p.faqTitle" maxlength="32">
 		<button class="v-button" @click="gotoPage()">搜索</button>
 	</div>
 	<table class="v-table v-table-hover">

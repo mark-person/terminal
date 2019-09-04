@@ -9,18 +9,18 @@
 .v-pointer {cursor: pointer;}
 
 /* common */
-body {font-family: Helvetica Neue, Arial, sans-serif;font-size: 14px; color: #444;}
+body {font-family: Helvetica Neue, Arial, sans-serif;font-size: 14px; color: #444;margin-top:0px}
 a, a:link, a:active{text-decoration:none;color:blue}
 
 /* input */
-.v-text  {border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;height:24px; width:180px}
-.v-select {border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;height:28px; width:180px}
-.v-button {padding:0px 18px;height:26px;cursor: pointer;}
+.v-text  {border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;height:24px; width:180px;margin:0px 3px}
+.v-select {border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;height:28px; width:180px;margin:0px 3px}
+.v-button {padding:0px 18px;height:26px;cursor: pointer;;margin:0px 3px}
 .v-number {border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;height:24px;width: 80px;}
 .v-date {border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;height:24px;width: 120px;}
 
 /* table */
-.v-table {width:100%;border: 1px solid #ddd;border-radius: 3px;background-color: #fff;}
+.v-table {width:100%;border:1px solid #ddd;border-radius: 3px;background-color: #fff;}
 .v-table>tbody>tr>th{background-color: #ddd;color: #727272;rgba(255,255,255,0.66);}
 .v-table>tbody>tr>th, .v-table>tbody>tr>td {min-width: 80px;padding: 4px 9px;}
 .v-table th.active {color: black;cursor: pointer;}
@@ -36,13 +36,12 @@ a, a:link, a:active{text-decoration:none;color:blue}
 .v-table-hover>tbody>tr:hover {background-color: #dafdf3;}
 
 /* page */
-.pagination {height: 35px;border: 1px solid #ddd;padding-top: 6px;width: 100%;margin-top: 2px;}
-.pagination > ul {padding: 0;margin-top: 0;float: left;}
+.pagination {height: 35px;border: 1px solid #ddd;width: 100%;margin-top: 2px;border-radius: 3px;display: flex;align-items:center;}
+.pagination > ul {margin-left:-25px;}
 .pagination > ul > li {display: inline;}
 .pagination > ul > li > span {cursor:pointer;position:relative;float:left;padding:3px 8px;margin-left:-1px;
 	line-height: 1.42857143;color: #337ab7;text-decoration: none;background-color: #fff;border: 1px solid #ddd;}
-.pagination > select {height:28px;margin:0px 10px;float:left;border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;}
-.pagination > div {padding: 6px 12px;}
+.pagination > select {height:28px;margin:0px 10px;float:left;border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:3px;}
 .pagination .active span {color:white;background-color:#337ab7;border-color:#337ab7;cursor:auto;}
 
 /* mask */
