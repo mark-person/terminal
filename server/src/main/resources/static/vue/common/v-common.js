@@ -71,8 +71,6 @@ function initLoading() {
 	      	}
 		}
 	})
-	
-	document.querySelectorAll(".block-template").forEach(function(o, i) {o.style.display = "block";})
 }
  
 function page(list, url) {

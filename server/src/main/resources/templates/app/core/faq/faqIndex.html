@@ -5,27 +5,10 @@
 <link th:replace="common/fragment::base"/>
 <script type="text/javascript" th:src="@{/dict/list?code=faq_category,faq_time_type}"></script>
 
-<script type="text/javascript" th:inline="javascript">
-
-var list = [[${list}]];
-
-var myModal;
-window.onload = function() {
-	var myPage = page(list, "faq/list");
-}
-
-function add() {
-	open(contextPath + 'faq/faq');
-}
-function edit(id) {
-	open(contextPath + "faq/faq?id=" + id);
-}
-
-</script>
 </head>
 <body class="block-template">
 
-<div id="page">
+<div id="page" v-cloak>
 	<div>
 		<label class="v-title">我是标题</label>
 		<button class="v-button" onclick="add()">新增</button>
@@ -47,7 +30,7 @@ function edit(id) {
 		<td>{{dict.faq_category[item.faqCategory]}}</td>
 		<td>{{dict.faq_time_type[item.faqTimeType]}}</td>
 		<td>{{item.faqCreated}}</td>
-		<td><a href="#this" @click="edit(item.faqId)">修改</a></td>
+		<td><a href="javascript:" @click="edit(item.faqId)">修改</a></td>
 	</tr>
 	</table>
 	<div th:replace="common/fragment::page"/>
@@ -55,7 +38,20 @@ function edit(id) {
 
 
 <div id="loading"><loading v-if="showLoading"></loading></div>
+<script type="text/javascript" th:inline="javascript">
 
+var list = [[${list}]];
+page(list, "faq/list");
+
+function add() {
+	open(contextPath + 'faq/faq');
+}
+
+function edit(id) {
+	open(contextPath + "faq/faq?id=" + id);
+}
+
+</script>
 </body>
 </html>
 
