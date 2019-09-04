@@ -1,6 +1,12 @@
 nginx自动检测后台服务器健康状态
 
 
+/**
+ * 这个window.onload与$(document).ready还是差很远的。首先$(function(){})是$(document).ready()的简写。
+ 指文档已经准备就绪（指html结构已经完整载完，但没有加载图片、框架等外部资源，所有资源载完才会触发onload）
+ */
+
+
 Status Code: 200  (from memory cache)
 # 
 

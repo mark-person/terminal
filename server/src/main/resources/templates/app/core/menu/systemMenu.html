@@ -11,41 +11,36 @@
 </head>
 <body>
 
-<div id="menuDiv" v-if="show">
+<div id="menuDiv" v-if="menuShow">
 	<ul id="accordion" class="accordion" v-cloak>
-	<li v-for="fold in menu" :class="fold.s=='1'?'open':''">
-		<div class="link" @click="onFold(fold)">
-			<i name="folder" :class="'fa fa-folder'+(fold.s=='1'?'-open':'')"></i>{{fold.t}}<i class="fa fa-chevron-down"></i>
+	<li v-for="f in menu" :class="f.s=='1'?'open':''">
+		<div class="link" @click="onFolder(f)">
+			<i :class="'fa fa-folder'+(f.s=='1'?'-open':'')"></i>{{f.t}}<i class="fa fa-chevron-down"></i>
 		</div>
-		<ul class="submenu" :style="'display:'+(fold.s==1?'block':'')">
-			<li v-for="m in fold.c" @click="onMenu(m)"><a :class="m.s==1?'menu-selected':''" href="#">{{m.t}}</a></li>
+		<ul class="submenu" :style="'display:'+(f.s==1?'block':'')">
+			<li v-for="m in f.c" @click="onMenu(m)"><a :class="m.s==1?'menu-selected':''" href="#">{{m.t}}</a></li>
 		</ul>
 	</li>
 	</ul>
 </div>
 
-<style>
-
-
-</style>
 
 <div style="width:100%">
 
 <div id="topDiv" style="display: flex;align-items:center;">
-	<a :class="'fa fa-chevron-'+(menuDiv.show?'left':'right')" style="padding:0px 20px;" href="javascript:toggleMenu()"></a>
+	<a :class="'fa fa-chevron-'+(menuVue.menuShow?'left':'right')" style="padding:0px 20px;" @click="toggleMenu()" href="javascript:"></a>
 	<span>帐号：</span><span>TEST</span>
 	<span style="margin-left:20px">用户名称：</span><span>TEST</span>
 	
-	<a href="javascript:index()" style="margin-left:20px">首页</a><span>｜</span>
-	<a href="javascript:editPassword()">修改密码</a><span>｜</span>
-    <a href="javascript:logout()">退出</a>&nbsp;&nbsp;
+	<a href="javascript:" @click="index()" style="margin-left:20px">首页</a><span>｜</span>
+	<a href="javascript:" @click="editPassword()">修改密码</a><span>｜</span>
+    <a href="javascript:" @click="logout()">退出</a>&nbsp;&nbsp;
 </div>
 
 <iframe id="content" src="http://localhost:8081/exceed/exceed" style="" onload=""></iframe>
 <div id="iframeLoading">请稍候...</div>
 
 </div>
-
 
 <script type="text/javascript" th:inline="javascript">
 
@@ -54,44 +49,43 @@ var menu = [{id:1,t:'发布管理',s:1,c:[{id:2,t:'发布代码',s:0}]},
 	{id:10,t:'发版相关信息',s:0,c:[{id:11,t:'越权测试1',s:0},{id:12,t:'越权测试2',s:0}]}
 	]
 
-var menuDiv = new Vue({
-    el:'#menuDiv',
-    data:{show:true, menu:menu}
-});
-
-var topDiv = new Vue({
-    el:'#topDiv',
-    data:{}
-});
-
-function onFold(fold) {
-	for (var i = 0; i < menuDiv.menu.length; i++) {
-		if (menuDiv.menu[i].id != fold.id) {
-			menuDiv.menu[i].s = 0;
+var menuVue = new Vue({el:'#menuDiv', data:{menu:menu, selectedMenu:{}, menuShow:true},
+	methods:{
+		onMenu:function(m) {
+			this.selectedMenu.s = 0;
+			this.selectedMenu = m;
+			m.s = 1;
+		},
+		onFolder:function(f) {
+			for (var i = 0; i < this.menu.length; i++) {
+				if (this.menu[i].id != f.id) {
+					this.menu[i].s = 0;
+				}
+			}
+			f.s = (f.s == 1 ? 0 : 1);
 		}
 	}
-	fold.s = (fold.s == 1 ? 0 : 1);
-}
+});
 
-var selectedMenu = {};
-function onMenu(m) {
-	selectedMenu.s = 0;
-	selectedMenu = m;
-	m.s = 1;
-}
+new Vue({el:'#topDiv',
+	methods:{
+		toggleMenu:function() {
+			menuVue.menuShow = (menuVue.menuShow) ? false : true;
+		},
+		index:function() {
+			alert("index");	
+		},
+		editPassword:function() {
+			alert("editPassword");	
+		},
+		logout:function() {
+			if (!confirm("确定退出?")) return;
+			alert("logout");
+		}
+	}
+});
 
-
-function toggleMenu() {
-	menuDiv.show = (menuDiv.show) ? false : true;
-}
-
-
-/**
- * 这个window.onload与$(document).ready还是差很远的。首先$(function(){})是$(document).ready()的简写。
- 指文档已经准备就绪（指html结构已经完整载完，但没有加载图片、框架等外部资源，所有资源载完才会触发onload）
- */
 </script>
-
 </body>
 </html>
 
