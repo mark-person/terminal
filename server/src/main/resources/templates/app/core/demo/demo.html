@@ -12,6 +12,11 @@
 		<label class="v-title">我是标题</label>
 		<button class="v-button" onclick="myModal.show('新增')">新增</button>
 		<input type="text" class="v-text"  v-model="p.demoName" maxlength="32">
+		
+		<select class="v-select">
+			<option value="">1111</option>
+			<option value="">1111</option>
+		</select>
 		<button class="v-button" @click="goto()">搜索</button>
 	</div>
 	<table class="v-table v-table-hover" >
@@ -61,7 +66,7 @@
 	</tr>
 	<tr>
 		<th>DEMO_DATE</th>
-		<td><input type="date" class="v-date"  v-model="p.demoDate"><span class="v-error"></td>
+		<td><input type="date" class="v-date" v-model="p.demoDate"><span class="v-error"></td>
 	</tr>
 </table>
 </modal>
