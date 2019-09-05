@@ -8,7 +8,7 @@ body {margin:0px;padding:0px;height:100%;overflow:hidden;display:flex;flex-direc
 #menuDiv::-webkit-scrollbar{width: 8px; background: #EEEEEE;}
 #iframeLoading {width:100%;text-align:center;margin-top:10px}
 #content {border:none;overflow:scroll;width:100%;height:calc(100% - 50px)}
-#topDiv {height:39px;background-color: #EEEEEE;}
+#topDiv {height:39px;background-color: #EEEEEE;display:flex;align-items:center;}
 
 .accordion {list-style: none;width: 100%;margin:0px -35px ;background: #EEEEEE;}
 .accordion .link {cursor: pointer;display: block;padding: 10px 15px 10px 42px;

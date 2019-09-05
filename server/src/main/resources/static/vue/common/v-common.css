@@ -2,6 +2,7 @@
 [v-cloak] {display: none;}
 
 /* demo */
+.v-search {display:flex;align-items:center;height:40px;}
 .v-title {font-size: 16px;font-weight: bold;}
 .v-title:before {content:"🔖";}
 .v-error {color:red}
@@ -11,6 +12,8 @@
 /* common */
 body {font-family: Helvetica Neue, Arial, sans-serif;font-size: 14px; color: #444;margin-top:0px}
 a, a:link, a:active{text-decoration:none;color:blue}
+
+
 
 /* input */
 .v-text  {border:1px solid #ccc;box-shadow:inset 0 1px 1px rgba(0,0,0,.075);border-radius:4px;height:24px; width:180px;margin:0px 3px}
