@@ -1,5 +1,13 @@
 
+var AXIOS_CONFIG = {
+	autoLoading:true
+};
+
 axios.interceptors.request.use(function (config) {
+	if (AXIOS_CONFIG.autoLoading) loading.show();
+	
+	config.url = contextPath + config.url;
+	
 	if (config.headers["Content-Type"] && config.headers["Content-Type"].indexOf("multipart") >= 0) {
 		return config;
 	}
@@ -9,16 +17,19 @@ axios.interceptors.request.use(function (config) {
 	}]
 	return config;
 }, function (error) {
-     return Promise.reject(error);
+	if (AXIOS_CONFIG.autoLoading) loading.hide();
+	return Promise.reject(error);
 });
 
 axios.interceptors.response.use(function(res) {
+	if (AXIOS_CONFIG.autoLoading) loading.hide();
 	var code = res.data.code;
 	if (code != 0) {
 		alert(res.data.msg);
 	}
 	return res.data;
 }, function(error) {
+	if (AXIOS_CONFIG.autoLoading) loading.hide();
 	return Promise.reject(error);
 });
 
@@ -35,6 +46,7 @@ V.isNum = function(v) {
 	if (this.notNull(v) != '') return '';
 	return isNaN(v) ? '必须为数字' : '';
 }
+
 
 var common = {};
 common.listDict = function(code) {
@@ -53,6 +65,8 @@ common.listDict = function(code) {
 }
 
 function initLoading() {
+	document.body.insertAdjacentHTML("beforeend",'<div id="loading"><loading v-if="showLoading"></loading></div>')
+	
 	loading = new Vue({
 		el: '#loading',
 		components: {'loading': httpVueLoader(contextPath + 'static/vue/template/loading.vue')},
@@ -73,7 +87,7 @@ function initLoading() {
 	})
 }
  
-function page(list, url) {
+function page(url, list) {
 	initLoading();
 	var page = new Vue({
 	    el:'#page',
@@ -84,18 +98,18 @@ function page(list, url) {
 	        page:list.page
 	    },
 	    methods: {
-	    	sortPage:function(orderName, orderType) {
+	    	sort:function(orderName, orderType) {
 	    		orderType = (orderType == 'asc' ? 'desc' : 'asc');
 	    		this.sortType[orderName] = orderType;
 	    		this.p.orderName = orderName;
 	    		this.p.orderType = orderType;
-	    		this.gotoPage();
+	    		this.goto();
 	    	},
-	    	gotoPage:function(n) {
+	    	goto:function(n) {
 	    		this.p.pageNumber = n ? n : 1;
 	    		this.p.pageSize = this.page.pageSize;
 	    		loading.show();
-	            axios.post(contextPath + url, this.p).then(function(res) {
+	            axios.post(url, this.p).then(function(res) {
 	            	loading.hide();
 	            	page.list = res.list;
 	            	page.page = res.page;
@@ -141,9 +155,6 @@ function modal(id, okFun, validateFun) {
 	})
 	return m;
 }
-
-
-
 
 
 
