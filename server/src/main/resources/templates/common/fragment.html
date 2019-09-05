@@ -15,7 +15,7 @@
 
 
 <!-- page -->
-<nav th:fragment="page" class="pagination blockTemplate">
+<nav th:fragment="page" class="pagination">
 	<ul>
 		<li v-if="page.pageNumber != 1" @click="gotoPage(1)"><span>«</span></li>
 		<li v-if="page.pageNumber - 2 >= 1" @click="gotoPage(page.pageNumber - 2)"><span>{{page.pageNumber - 2}}</span></li>

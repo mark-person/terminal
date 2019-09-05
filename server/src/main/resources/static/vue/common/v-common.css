@@ -36,7 +36,7 @@ a, a:link, a:active{text-decoration:none;color:blue}
 .v-table-hover>tbody>tr:hover {background-color: #dafdf3;}
 
 /* page */
-.pagination {height: 35px;border: 1px solid #ddd;width: 100%;margin-top: 2px;border-radius: 3px;display: flex;align-items:center;}
+.pagination {height: 35px;border: 1px solid #ddd;margin-top: 2px;border-radius: 3px;display: flex;align-items:center;}
 .pagination > ul {margin-left:-25px;}
 .pagination > ul > li {display: inline;}
 .pagination > ul > li > span {cursor:pointer;position:relative;float:left;padding:3px 8px;margin-left:-1px;
