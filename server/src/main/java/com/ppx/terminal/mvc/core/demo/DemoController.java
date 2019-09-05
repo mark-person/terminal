@@ -27,7 +27,7 @@ public class DemoController {
 	@GetMapping("/demo")
 	public ModelAndView demo(ModelAndView mv) {
 		mv.setViewName("app/core/demo/demo");
-		mv.addObject("list", list(new Page(), new Demo()));
+		mv.addObject("data", list(new Page(), new Demo()));
 		return mv;
 	}
 	

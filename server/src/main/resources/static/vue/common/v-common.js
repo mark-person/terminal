@@ -1,20 +1,10 @@
+// 全局的 axios 默认值
+axios.defaults.baseURL = contextPath;
 
-var AXIOS_CONFIG = {
-	autoLoading:true
-};
-
-var loading = {
-	show:function() {},
-	hide:function() {}
-	
-}
 
 axios.interceptors.request.use(function (config) {
-	if (AXIOS_CONFIG.autoLoading) loading.show();
-
-	
 	// 改用config.baseURL = contextPath;
-	config.url = contextPath + config.url;
+	// config.url = contextPath + config.url;
 	
 	if (config.headers["Content-Type"] && config.headers["Content-Type"].indexOf("multipart") >= 0) {
 		return config;
@@ -25,24 +15,18 @@ axios.interceptors.request.use(function (config) {
 	}]
 	return config;
 }, function (error) {
-	if (AXIOS_CONFIG.autoLoading) loading.hide();
 	return Promise.reject(error);
-});
+})
 
 axios.interceptors.response.use(function(res) {
-	
-	
-	if (AXIOS_CONFIG.autoLoading) loading.hide();
-	
-	var code = res.data.code;
-	if (code != 0) {
+	if (res.data.code != 0) {
 		alert(res.data.msg);
 	}
 	return res.data;
 }, function(error) {
-	if (AXIOS_CONFIG.autoLoading) loading.hide();
+	loading.hide();
 	return Promise.reject(error);
-});
+})
 
 
 var V = {};
@@ -99,15 +83,18 @@ function initLoading() {
 	})
 }
  
-function page(url, list) {
+function page(url, data) {
 	initLoading();
 	var page = new Vue({
 	    el:'#page',
 	    data:{
 	        p:{},
-	        list:list.list,
+	        list:data.list,
 	        sortType:[],
-	        page:list.page
+	        page:data.page
+	    },
+	    created: function () {
+	    	this.sortType[data.page.orderName] = data.page.orderType;
 	    },
 	    methods: {
 	    	sort:function(orderName, orderType) {
@@ -118,7 +105,7 @@ function page(url, list) {
 	    		this.goto();
 	    	},
 	    	goto:function(n) {
-	    		this.p.pageNumber = n ? n : 1;
+	    		this.p.pageNum = (n ? n : 1);
 	    		this.p.pageSize = this.page.pageSize;
 	    		loading.show();
 	            axios.post(url, this.p).then(function(res) {
@@ -156,6 +143,7 @@ function modal(id, okFun, validateFun) {
 		},
 		methods: {
 			show:function(title, p) {
+				loading.hide();
 	      		this.modal.title = title;
 	      		this.p = p ? p : {};
 	      		this.modal.showModal = true;

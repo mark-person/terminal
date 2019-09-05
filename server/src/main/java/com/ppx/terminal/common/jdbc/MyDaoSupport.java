@@ -312,7 +312,7 @@ public class MyDaoSupport extends JdbcDaoSupport {
 		}
 
 		qSql.append(" limit ?, ?");
-		paraList.add((page.getPageNumber() - 1) * page.getPageSize());
+		paraList.add((page.getPageNum() - 1) * page.getPageSize());
 		paraList.add(page.getPageSize());
 		List<T> r = (List<T>) super.getJdbcTemplate().query(qSql.toString(), BeanPropertyRowMapper.newInstance(c),
 				paraList.toArray());

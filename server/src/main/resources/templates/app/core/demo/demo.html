@@ -10,7 +10,7 @@
 <div id="page" v-cloak>
 	<div class="v-search">
 		<label class="v-title">我是标题</label>
-		<button class="v-button" onclick="myModal.show('新增')">新增</button>
+		<button class="v-button" onclick="vModal.show('新增')">新增</button>
 		<input type="text" class="v-text"  v-model="p.demoName" maxlength="32">
 		
 		<select class="v-select">
@@ -73,13 +73,13 @@
 </div>
 <script type="text/javascript" th:inline="javascript">
 
-var myPage = page("demo/list", [[${list}]]);
+var vPage = page("demo/list", [[${data}]]);
 
-var myModal = modal("modal", function(p) {
-	
+var vModal = modal("modal", function(p) {
+	loading.show();
 	axios.post("demo/insertOrUpdate", p).then(function(res) {
-		myModal.hide();
-		myPage.goto();
+		vModal.hide();
+		vPage.goto();
 	})
 }, function(p) {
 	return {
@@ -88,11 +88,12 @@ var myModal = modal("modal", function(p) {
 		demoInt:V.notNull(p.demoInt) || V.isInt(p.demoInt),
 		demoNum:V.isNum(p.demoNum)
 	}
-});
+})
 
 function edit(id) {
+	loading.show();
 	axios.post("demo/get", {id:id}).then(function(res) {
-		myModal.show("修改", res.pojo);
+		vModal.show("修改", res.pojo);
 	})
 }
 

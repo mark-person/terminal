@@ -14,7 +14,7 @@ public class Page {
 
 	private int pageSize = 3;
 
-	private int pageNumber = 1;
+	private int pageNum = 1;
 
 	private int totalRows;
 	
@@ -69,12 +69,12 @@ public class Page {
 		this.pageSize = pageSize;
 	}
 
-	public int getPageNumber() {
-		return pageNumber;
+	public int getPageNum() {
+		return pageNum;
 	}
 
-	public void setPageNumber(int pageNumber) {
-		this.pageNumber = pageNumber;
+	public void setPageNum(int pageNum) {
+		this.pageNum = pageNum;
 	}
 
 	public int getTotalRows() {

@@ -17,13 +17,13 @@
 <!-- page -->
 <nav th:fragment="page" class="pagination">
 	<ul>
-		<li v-if="page.pageNumber != 1" @click="goto(1)"><span>«</span></li>
-		<li v-if="page.pageNumber - 2 >= 1" @click="goto(page.pageNumber - 2)"><span>{{page.pageNumber - 2}}</span></li>
-		<li v-if="page.pageNumber - 1 >= 1" @click="goto(page.pageNumber - 1)"><span>{{page.pageNumber - 1}}</span></li>
-		<li class="active"><span>{{page.pageNumber}}</span></li>
-		<li v-if="page.pageNumber + 1 <= page.totalNum" @click="goto(page.pageNumber + 1)"><span>{{page.pageNumber + 1}}</span></li>
-		<li v-if="page.pageNumber + 2 <= page.totalNum" @click="goto(page.pageNumber + 2)"><span>{{page.pageNumber + 2}}</span></li>
-		<li v-if="page.pageNumber != page.totalNum" @click="goto(page.totalNum)"><span>»</span></li>
+		<li v-if="page.pageNum != 1" @click="goto(1)"><span>«</span></li>
+		<li v-if="page.pageNum - 2 >= 1" @click="goto(page.pageNum - 2)"><span>{{page.pageNum - 2}}</span></li>
+		<li v-if="page.pageNum - 1 >= 1" @click="goto(page.pageNum - 1)"><span>{{page.pageNum - 1}}</span></li>
+		<li class="active"><span>{{page.pageNum}}</span></li>
+		<li v-if="page.pageNum + 1 <= page.totalNum" @click="goto(page.pageNum + 1)"><span>{{page.pageNum + 1}}</span></li>
+		<li v-if="page.pageNum + 2 <= page.totalNum" @click="goto(page.pageNum + 2)"><span>{{page.pageNum + 2}}</span></li>
+		<li v-if="page.pageNum != page.totalNum" @click="goto(page.totalNum)"><span>»</span></li>
 	</ul>
 	<select @change="goto(1)" v-model="page.pageSize">
 		<option value="3">3条</option><option value="10">10条</option><option value="50">50条</option>
