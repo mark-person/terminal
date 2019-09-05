@@ -3,55 +3,19 @@
 <head>
 <meta charset="utf-8">
 <link th:replace="common/fragment::base"/>
+<script type="text/javascript" th:src="@{/dict/list?code=demo_type}"></script>
 
-<script type="text/javascript" th:inline="javascript">
-
-var list = [[${list}]];
-
-var myModal;
-window.onload = function() {
-	var myPage = page(list, "demo/list");
-	var validate = function(p) {
-		return {
-			demoName:V.notNull(p.demoName),
-			demoType:V.notNull(p.demoType),
-			demoInt:V.notNull(p.demoInt) || V.isInt(p.demoInt),
-			demoNum:V.isNum(p.demoNum)
-		}
-	}
-	
-	myModal = modal("modal", function(p) {
-		loading.show();
-		axios.post(contextPath + "demo/insertOrUpdate", p).then(function(res) {
-			loading.hide();
-			myModal.hide();
-			myPage.gotoPage();
-		})
-	}, validate);
-}
-
-function edit(id) {
-	loading.show();
-	axios.post(contextPath + "demo/get", {id:id}).then(function(res) {
-		loading.hide();
-		myModal.show("修改", res.pojo);
-	})
-}
-
-
-var demoType = {NEW:'新的', OLD:'旧的'};
-</script>
 </head>
-<body class="block-template">
+<body>
 
-<div id="page">
+<div id="page" v-cloak>
 	<div class="v-search">
 		<label class="v-title">我是标题</label>
 		<button class="v-button" onclick="myModal.show('新增')">新增</button>
 		<input type="text" class="v-text"  v-model="p.demoName" maxlength="32">
 		<button class="v-button" @click="gotoPage()">搜索</button>
 	</div>
-	<table class="v-table v-table-hover">
+	<table class="v-table v-table-hover" >
 	<tr>
 		<th class="active" @click="sortPage('demo_id', sortType['demo_id'])">DEMO_ID<span :class="sortType['demo_id']"></span></th>
 		<th class="active" @click="sortPage('demo_name', sortType['demo_name'])">DEMO_NAME<span :class="sortType['demo_name']"></span></th>
@@ -63,7 +27,7 @@ var demoType = {NEW:'新的', OLD:'旧的'};
 	<tr v-for="item in list">
 		<td>{{item.demoId}}</td>
 		<td>{{item.demoName}}</td>
-		<td>{{demoType[item.demoType]}}</td>
+		<td>{{dict.demo_type[item.demoType]}}</td>
 		<td class="v-right">{{item.demoNum}}</td>
 		<td>{{item.demoDate}}</td>
 		<td><a href="#this" @click="edit(item.demoId)">修改</a></td>
@@ -72,7 +36,7 @@ var demoType = {NEW:'新的', OLD:'旧的'};
 	<div th:replace="common/fragment::page"/>
 </div>
 
-<div id="modal">
+<div id="modal" v-cloak>
 <modal v-if="modal.showModal" :modal="modal">
 <table class="v-table" slot="body">
 	<tr>
@@ -83,7 +47,7 @@ var demoType = {NEW:'新的', OLD:'旧的'};
 		<th>DEMO_TYPE</th>
 		<td>	
 			<select class="v-select" v-model="p.demoType">
-				<option v-for="(item, key) in demoType" :value="key">{{item}}</option>
+				<option v-for="(v, k) in common.listDict('demo_type')" :value="k">{{v}}</option>
 			</select>
 			<span class="v-error">{{v.demoType}}</span>
 		</td>
@@ -105,6 +69,40 @@ var demoType = {NEW:'新的', OLD:'旧的'};
 </div>
 
 <div id="loading"><loading v-if="showLoading"></loading></div>
+<script type="text/javascript" th:inline="javascript">
+
+var list = [[${list}]];
+var myPage = page(list, "demo/list");
+
+var validate = function(p) {
+	return {
+		demoName:V.notNull(p.demoName),
+		demoType:V.notNull(p.demoType),
+		demoInt:V.notNull(p.demoInt) || V.isInt(p.demoInt),
+		demoNum:V.isNum(p.demoNum)
+	}
+}
+
+var myModal = modal("modal", function(p) {
+	loading.show();
+	axios.post(contextPath + "demo/insertOrUpdate", p).then(function(res) {
+		loading.hide();
+		myModal.hide();
+		myPage.gotoPage();
+	})
+}, validate);
+
+function edit(id) {
+	loading.show();
+	axios.post(contextPath + "demo/get", {id:id}).then(function(res) {
+		loading.hide();
+		myModal.show("修改", res.pojo);
+	})
+}
+</script>
+
+
+
 </body>
 </html>
 
