@@ -3,9 +3,16 @@ var AXIOS_CONFIG = {
 	autoLoading:true
 };
 
+var loading = {
+	show:function() {},
+	hide:function() {}
+}
+
 axios.interceptors.request.use(function (config) {
 	if (AXIOS_CONFIG.autoLoading) loading.show();
+
 	
+	// 改用config.baseURL = contextPath;
 	config.url = contextPath + config.url;
 	
 	if (config.headers["Content-Type"] && config.headers["Content-Type"].indexOf("multipart") >= 0) {
@@ -22,7 +29,10 @@ axios.interceptors.request.use(function (config) {
 });
 
 axios.interceptors.response.use(function(res) {
+	
+	
 	if (AXIOS_CONFIG.autoLoading) loading.hide();
+	
 	var code = res.data.code;
 	if (code != 0) {
 		alert(res.data.msg);
@@ -64,6 +74,7 @@ common.listDict = function(code) {
 	return newDict;
 }
 
+// 改成在axio中初始化
 function initLoading() {
 	document.body.insertAdjacentHTML("beforeend",'<div id="loading"><loading v-if="showLoading"></loading></div>')
 	

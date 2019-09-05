@@ -76,6 +76,7 @@
 var myPage = page("demo/list", [[${list}]]);
 
 var myModal = modal("modal", function(p) {
+	
 	axios.post("demo/insertOrUpdate", p).then(function(res) {
 		myModal.hide();
 		myPage.goto();

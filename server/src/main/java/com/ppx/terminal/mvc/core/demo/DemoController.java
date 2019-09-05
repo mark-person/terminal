@@ -34,12 +34,12 @@ public class DemoController {
 	@PostMapping("/list") @ResponseBody
 	public Map<String, Object> list(Page page, Demo pojo) {
 		
-		try {
-			Thread.sleep(1000);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
+//		try {
+//			Thread.sleep(1000);
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//		
 		
 		List<Demo> list = impl.list(page, pojo);
 		return ControllerReturn.page(page, list);
@@ -48,11 +48,11 @@ public class DemoController {
 	@PostMapping("/insertOrUpdate") @ResponseBody
     public Map<?, ?> insert(Demo pojo) {
 		
-		try {
-			Thread.sleep(1000);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+//		try {
+//			Thread.sleep(1000);
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
 		
 		if (pojo.getDemoId() == null) {
 			return impl.insert(pojo);

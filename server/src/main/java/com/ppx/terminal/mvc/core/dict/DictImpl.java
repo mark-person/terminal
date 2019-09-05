@@ -83,14 +83,19 @@ public class DictImpl extends MyDaoSupport {
 	}
 	
 	private void setDictJson(String columnName, String comment, Map<String, Object> returnMap) {
+		
 		if (Strings.isEmpty(comment)) {
-			returnMap.put(columnName, "comment is empty");
+			Map<String, String> errorMap = new HashMap<String, String>(1);
+			errorMap.put("", "comment is empty");
+			returnMap.put(columnName, errorMap);
 			return;
 		}
 		comment = comment.trim();
 		String[] item = comment.split("\\|");
 		if (item.length < 2) {
-			returnMap.put(columnName, "lack of |");
+			Map<String, String> errorMap = new HashMap<String, String>();
+			errorMap.put("", "lack of |");
+			returnMap.put(columnName, errorMap);
 			return;
 		}
 		
@@ -98,7 +103,9 @@ public class DictImpl extends MyDaoSupport {
 			JsonNode jn = new ObjectMapper().readTree(item[1]);
 			returnMap.put(columnName, jn);
 		} catch (IOException e) {
-			returnMap.put(columnName, "json error:" + e.getMessage());
+			Map<String, String> errorMap = new HashMap<String, String>(1);
+			errorMap.put("", "json error:" + e.getMessage());
+			returnMap.put(columnName, errorMap);
 			return;
 		}
 		
