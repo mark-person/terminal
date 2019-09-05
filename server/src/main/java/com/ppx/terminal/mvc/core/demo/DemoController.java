@@ -48,6 +48,12 @@ public class DemoController {
 	@PostMapping("/insertOrUpdate") @ResponseBody
     public Map<?, ?> insert(Demo pojo) {
 		
+		try {
+			Thread.sleep(1000);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 		if (pojo.getDemoId() == null) {
 			return impl.insert(pojo);
 		}
