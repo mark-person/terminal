@@ -6,6 +6,7 @@ var AXIOS_CONFIG = {
 var loading = {
 	show:function() {},
 	hide:function() {}
+	
 }
 
 axios.interceptors.request.use(function (config) {
