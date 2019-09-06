@@ -61,7 +61,7 @@ function initLoading() {
 	
 	loading = new Vue({
 		el: '#loading',
-		components: {'loading': httpVueLoader(contextPath + 'static/vue/template/loading.vue')},
+		components: {'loading': httpVueLoader(baseURL + 'static/vue/template/loading.vue')},
 		data: {
 			showLoading: false,
 	      	delayLoading: true
@@ -123,7 +123,7 @@ function page(url, data) {
 function modal(id, okFun, validateFun) {
 	var m = new Vue({
 		el:'#' + id,
-		components:{'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {p:Object, modal:Object, firstList:Array}},
+		components:{'modal': httpVueLoader(baseURL + 'static/vue/template/modal.vue'), props: {p:Object, modal:Object, firstList:Array}},
 		data:{
 	      	modal:{
 	      		showModal:false,title:'',width:'500px',showOk:typeof okFun == "function",
