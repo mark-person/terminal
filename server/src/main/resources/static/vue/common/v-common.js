@@ -2,7 +2,6 @@
 axios.defaults.baseURL = baseURL;
 
 axios.interceptors.request.use(function (config) {
-	
 	if (config.headers["Content-Type"] && config.headers["Content-Type"].indexOf("multipart") >= 0) {
 		return config;
 	}
@@ -58,14 +57,10 @@ common.listDict = function(code) {
 
 function initLoading() {
 	document.body.insertAdjacentHTML("beforeend",'<div id="loading"><loading v-if="showLoading"></loading></div>')
-	
 	loading = new Vue({
 		el: '#loading',
 		components: {'loading': httpVueLoader(baseURL + 'static/vue/template/loading.vue')},
-		data: {
-			showLoading: false,
-	      	delayLoading: true
-		},
+		data: {showLoading: false, delayLoading: true},
 		methods: {
 	      	show: function() {
 	      		this.delayLoading = true;
@@ -84,10 +79,7 @@ function page(url, data) {
 	var page = new Vue({
 	    el:'#page',
 	    data:{
-	        p:{},
-	        list:data.list,
-	        sortType:[],
-	        page:data.page
+	        p:{},list:data.list,sortType:[],page:data.page
 	    },
 	    created:function () {
 	    	this.sortType[data.page.orderName] = data.page.orderType;
