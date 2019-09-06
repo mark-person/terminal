@@ -94,6 +94,9 @@ function page(url, data) {
 	    	this.sortType[data.page.orderName] = data.page.orderType;
 	    },
 	    methods: {
+	    	getSortType:function(orderName) {
+	    		return this.sortType[orderName];
+	    	},
 	    	sort:function(orderName) {
 	    		var orderType = (this.sortType[orderName] == 'asc' ? 'desc' : 'asc');
 	    		

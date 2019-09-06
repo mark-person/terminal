@@ -11,13 +11,13 @@
 	<div class="v-search">
 		<label class="v-title">我是标题</label>
 		<button class="v-button" onclick="vModal.show('新增')">新增</button>
-		<input type="text" class="v-text"  v-model="p.demoName" maxlength="32">
+		<input type="text" class="v-text" v-model="p.demoName" maxlength="32">
 		<button class="v-button" @click="goto()">搜索</button>
 	</div>
 	<table class="v-table v-table-hover">
 	<tr>
-		<th class="active w-id" @click="sort('demo_id')">DEMO_ID<a :class="sortType['demo_id']"></a></th>
-		<th class="active w-title" @click="sort('demo_name')">DEMO_NAME<a :class="sortType['demo_name']"></a></th>
+		<th class="active w-id" @click="sort('demo_id')">DEMO_ID<div :class="getSortType('demo_id')"></div></th>
+		<th class="active w-title" @click="sort('demo_name')">DEMO_NAME<div :class="getSortType('demo_name')"></div></th>
 		<th>DEMO_TYPE</th>
 		<th>DEMO_NUM</th>
 		<th>DEMO_DATE</th>
