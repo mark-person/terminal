@@ -1,6 +1,7 @@
 nginx自动检测后台服务器健康状态
 
 java zgc 下载
+-server -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -Xlog:age*,gc*=info:file=gc-%t.log:time,tid,tags:filecount=3,filesize=20m -Djava.io.tmpdir=/tmp'
 
 /**
  * 这个window.onload与$(document).ready还是差很远的。首先$(function(){})是$(document).ready()的简写。
