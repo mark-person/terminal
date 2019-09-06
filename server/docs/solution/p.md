@@ -1,5 +1,6 @@
 nginx自动检测后台服务器健康状态
 
+java zgc 下载
 
 /**
  * 这个window.onload与$(document).ready还是差很远的。首先$(function(){})是$(document).ready()的简写。
