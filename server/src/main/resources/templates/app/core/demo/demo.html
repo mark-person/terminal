@@ -12,17 +12,12 @@
 		<label class="v-title">我是标题</label>
 		<button class="v-button" onclick="vModal.show('新增')">新增</button>
 		<input type="text" class="v-text"  v-model="p.demoName" maxlength="32">
-		
-		<select class="v-select">
-			<option value="">1111</option>
-			<option value="">1111</option>
-		</select>
 		<button class="v-button" @click="goto()">搜索</button>
 	</div>
-	<table class="v-table v-table-hover" >
+	<table class="v-table v-table-hover">
 	<tr>
-		<th class="active" @click="sort('demo_id', sortType['demo_id'])">DEMO_ID<span :class="sortType['demo_id']"></span></th>
-		<th class="active" @click="sort('demo_name', sortType['demo_name'])">DEMO_NAME<span :class="sortType['demo_name']"></span></th>
+		<th class="active" @click="sort('demo_id')">DEMO_ID<a :class="sortType['demo_id']"></a></th>
+		<th class="active" @click="sort('demo_name')">DEMO_NAME<a :class="sortType['demo_name']"></a></th>
 		<th>DEMO_TYPE</th>
 		<th>DEMO_NUM</th>
 		<th>DEMO_DATE</th>
@@ -34,7 +29,7 @@
 		<td>{{dict.demo_type[item.demoType]}}</td>
 		<td class="v-right">{{item.demoNum}}</td>
 		<td>{{item.demoDate}}</td>
-		<td><a href="#this" @click="edit(item.demoId)">修改</a></td>
+		<td><a @click="edit(item.demoId)">修改</a></td>
 	</tr>
 	</table>
 	<div th:replace="common/fragment::page"/>

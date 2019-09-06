@@ -1,10 +1,7 @@
 // 全局的 axios 默认值
 axios.defaults.baseURL = contextPath;
 
-
 axios.interceptors.request.use(function (config) {
-	// 改用config.baseURL = contextPath;
-	// config.url = contextPath + config.url;
 	
 	if (config.headers["Content-Type"] && config.headers["Content-Type"].indexOf("multipart") >= 0) {
 		return config;
@@ -97,9 +94,16 @@ function page(url, data) {
 	    	this.sortType[data.page.orderName] = data.page.orderType;
 	    },
 	    methods: {
-	    	sort:function(orderName, orderType) {
-	    		orderType = (orderType == 'asc' ? 'desc' : 'asc');
+	    	sort:function(orderName) {
+	    		var orderType = (this.sortType[orderName] == 'asc' ? 'desc' : 'asc');
+	    		
+	    		for (i in this.sortType) {
+	    			this.sortType[i] = "";
+	    		}
+	    		
 	    		this.sortType[orderName] = orderType;
+	    		
+	    		
 	    		this.p.orderName = orderName;
 	    		this.p.orderType = orderType;
 	    		this.goto();
