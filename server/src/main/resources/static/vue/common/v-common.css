@@ -1,4 +1,7 @@
 
+
+
+
 [v-cloak] {display: none;}
 
 /* demo */
@@ -8,6 +11,16 @@
 .v-error {color:red}
 .v-right {text-align: right;}
 .v-pointer {cursor: pointer;}
+
+
+.w-id {width:6.875rem}
+.w-title {min-width:9.375rem}
+.w-date {width:6.875rem}
+.w-number {width:4.375rem}
+.w-time {width:10.625rem}
+.w-action {min-width:13.125rem} /*17.5rem*/
+.ellipsis {white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
 
 /* common */
 body {font-family: Helvetica Neue, Arial, sans-serif;font-size: 14px; color: #444;margin-top:0px}
