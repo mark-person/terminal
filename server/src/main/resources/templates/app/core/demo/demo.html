@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<link th:replace="common/fragment::base"/>
+<link th:replace="common/v-fragment::base"/>
 <script type="text/javascript" th:src="@{/dict/list?code=demo_type}"></script>
 
 </head>
@@ -32,7 +32,7 @@
 		<td><a @click="edit(item.demoId)">修改</a></td>
 	</tr>
 	</table>
-	<div th:replace="common/fragment::page"/>
+	<div th:replace="common/v-fragment::page"/>
 </div>
 
 <div id="modal" v-cloak>

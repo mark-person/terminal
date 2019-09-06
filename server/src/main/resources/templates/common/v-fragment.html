@@ -1,18 +1,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
-<script th:fragment="common" type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
-
-<script th:fragment="common" th:src="@{/static/cdn/jquery.min-3.3.1.js}" type="text/javascript"></script>
-<link   th:fragment="common" th:href="@{/static/common/common-0.1.0.css}" rel="stylesheet"/>
-<script th:fragment="common" th:src="@{/static/common/common-0.1.0.js}" type="text/javascript"></script>
-
-
-
-<script th:fragment="base" type="text/javascript" th:inline="javascript">var contextPath = [[@{/}]];</script>
+<script th:fragment="base" type="text/javascript" th:inline="javascript">var baseURL = [[@{/}]];</script>
 <script th:fragment="base" type="text/javascript" th:src="@{/static/vue/vue.all.js}"></script>
 <script th:fragment="base" type="text/javascript" th:src="@{/static/vue/common/v-common.js}"></script>
 <link   th:fragment="base" rel="stylesheet" th:href="@{/static/vue/common/v-common.css}">
-
 
 <!-- page -->
 <nav th:fragment="page" class="pagination">

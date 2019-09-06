@@ -1,5 +1,5 @@
 // 全局的 axios 默认值
-axios.defaults.baseURL = contextPath;
+axios.defaults.baseURL = baseURL;
 
 axios.interceptors.request.use(function (config) {
 	
