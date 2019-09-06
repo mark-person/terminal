@@ -29,7 +29,7 @@ public class FaqController {
 	@GetMapping("/faqIndex")
 	public ModelAndView faqIndex(ModelAndView mv) {
 		mv.setViewName("app/core/faq/faqIndex");
-		mv.addObject("list", list(new Page(), new Faq()));	
+		mv.addObject("data", list(new Page(), new Faq()));	
 		return mv;
 	}
 	

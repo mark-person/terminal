@@ -2,26 +2,89 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<link th:replace="common/fragment::base"/>
+<link th:replace="common/v-fragment::base"/>
 <script type="text/javascript" th:src="@{/static/vue/common/v-tool.js}"></script>
 <script type="text/javascript" th:src="@{/static/tool/showdown.min.js}"></script>
 <script type="text/javascript" th:src="@{/static/tool/highlight.pack.js}"></script>
 <link rel="stylesheet" th:href="@{/static/tool/github-markdown.css}">
-<link rel="stylesheet" th:href="@{/static/tool/github-gist.css}">
 
 <script type="text/javascript" th:src="@{/dict/list?code=faq_category,faq_time_type}"></script>
+</head>
+<body>
 
-<style type="text/css">
+<table class="v-table" id="faq">
+<tr>
+	<th style="width:2rem">Q</th><td><input class="v-text" type="text" style="width:36rem;" maxlength="128" v-model="faqTitle"></td>
+</tr>
+<tr>
+	<th>ATTR</th>
+	<td style="display:flex;align-items:center;">
+		<select class="v-select" v-model="faqCategory">
+			<option v-for="(v, k) in common.listDict('faq_category')" :value="k">{{v}}</option>
+		</select>
+		
+		<select class="v-select" v-model="faqTimeType">
+			<option v-for="(v, k) in common.listDict('faq_time_type')" :value="k">{{v}}</option>
+		</select>
+	</td>
+</tr>
+<tr>
+	<th>DESCR</th>
+	<td style="background-color: white;border-top:1px solid #ddd;border-bottom:1px solid #ddd">
+		<div style="float:left">
+			<div><textarea class="v-text" id="faqDescr" style="width:35.6rem;height:170px" v-model="faqDescr" onfocus="currentInput=this"></textarea></div>
+			<div>
+				<button class="v-button" onclick="add()">+</button>
+				<button class="v-button" onclick="del()">-</button>
+			</div>
+			<div v-for="(item, index) in sub">
+				<textarea class="v-text" style="width:35.6rem;height:100px" rows="4" v-model="sub[index]"></textarea>
+			</div>
+		</div>
+		<div id="faqDescrView" v-html="faqDescrView" class="markdown-body" style="margin-left:520px"></div>
+	</td>
+</tr>
+<tr>
+	<th>A</th>
+	<td>
+		<div style="float:left">
+			<div><textarea class="v-text" id="faqAnswer" style="width:500px;height:170px" v-model="faqAnswer" onfocus="currentInput=this"></textarea></div>
+			<div v-for="(item, index) in answerSub">
+				<textarea class="v-text" style="width:500px;height:100px" rows="4" v-model="answerSub[index]"></textarea>
+			</div>
+			<button class="v-button" onclick="answerAdd()">+</button>
+			<button class="v-button" onclick="answerDel()">-</button>
+		</div>
+		<div id="faqAnswerView" v-html="faqAnswerView" class="markdown-body" style="margin-left:520px"></div>
+	</td>
+</tr>
 
-</style>
+<tr>
+	<td colspan="2" style="text-align: center;">
+		<button class="v-button" onclick="ok()"><span v-if="faqId==0">新增</span><span v-if="faqId!=0">修改</span></button>
+	</td>
+</tr>
+</table>
+
 <script type="text/javascript" th:inline="javascript">
+
+// 截图，用Ctrl+V
+document.body.addEventListener('paste', function(e) {
+	if (!e.clipboardData) return;
+	
+	for (var i = 0; i < e.clipboardData.items.length; i++) {
+		var c = e.clipboardData.items[i];
+		var f = c.getAsFile();
+		if (f) {upload(f)};
+	}
+})
 
 var currentInput = null;
 function upload(file) {
 	var formData = new FormData();
 	formData.append("mFile", file);
 	let config = {headers:{"Content-Type":"multipart/form-data"}};
-	axios.post(contextPath + "uploadImg/uploadFaq", formData, config).then(function(r) {
+	axios.post("uploadImg/uploadFaq", formData, config).then(function(r) {
 		var path = "/img/faq/" + r.list[0];
 		
 		var editorId = currentInput != null ? currentInput.id : "faqDescr";
@@ -30,72 +93,17 @@ function upload(file) {
 	})
 }
 
-var form;
-window.onload = function() {
-	// 截图，用Ctrl+V
-	document.body.addEventListener('paste', function(e) {
-		if (!e.clipboardData) return;
-		
-		for (var i = 0; i < e.clipboardData.items.length; i++) {
-			var c = e.clipboardData.items[i];
-          	var f = c.getAsFile();
-          	if (f) {
-				upload(f);
-          	}
-        }
-	})
-	
-	var initData = [[${pojo}]];
-	if (initData == null) {
-		initData = {faqId:0, faqTitle:'', faqCategory:'tech', faqTimeType:'long', faqDescr:"", sub:[],  faqAnswer:"", answerSub:[]};
-	}
-	form = new Vue({
-	    el:'#faq',
-	    data:initData,
-	    computed:{
-	    	faqDescrView:function() {
-	    		return getMarkdown(this.faqDescr, this, 0);
-	    	},
-	    	faqAnswerView:function() {
-	    		return getMarkdown(this.faqAnswer, this, 1000);
-	    	}
-	    },
-	    methods: {
-	    	refreshCode:function(id) {
-	    		this.$nextTick(function () {
-		    		const preEl = document.getElementById(id).querySelectorAll('code');
-		    		preEl.forEach((el) => {
-		    			hljs.highlightBlock(el)
-		    		})
-	    		})
-	    	}
-	    },
-	    watch: {
-	    	faqDescr(n, o) {this.refreshCode("faqDescrView")},
-	    	sub(n, o) {this.refreshCode("faqDescrView")},
-	    	faqAnswer(n, o) {this.refreshCode("faqAnswerView")},
-	    	answerSub(n, o) {this.refreshCode("faqAnswerView")}
-	    },
-	    mounted() {
-	    	this.refreshCode("faqDescrView");
-	    	this.refreshCode("faqAnswerView");
-	    }
-	})
-	
-	
-}
-
 var converter = new showdown.Converter();
 function getMarkdown(html, obj, i) {
 	html = html.replace(/<m>/g, function() {
 		i++;
-		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + 'arrow' + i + '" class="leftArrow"></span>' +
+		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + 'arrow' + i + '" class="left-arrow"></span>' +
 			'<div id="' + 'div' + i + '" style="margin-top:-10px;margin-bottom:-10px;display:none">';
 	});
 	
 	html = html.replace(/<mm>/g, function() {
 		i++;
-		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + 'arrow' + i + '" class="rightArrow"></span>' +
+		return  '<a href="#this" onclick="more(' + i + ')">更多</a><span id="' + 'arrow' + i + '" class="right-arrow"></span>' +
 			'<div id="' + 'div' + i + '" style="margin-top:-10px;margin-bottom:-10px;">';
 	});
 	
@@ -121,13 +129,12 @@ function more(i) {
 	var divObj = document.getElementById("div" + i);
 	
 	var direction = arrowObj.getAttribute("class");
-	direction = direction == 'leftArrow' ? 'rightArrow' : 'leftArrow';
+	direction = direction == 'left-arrow' ? 'right-arrow' : 'left-arrow';
 	arrowObj.setAttribute("class", direction);
 	
 	var display = divObj.style.display == 'none' ? '' : 'none';
 	divObj.style.display = display;
 }
-
 
 function add() {
 	form.sub.push('');
@@ -150,87 +157,57 @@ function answerDel() {
 function ok() {
 	if (form.faqTitle == "") {alert("问题不能为空");return}
 	
-	if (form.faqId == 0) {
-		axios.post(contextPath + "faq/insert", form._data).then(function(r) {
-			if (r.code === 0) {
-				form.faqId = r.faqId;
-				opener.location.reload();
-				alert("新增成功");
-			}
-		})
-	}
-	else {
-		axios.post(contextPath + "faq/update", form._data).then(function(r) {
-			if (r.code === 0) {
-				opener.location.reload();
-				alert("修改成功");
-			}
-		})
-	}
+	var isInsert = form.faqId == 0;
+	var url = (isInsert ? "faq/insert" : "faq/update");
+	var name = (isInsert ? "新增" : "修改");
+	axios.post(url, form._data).then(function(r) {
+		if (r.code !== 0) return;
+		
+		if (isInsert) form.faqId = r.faqId;
+		if (opener) opener.location.reload();
+		alert(name + "成功");
+	})
 }
 
 
+var initData = [[${pojo}]];
+if (initData == null) {
+	initData = {faqId:0, faqTitle:'', faqCategory:'tech', faqTimeType:'long', faqDescr:"", sub:[],  faqAnswer:"", answerSub:[]};
+}
+
+var form = new Vue({
+    el:'#faq',
+    data:initData,
+    computed:{
+    	faqDescrView:function() {
+    		return getMarkdown(this.faqDescr, this, 0);
+    	},
+    	faqAnswerView:function() {
+    		return getMarkdown(this.faqAnswer, this, 1000);
+    	}
+    },
+    methods: {
+    	refreshCode:function(id) {
+    		this.$nextTick(function () {
+	    		const preEl = document.getElementById(id).querySelectorAll('code');
+	    		preEl.forEach((el) => {
+	    			hljs.highlightBlock(el)
+	    		})
+    		})
+    	}
+    },
+    watch: {
+    	faqDescr(n, o) {this.refreshCode("faqDescrView")},
+    	sub(n, o) {this.refreshCode("faqDescrView")},
+    	faqAnswer(n, o) {this.refreshCode("faqAnswerView")},
+    	answerSub(n, o) {this.refreshCode("faqAnswerView")}
+    },
+    mounted() {
+    	this.refreshCode("faqDescrView");
+    	this.refreshCode("faqAnswerView");
+    }
+})
+
 </script>
-</head>
-<body>
-
-<table class="v-table" id="faq">
-<tr>
-	<th style="width:30px">Q</th><td><input class="v-text" type="text" style="width:504px;" maxlength="128" v-model="faqTitle"></td>
-</tr>
-<tr>
-	<th>ATTR</th>
-	<td>
-		<select class="v-select" v-model="faqCategory">
-			<option v-for="(v, k) in common.listDict('faq_category')" :value="k">{{v}}</option>
-		</select>
-		
-		<select class="v-select" v-model="faqTimeType">
-			<option v-for="(v, k) in common.listDict('faq_time_type')" :value="k">{{v}}</option>
-		</select>
-	</td>
-</tr>
-<tr>
-	<th>DESCR</th>
-	<td style="background-color: white;border-top:1px solid #ddd;border-bottom:1px solid #ddd">
-		<div style="float:left">
-			<div><textarea class="v-text" id="faqDescr" style="width:500px;height:170px" v-model="faqDescr" onfocus="currentInput=this;"></textarea></div>
-			<div>
-				<button class="v-button" onclick="add()">+</button>
-				<button class="v-button" onclick="del()">-</button>
-			</div>
-			<div v-for="(item, index) in sub">
-				<textarea class="v-text" style="width:500px;height:100px" rows="4" v-model="sub[index]"></textarea>
-			</div>
-		</div>
-		<div id="faqDescrView" v-html="faqDescrView" class="markdown-body" style="margin-left:520px"></div>
-	</td>
-</tr>
-<tr>
-	<th>A</th>
-	<td>
-		<div style="float:left">
-			<div><textarea class="v-text" id="faqAnswer" style="width:500px;height:170px" v-model="faqAnswer" onfocus="currentInput=this;"></textarea></div>
-			<div v-for="(item, index) in answerSub">
-				<textarea class="v-text" style="width:500px;height:100px" rows="4" v-model="answerSub[index]"></textarea>
-			</div>
-			<button class="v-button" onclick="answerAdd()">+</button>
-			<button class="v-button" onclick="answerDel()">-</button>
-		</div>
-		<div id="faqAnswerView" v-html="faqAnswerView" class="markdown-body" style="margin-left:520px"></div>
-	</td>
-</tr>
-
-<tr>
-	<td colspan="2" style="text-align: center;">
-		<button class="v-button" onclick="ok()">确定</button>
-	</td>
-</tr>
-</table>
-
-
-
-
-
 </body>
 </html>

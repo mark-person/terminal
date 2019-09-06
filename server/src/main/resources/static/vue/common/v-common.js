@@ -6,7 +6,7 @@ axios.interceptors.request.use(function (config) {
 		return config;
 	}
 	config.transformRequest=[function (data) {
-		if (typeof data == "object")  return  Qs.stringify(data, {arrayFormat:'repeat'});
+		if (typeof data == "object")  return Qs.stringify(data, {arrayFormat:'repeat'});
          return data;
 	}]
 	return config;

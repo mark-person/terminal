@@ -2,18 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<link th:replace="common/fragment::base"/>
+<link th:replace="common/v-fragment::base"/>
 <script type="text/javascript" th:src="@{/dict/list?code=faq_category,faq_time_type}"></script>
-
 </head>
 <body>
-
 <div id="page" v-cloak>
 	<div class="v-search">
 		<label class="v-title">我是标题</label>
 		<button class="v-button" onclick="add()">新增</button>
 		<input type="text" class="v-text" v-model="p.faqTitle" maxlength="32">
-		<button class="v-button" @click="gotoPage()">搜索</button>
+		<button class="v-button" @click="goto()">搜索</button>
 	</div>
 	<table class="v-table v-table-hover">
 	<tr>
@@ -33,24 +31,19 @@
 		<td><a href="javascript:" @click="edit(item.faqId)">修改</a></td>
 	</tr>
 	</table>
-	<div th:replace="common/fragment::page"/>
+	<div th:replace="common/v-fragment::page"/>
 </div>
 
-
-<div id="loading"><loading v-if="showLoading"></loading></div>
 <script type="text/javascript" th:inline="javascript">
-
-var list = [[${list}]];
-page(list, "faq/list");
+page("faq/list", [[${data}]]);
 
 function add() {
-	open(contextPath + 'faq/faq');
+	open(baseURL + 'faq/faq');
 }
 
 function edit(id) {
-	open(contextPath + "faq/faq?id=" + id);
+	open(baseURL + "faq/faq?id=" + id);
 }
-
 </script>
 </body>
 </html>
