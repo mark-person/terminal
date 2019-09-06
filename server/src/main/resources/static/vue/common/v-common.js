@@ -56,7 +56,6 @@ common.listDict = function(code) {
 	return newDict;
 }
 
-// 改成在axio中初始化
 function initLoading() {
 	document.body.insertAdjacentHTML("beforeend",'<div id="loading"><loading v-if="showLoading"></loading></div>')
 	
@@ -68,11 +67,11 @@ function initLoading() {
 	      	delayLoading: true
 		},
 		methods: {
-	      	show:function() {
+	      	show: function() {
 	      		this.delayLoading = true;
 				setTimeout(function() {loading.showLoading = (loading.delayLoading) ? true : false;}, 300);
 	      	},
-	      	hide:function() {
+	      	hide: function() {
 	      		this.delayLoading = false;
 	      		loading.showLoading = false;
 	      	}
@@ -90,23 +89,18 @@ function page(url, data) {
 	        sortType:[],
 	        page:data.page
 	    },
-	    created: function () {
+	    created:function () {
 	    	this.sortType[data.page.orderName] = data.page.orderType;
 	    },
-	    methods: {
+	    methods:{
 	    	getSortType:function(orderName) {
-	    		return this.sortType[orderName];
+	    		return this.sortType[orderName] == undefined ? 'sort' : this.sortType[orderName];
 	    	},
 	    	sort:function(orderName) {
 	    		var orderType = (this.sortType[orderName] == 'asc' ? 'desc' : 'asc');
-	    		
-	    		for (i in this.sortType) {
-	    			this.sortType[i] = "";
-	    		}
+	    		for (i in this.sortType) {this.sortType[i] = "sort";}
 	    		
 	    		this.sortType[orderName] = orderType;
-	    		
-	    		
 	    		this.p.orderName = orderName;
 	    		this.p.orderType = orderType;
 	    		this.goto();
@@ -128,9 +122,9 @@ function page(url, data) {
 
 function modal(id, okFun, validateFun) {
 	var m = new Vue({
-		el: '#' + id,
-		components: {'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {p:Object, modal:Object, firstList:Array}},
-		data: {
+		el:'#' + id,
+		components:{'modal': httpVueLoader(contextPath + 'static/vue/template/modal.vue'), props: {p:Object, modal:Object, firstList:Array}},
+		data:{
 	      	modal:{
 	      		showModal:false,title:'',width:'500px',showOk:typeof okFun == "function",
 	      		ok:function() {if (!m.isValid) return;okFun(m.p);}
@@ -138,7 +132,7 @@ function modal(id, okFun, validateFun) {
 	      	p:{}
 		},
 		computed: {
-			v:function() {
+			v: function() {
 				if (typeof validateFun == "function") return validateFun(this.p);
 			},
 			isValid:function () {
@@ -148,7 +142,7 @@ function modal(id, okFun, validateFun) {
 				return true;
 			}
 		},
-		methods: {
+		methods:{
 			show:function(title, p) {
 				loading.hide();
 	      		this.modal.title = title;

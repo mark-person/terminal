@@ -16,12 +16,12 @@
 	</div>
 	<table class="v-table v-table-hover">
 	<tr>
-		<th class="active w-id" @click="sort('demo_id')">DEMO_ID<div :class="getSortType('demo_id')"></div></th>
-		<th class="active w-title" @click="sort('demo_name')">DEMO_NAME<div :class="getSortType('demo_name')"></div></th>
+		<th class="active w-id" @click="sort('demo_id')">ID<div :class="getSortType('demo_id')"></div></th>
+		<th class="active w-name" @click="sort('demo_name')">名称<div :class="getSortType('demo_name')"></div></th>
 		<th>DEMO_TYPE</th>
 		<th>DEMO_NUM</th>
 		<th>DEMO_DATE</th>
-		<th>ACTIOLN</th>
+		<th>操作</th>
 	</tr>
 	<tr v-for="item in list">
 		<td>{{item.demoId}}</td>
@@ -39,7 +39,7 @@
 <modal v-if="modal.showModal" :modal="modal">
 <table class="v-table" slot="body">
 	<tr>
-		<th style="width:100px">DEMO_NAME</th>
+		<th class="w-name">DEMO_NAME</th>
 		<td><input class="v-text" type="text" v-model="p.demoName" maxlength="32"><span class="v-error">{{v.demoName}}</span></td>
 	</tr>
 	<tr>
